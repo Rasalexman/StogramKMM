@@ -1,0 +1,32 @@
+{
+  "pins" : [
+    {
+      "identity" : "realm-core",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/realm/realm-core",
+      "state" : {
+        "revision" : "472d325a2e844fcb48c400db74e6b9646f92ca93",
+        "version" : "11.15.0"
+      }
+    },
+    {
+      "identity" : "realm-swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/realm/realm-swift.git",
+      "state" : {
+        "revision" : "41fe221e2209ad31bee35593513d957dc3e6e458",
+        "version" : "10.25.2"
+      }
+    },
+    {
+      "identity" : "sodi",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Rasalexman/Sodi",
+      "state" : {
+        "revision" : "4c708ce431e97fb7f87ca13d84208dac05720be6",
+        "version" : "1.1.0"
+      }
+    }
+  ],
+  "version" : 2
+}
