@@ -42,7 +42,7 @@ struct MainView: BaseView {
                     .navigationBarTitleDisplayMode(.inline)
                 
                 ProfileView()
-                    .tag(Tab.settings)
+                    .tag(Tab.profile)
                     .tabItem { Label("Профиль", systemImage: "person.fill") }
                     .navigationBarTitleDisplayMode(.inline)
             }

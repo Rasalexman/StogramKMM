@@ -16,18 +16,28 @@ struct ProfilePhotoView: BaseView {
     var body : some View
     {
         ZStack(alignment: .bottomTrailing) {
-            Rectangle()
-                .aspectRatio(contentMode: .fit)
-                .foregroundColor(.clear)
-                .overlay {
-                    GeometryReader { geometry in
-                        Image(postModel.takeSinglePhoto())
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: chooseWidth(geometry), height: chooseHeight(geometry), alignment:.center)
-                            .clipped()
+            if #available(iOS 15.0, *) {
+                Rectangle()
+                    .aspectRatio(contentMode: .fit)
+                    .foregroundColor(.clear)
+                    .overlay {
+                        GeometryReader { geometry in
+                            Image(postModel.takeSinglePhoto())
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: chooseWidth(geometry), height: chooseHeight(geometry), alignment:.center)
+                                .clipped()
+                        }
                     }
+            } else {
+                GeometryReader { geometry in
+                    Image(postModel.takeSinglePhoto())
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: chooseWidth(geometry), height: chooseHeight(geometry), alignment:.center)
+                        .clipped()
                 }
+            }
             
             if postModel.hasMoreContent {
                 VStack(alignment: .trailing) {

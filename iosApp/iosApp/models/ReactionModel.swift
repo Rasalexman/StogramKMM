@@ -17,7 +17,7 @@ struct ReactionModel: Identifiable, Hashable {
     var liked: Bool = false
     var comment: String = ""
     
-    var fullDescription: AttributedString {
+    var fullDescription: String {//AttributedString {
         var desc: String = "**\(userName)**"
         switch reactionType {
         case .photoLike:
@@ -30,7 +30,7 @@ struct ReactionModel: Identifiable, Hashable {
             desc += " поставил(а) лайк на ваш комментарий"
         }
         
-        return desc.markdownToAttributed()
+        return desc//.markdownToAttributed()
     }
     
     var postModel: PostModel {

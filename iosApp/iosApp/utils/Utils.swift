@@ -115,6 +115,7 @@ extension Int {
 }
 
 extension String {
+    @available(iOS 15, *)
     func markdownToAttributed() -> AttributedString {
         do {
             return try AttributedString(markdown: self) /// convert to AttributedString

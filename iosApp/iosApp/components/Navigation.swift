@@ -17,5 +17,5 @@ enum Tab {
     case search
     case create
     case reactions
-    case settings
+    case profile
 }

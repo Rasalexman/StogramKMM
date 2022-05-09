@@ -42,6 +42,10 @@ struct HomeView: BaseView {
                             .frame(width: UIScreen.screenWidth-8, height: 2, alignment: .trailing)
                     }
                 }
+            }.onAppear {
+                vm.startObservingPosts()
+            }.onDisappear {
+                vm.stopObservingPost()
             }
         }
     }
