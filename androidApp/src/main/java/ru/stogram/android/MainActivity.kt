@@ -3,16 +3,21 @@ package ru.stogram.android
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.ui.text.ExperimentalTextApi
+import androidx.core.view.WindowCompat
+import ru.stogram.android.features.MainView
+import ru.stogram.android.theme.StogramTheme
 
 class MainActivity : ComponentActivity() {
 
+    @ExperimentalTextApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+
         setContent {
-            MaterialTheme {
-                Text("Hello world!")
+            StogramTheme(false) {
+                MainView()
             }
         }
     }

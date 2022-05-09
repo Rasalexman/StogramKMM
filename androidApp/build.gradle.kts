@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     kotlin("android")
+    id("com.google.devtools.ksp") version "1.6.20-1.0.5"
 }
 
 android {
@@ -41,6 +42,15 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = composeVersion
     }
+
+    kotlin {
+        sourceSets.release {
+            kotlin.srcDirs("build/generated/ksp/release/kotlin")
+        }
+        sourceSets.debug {
+            kotlin.srcDirs("build/generated/ksp/debug/kotlin")
+        }
+    }
 }
 
 dependencies {
@@ -48,17 +58,44 @@ dependencies {
     val composeMaterial: String by rootProject.extra
     val composePreview: String by rootProject.extra
     val composeActivity: String by rootProject.extra
+    val composeNavigation: String by rootProject.extra
+    val composeFonts: String by rootProject.extra
+    val composeIcons: String by rootProject.extra
 
+    val companistFlowLayout: String by rootProject.extra
+    val companistInsetsUI: String by rootProject.extra
+    val companistNavigation: String by rootProject.extra
+    val companistSwipeRefresh: String by rootProject.extra
+
+    val core: String by rootProject.extra
+    val lifecycleVM: String by rootProject.extra
+    val coroutinesAndroid: String by rootProject.extra
+
+    val leakCanary: String by rootProject.extra
+    val kodiksp: String by rootProject.extra
+    val timber: String by rootProject.extra
 
     implementation(project(":shared"))
-    implementation("com.google.android.material:material:1.5.0")
-    implementation("androidx.constraintlayout:constraintlayout:2.1.3")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0")
+    implementation(core)
+    implementation(lifecycleVM)
+    implementation(coroutinesAndroid)
+    implementation(timber)
 
     implementation(composeUI)
     implementation(composeMaterial)
     implementation(composePreview)
     implementation(composeActivity)
+    implementation(composeNavigation)
+    implementation(composeFonts)
+    implementation(composeIcons)
+
+    implementation(companistFlowLayout)
+    implementation(companistInsetsUI)
+    implementation(companistNavigation)
+    implementation(companistSwipeRefresh)
+
+    ksp(kodiksp)
+
+    debugImplementation(leakCanary)
     debugImplementation("androidx.compose.ui:ui-tooling:1.1.1")
 }

@@ -1,6 +1,10 @@
 plugins {
+    //id("org.jetbrains.gradle.apple.applePlugin") version "212.4638.14-0.13.1"
     kotlin("multiplatform")
+    //kotlin("native.cocoapods")
     id("com.android.library")
+    kotlin("plugin.serialization")
+    id("io.realm.kotlin")
 }
 
 kotlin {
@@ -16,15 +20,30 @@ kotlin {
         }
     }
 
+//    cocoapods {
+//        summary = "Realm Kotlin Stogram shared Library"
+//        homepage = "https://github.com/realm/realm-kotlin"
+//        ios.deploymentTarget = "14.1"
+//        osx.deploymentTarget = "11.0"
+//        frameworkName = "shared"
+//        podfile = project.file("../iosApp/Podfile")
+//    }
+
     sourceSets {
         val ktorCore: String by rootProject.extra
         val ktorCio: String by rootProject.extra
         val ktorLogging: String by rootProject.extra
+        val realmBase: String by rootProject.extra
+        val coroutinesNative: String by rootProject.extra
+        val serializationCore: String by rootProject.extra
         val commonMain by getting {
             dependencies {
                 implementation(ktorCore)
                 implementation(ktorCio)
                 implementation(ktorLogging)
+                implementation(coroutinesNative)
+                implementation(serializationCore)
+                api(realmBase)
             }
         }
 
@@ -35,8 +54,12 @@ kotlin {
         }
 
         val ktorAndroid: String by rootProject.extra
+        val kodi: String by rootProject.extra
+        val sresult: String by rootProject.extra
         val androidMain by getting {
             dependencies {
+                api(kodi)
+                api(sresult)
                 implementation(ktorAndroid)
             }
         }
