@@ -33,7 +33,7 @@ extra["composeVersion"] = composeVersion
 extra["kotlinVersion"] = kotlin_version
 extra["apiVersion"] = "1.6"
 extra["jvmVersion"] = "11"
-extra["agpVersion"] = "7.1.3"
+extra["agpVersion"] = "7.2.0"
 extra["realmVersion"] = realmVersion
 
 extra["minSdkVersion"] = 24
