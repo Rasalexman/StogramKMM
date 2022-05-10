@@ -8,20 +8,18 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.navigation
 import com.rasalexman.kodi.core.immutableInstance
+import ru.stogram.android.constants.ScreenNames
+import ru.stogram.android.features.create.Create
+import ru.stogram.android.features.home.Home
 import ru.stogram.android.features.home.HomeView
 import ru.stogram.android.features.home.HomeViewModel
+import ru.stogram.android.features.profile.Profile
+import ru.stogram.android.features.reactions.Reactions
 import ru.stogram.android.features.reactions.ReactionsView
 import ru.stogram.android.features.reactions.ReactionsViewModel
+import ru.stogram.android.features.search.Search
 import ru.stogram.android.features.search.SearchView
 import ru.stogram.android.features.search.SearchViewModel
-
-object ScreenNames {
-    const val HOME = "home"
-    const val SEARCH = "search"
-    const val CREATE = "create"
-    const val REACTIONS = "reactions"
-    const val PROFILE = "profile"
-}
 
 internal sealed class Screen(val route: String) {
     object Home : Screen(ScreenNames.HOME)
@@ -37,7 +35,9 @@ private sealed class LeafScreen(
     fun createRoute(root: Screen) = "${root.route}/$route"
     object Home : LeafScreen(ScreenNames.HOME)
     object Search : LeafScreen(ScreenNames.SEARCH)
+    object Create : LeafScreen(ScreenNames.CREATE)
     object Reactions : LeafScreen(ScreenNames.REACTIONS)
+    object Profile : LeafScreen(ScreenNames.PROFILE)
 }
 
 @ExperimentalAnimationApi
@@ -58,9 +58,9 @@ internal fun AppNavigation(
     ) {
         addHomeTopLevel(navController)
         addSearchTopLevel(navController)
+        addCreateTopLevel(navController)
         addReactionsTopLevel(navController)
-        //addWatchedTopLevel(navController, onOpenSettings)
-        //addSearchTopLevel(navController, onOpenSettings)
+        addProfileTopLevel(navController)
     }
 }
 
@@ -68,25 +68,17 @@ internal fun AppNavigation(
 private fun NavGraphBuilder.addHomeTopLevel(
     navController: NavController
 ) {
+    val route = LeafScreen.Home.createRoute(Screen.Home)
     navigation(
         route = Screen.Home.route,
         startDestination = LeafScreen.Home.createRoute(Screen.Home),
     ) {
-        addHome(navController, Screen.Home)
-    }
-}
-
-@ExperimentalAnimationApi
-private fun NavGraphBuilder.addHome(
-    navController: NavController,
-    root: Screen,
-) {
-    composable(
-        route = LeafScreen.Home.createRoute(root),
-        debugLabel = "Home()",
-    ) {
-        val vm: HomeViewModel by immutableInstance()
-        HomeView(viewModel = vm)
+        addBottomNavigationView(
+            route = route,
+            label = ScreenNames.HOME
+        ) {
+            Home()
+        }
     }
 }
 
@@ -94,25 +86,35 @@ private fun NavGraphBuilder.addHome(
 private fun NavGraphBuilder.addSearchTopLevel(
     navController: NavController
 ) {
+    val route = LeafScreen.Search.createRoute(Screen.Search)
     navigation(
         route = Screen.Search.route,
-        startDestination = LeafScreen.Search.createRoute(Screen.Search),
+        startDestination = route,
     ) {
-        addSearch(navController, Screen.Search)
+        addBottomNavigationView(
+            route = route,
+            label = ScreenNames.SEARCH
+        ) {
+            Search()
+        }
     }
 }
 
 @ExperimentalAnimationApi
-private fun NavGraphBuilder.addSearch(
-    navController: NavController,
-    root: Screen,
+private fun NavGraphBuilder.addCreateTopLevel(
+    navController: NavController
 ) {
-    composable(
-        route = LeafScreen.Search.createRoute(root),
-        debugLabel = "Search()",
+    val route = LeafScreen.Create.createRoute(Screen.Create)
+    navigation(
+        route = Screen.Create.route,
+        startDestination = route,
     ) {
-        val vm: SearchViewModel by immutableInstance()
-        SearchView(viewModel = vm)
+        addBottomNavigationView(
+            route = route,
+            label = ScreenNames.CREATE
+        ) {
+            Create()
+        }
     }
 }
 
@@ -120,26 +122,49 @@ private fun NavGraphBuilder.addSearch(
 private fun NavGraphBuilder.addReactionsTopLevel(
     navController: NavController
 ) {
+    val route = LeafScreen.Reactions.createRoute(Screen.Reactions)
     navigation(
         route = Screen.Reactions.route,
-        startDestination = LeafScreen.Reactions.createRoute(Screen.Reactions),
+        startDestination = route,
     ) {
-        addReactions(navController, Screen.Reactions)
+        addBottomNavigationView(
+            route = route,
+            label = ScreenNames.REACTIONS
+        ) {
+            Reactions()
+        }
     }
 }
 
 @ExperimentalAnimationApi
-private fun NavGraphBuilder.addReactions(
-    navController: NavController,
-    root: Screen,
+private fun NavGraphBuilder.addProfileTopLevel(
+    navController: NavController
+) {
+    val route = LeafScreen.Profile.createRoute(Screen.Profile)
+    navigation(
+        route = Screen.Profile.route,
+        startDestination = route,
+    ) {
+        addBottomNavigationView(
+            route = route,
+            label = ScreenNames.PROFILE
+        ) {
+            Profile()
+        }
+    }
+}
+
+@ExperimentalAnimationApi
+private fun NavGraphBuilder.addBottomNavigationView(
+    route: String,
+    label: String,
+    content: @Composable AnimatedVisibilityScope.(NavBackStackEntry) -> Unit
 ) {
     composable(
-        route = LeafScreen.Reactions.createRoute(root),
-        debugLabel = "Reactions()",
-    ) {
-        val vm: ReactionsViewModel by immutableInstance()
-        ReactionsView(viewModel = vm)
-    }
+        route = route,
+        debugLabel = label,
+        content = content
+    )
 }
 
 

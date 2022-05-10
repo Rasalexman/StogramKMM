@@ -38,7 +38,7 @@ fun MainView() {
     // as a screen views to analytics
     LaunchedEffect(navController) {
         navController.currentBackStackEntryFlow.collect { entry ->
-            logg { "label: ${entry.debugLabel}" }
+            logg { "label: ${entry.debugLabel} | route: ${entry.destination.route}" }
         }
     }
 
@@ -74,7 +74,7 @@ fun MainView() {
             }
         }
     ) {
-        Row(Modifier.fillMaxSize()) {
+        Row(Modifier.fillMaxSize().statusBarsPadding()) {
             if (!useBottomNavigation) {
                 val currentSelectedItem by navController.currentScreenAsState()
                 MainNavigationRail(
@@ -270,8 +270,8 @@ private val MainNavigationItems = listOf(
         screen = Screen.Home,
         labelResId = ru.stogram.android.R.string.tab_home,
         contentDescriptionResId = ru.stogram.android.R.string.tab_home,
-        iconImageVector = Icons.Outlined.Weekend,
-        selectedImageVector = Icons.Default.Weekend,
+        iconImageVector = Icons.Outlined.Home,
+        selectedImageVector = Icons.Default.Home,
     ),
     MainNavigationItem.ImageVectorIcon(
         screen = Screen.Search,
@@ -280,13 +280,13 @@ private val MainNavigationItems = listOf(
         iconImageVector = Icons.Outlined.Search,
         selectedImageVector = Icons.Default.Search,
     ),
-//    MainNavigationItem.ImageVectorIcon(
-//        screen = Screen.Create,
-//        labelResId = ru.stogram.android.R.string.tab_create,
-//        contentDescriptionResId = ru.stogram.android.R.string.tab_create,
-//        iconImageVector = Icons.Outlined.Visibility,
-//        selectedImageVector = Icons.Default.Visibility,
-//    ),
+    MainNavigationItem.ImageVectorIcon(
+        screen = Screen.Create,
+        labelResId = ru.stogram.android.R.string.tab_create,
+        contentDescriptionResId = ru.stogram.android.R.string.tab_create,
+        iconImageVector = Icons.Outlined.Add,
+        selectedImageVector = Icons.Default.Add,
+    ),
     MainNavigationItem.ImageVectorIcon(
         screen = Screen.Reactions,
         labelResId = ru.stogram.android.R.string.tab_reactions,
@@ -294,11 +294,11 @@ private val MainNavigationItems = listOf(
         iconImageVector = Icons.Outlined.Favorite,
         selectedImageVector = Icons.Default.Favorite,
     ),
-//    MainNavigationItem.ImageVectorIcon(
-//        screen = Screen.Profile,
-//        labelResId = ru.stogram.android.R.string.tab_profile,
-//        contentDescriptionResId = ru.stogram.android.R.string.tab_profile,
-//        iconImageVector = Icons.Outlined.VerifiedUser,
-//        selectedImageVector = Icons.Default.VerifiedUser
-//    ),
+    MainNavigationItem.ImageVectorIcon(
+        screen = Screen.Profile,
+        labelResId = ru.stogram.android.R.string.tab_profile,
+        contentDescriptionResId = ru.stogram.android.R.string.tab_profile,
+        iconImageVector = Icons.Outlined.Person,
+        selectedImageVector = Icons.Default.Person
+    ),
 )

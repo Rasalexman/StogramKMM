@@ -74,12 +74,14 @@ dependencies {
     val leakCanary: String by rootProject.extra
     val kodiksp: String by rootProject.extra
     val timber: String by rootProject.extra
+    val coil: String by rootProject.extra
 
     implementation(project(":shared"))
     implementation(core)
     implementation(lifecycleVM)
     implementation(coroutinesAndroid)
     implementation(timber)
+    implementation(coil)
 
     implementation(composeUI)
     implementation(composeMaterial)

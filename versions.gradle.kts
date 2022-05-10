@@ -8,6 +8,7 @@ val kodi = "1.6.3"
 val leakcanary = "2.8.1"
 val kotpref = "2.13.2"
 val sresult = "1.3.44"
+val coil = "2.0.0-rc03"
 
 val junit = "5.8.1"
 val runner = "1.1.0"
@@ -19,7 +20,7 @@ val lifecycle = "2.5.0-beta01"
 
 val composeVersion = "1.2.0-alpha08"
 val composeNavigation = "2.4.2"
-val composeActivity = "1.6.0-alpha03"
+val composeActivity = "1.5.0-beta01"//"1.6.0-alpha03"
 val accompanist = "0.24.7-alpha"
 
 val ktorVersion = "2.0.0"
@@ -55,6 +56,7 @@ extra["lifecycleVM"] = "androidx.lifecycle:lifecycle-viewmodel:$lifecycle"
 extra["ktorAndroid"] = "io.ktor:ktor-client-android:$ktorVersion"
 extra["sresult"] = "com.github.Rasalexman.SResult:sresult:$sresult"
 extra["timber"] = "com.jakewharton.timber:timber:5.0.1"
+extra["coil"] = "io.coil-kt:coil-compose:$coil"
 
 //------- Compose
 extra["composeUI"] = "androidx.compose.ui:ui:$composeVersion"

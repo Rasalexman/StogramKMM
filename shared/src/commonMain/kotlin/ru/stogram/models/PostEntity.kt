@@ -1,10 +1,7 @@
 package ru.stogram.models
 
 import io.realm.RealmObject
-import ru.stogram.utils.getRandomName
-import ru.stogram.utils.getRandomString
-import ru.stogram.utils.randomBool
-import ru.stogram.utils.randomCount
+import ru.stogram.utils.*
 import kotlin.random.Random
 
 class PostEntity : RealmObject {
@@ -21,29 +18,46 @@ class PostEntity : RealmObject {
     var hasStory: Boolean = false
     var date: String? = null
 
+    fun createUser(): IUser {
+        val hasUserStory = hasStory
+        return UserEntity().apply {
+            this.id = userId
+            this.name = userName
+            this.photo = userPhoto
+            this.desc = location
+            this.hasStory = hasUserStory
+        }
+    }
+
+    fun createRandomPhoto(): String {
+        return getRandomPhoto()
+    }
+
     companion object {
         fun createRandom(): List<PostEntity> {
             val createData = mutableListOf<PostEntity>()
-            val randomInt: Int = Random.nextInt(24, 48)
+            val randomInt: Int = Random.nextInt(24, 56)
             repeat(randomInt) {
-                createData.add(
-                    PostEntity().apply {
-                        id = getRandomString(100)
-                        postId = getRandomString(100)
-                        userId = getRandomString(100)
-                        userName = getRandomName()
-                        userPhoto = getRandomString(10)
-                        location = "Saint-Petersburg"
-                        text = getRandomString(200)
-                        likesCount = randomCount
-                        commentsCount = randomCount
-                        isLiked = randomBool
-                        hasStory = randomBool
-                        date = "10.05.2022"
-                    }
-                )
+                createData.add(createRandomPost())
             }
             return createData
+        }
+
+        fun createRandomPost(): PostEntity {
+            return PostEntity().apply {
+                id = getRandomString(100)
+                postId = getRandomString(100)
+                userId = getRandomString(100)
+                userName = getRandomName()
+                userPhoto = getRandomPhoto()
+                location = randomLocation
+                text = getRandomString(300)
+                likesCount = randomCount
+                commentsCount = randomCount
+                isLiked = randomBool
+                hasStory = randomBool
+                date = "10.05.2022"
+            }
         }
     }
 }

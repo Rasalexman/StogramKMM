@@ -1,4 +1,4 @@
-package ru.stogram.android.features.reactions
+package ru.stogram.android.features.create
 
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,22 +18,22 @@ import ru.stogram.android.common.Layout
 import ru.stogram.android.common.bodyWidth
 
 @Composable
-fun Reactions() {
-    val vm: ReactionsViewModel by immutableInstance()
-    ReactionsView(viewModel = vm)
+fun Create() {
+    val vm: CreateViewModel by immutableInstance()
+    CreateView(viewModel = vm)
 }
 
 @Composable
-fun ReactionsView(viewModel: ReactionsViewModel) {
-    ReactionsView(
+fun CreateView(viewModel: CreateViewModel) {
+    CreateView(
         viewModel = viewModel,
         refresh = viewModel::onSwipeRefresh
     )
 }
 
 @Composable
-internal fun ReactionsView(
-    viewModel: ReactionsViewModel,
+internal fun CreateView(
+    viewModel: CreateViewModel,
     refresh: () -> Unit
 ) {
     val scaffoldState = rememberScaffoldState()
@@ -62,7 +62,7 @@ internal fun ReactionsView(
                     Spacer(Modifier.height(Layout.gutter))
                 }
                 item {
-                    Text(text = "This is ReactionsView()")
+                    Text(text = "This is CreateView()")
                 }
             }
         }
@@ -72,5 +72,5 @@ internal fun ReactionsView(
 @Preview
 @Composable
 fun SearchPreview() {
-    ReactionsView(viewModel = ReactionsViewModel())
+    CreateView(viewModel = CreateViewModel())
 }

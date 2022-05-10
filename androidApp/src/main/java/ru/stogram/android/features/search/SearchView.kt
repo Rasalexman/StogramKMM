@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.Text
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -12,8 +13,15 @@ import com.google.accompanist.insets.ui.Scaffold
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import com.rasalexman.kodi.core.immutableInstance
 import ru.stogram.android.common.Layout
 import ru.stogram.android.common.bodyWidth
+
+@Composable
+fun Search() {
+    val vm: SearchViewModel by immutableInstance()
+    SearchView(viewModel = vm)
+}
 
 @Composable
 fun SearchView(viewModel: SearchViewModel) {
@@ -52,6 +60,9 @@ internal fun SearchView(
             ) {
                 item {
                     Spacer(Modifier.height(Layout.gutter))
+                }
+                item {
+                    Text(text = "This is SearchView()")
                 }
             }
         }
