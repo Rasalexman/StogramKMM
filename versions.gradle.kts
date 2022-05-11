@@ -2,7 +2,7 @@
 extra["appVersion"] = "1.0.1"
 
 //------- LIBS VERSIONS
-val kotlin_version = "1.6.20"
+val kotlin_version = "1.6.10"
 val gson = "2.8.9"
 val kodi = "1.6.3"
 val leakcanary = "2.8.1"
@@ -18,10 +18,10 @@ val coroutines = "1.6.1"
 val core = "1.7.0"
 val lifecycle = "2.5.0-beta01"
 
-val composeVersion = "1.2.0-alpha08"
+val composeVersion = "1.2.0-alpha07"
 val composeNavigation = "2.4.2"
 val composeActivity = "1.5.0-beta01"//"1.6.0-alpha03"
-val accompanist = "0.24.7-alpha"
+val accompanist = "0.24.6-alpha"
 
 val ktorVersion = "2.0.0"
 val realmVersion = "0.11.1"
@@ -72,6 +72,8 @@ extra["companistFlowLayout"] = "com.google.accompanist:accompanist-flowlayout:$a
 extra["companistInsetsUI"] = "com.google.accompanist:accompanist-insets-ui:$accompanist"
 extra["companistNavigation"] = "com.google.accompanist:accompanist-navigation-animation:$accompanist"
 extra["companistSwipeRefresh"] = "com.google.accompanist:accompanist-swiperefresh:$accompanist"
+extra["companistPager"] = "com.google.accompanist:accompanist-pager:$accompanist"
+extra["companistPagerIndicators"] = "com.google.accompanist:accompanist-pager-indicators:$accompanist"
 
 //------- iOS Libs
 extra["ktorIOS"] = "io.ktor:ktor-client-darwin:$ktorVersion"

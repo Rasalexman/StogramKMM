@@ -1,7 +1,7 @@
 plugins {
     id("com.android.application")
     kotlin("android")
-    id("com.google.devtools.ksp") version "1.6.20-1.0.5"
+    id("com.google.devtools.ksp") version "1.6.10-1.0.4"
 }
 
 android {
@@ -66,6 +66,8 @@ dependencies {
     val companistInsetsUI: String by rootProject.extra
     val companistNavigation: String by rootProject.extra
     val companistSwipeRefresh: String by rootProject.extra
+    val companistPager: String by rootProject.extra
+    val companistPagerIndicators: String by rootProject.extra
 
     val core: String by rootProject.extra
     val lifecycleVM: String by rootProject.extra
@@ -95,6 +97,8 @@ dependencies {
     implementation(companistInsetsUI)
     implementation(companistNavigation)
     implementation(companistSwipeRefresh)
+    implementation(companistPager)
+    implementation(companistPagerIndicators)
 
     ksp(kodiksp)
 

@@ -18,6 +18,9 @@ class PostEntity : RealmObject {
     var hasStory: Boolean = false
     var date: String? = null
 
+    //
+    var content: List<String> = getRandomPhotoList()
+
     fun createUser(): IUser {
         val hasUserStory = hasStory
         return UserEntity().apply {
@@ -29,21 +32,17 @@ class PostEntity : RealmObject {
         }
     }
 
-    fun createRandomPhoto(): String {
-        return getRandomPhoto()
-    }
-
     companion object {
-        fun createRandom(): List<PostEntity> {
+        fun createRandomList(): List<PostEntity> {
             val createData = mutableListOf<PostEntity>()
             val randomInt: Int = Random.nextInt(24, 56)
             repeat(randomInt) {
-                createData.add(createRandomPost())
+                createData.add(createRandom())
             }
             return createData
         }
 
-        fun createRandomPost(): PostEntity {
+        fun createRandom(): PostEntity {
             return PostEntity().apply {
                 id = getRandomString(100)
                 postId = getRandomString(100)
@@ -56,6 +55,7 @@ class PostEntity : RealmObject {
                 commentsCount = randomCount
                 isLiked = randomBool
                 hasStory = randomBool
+                content = getRandomPhotoList()
                 date = "10.05.2022"
             }
         }

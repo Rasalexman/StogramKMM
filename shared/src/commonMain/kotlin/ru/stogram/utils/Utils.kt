@@ -61,3 +61,12 @@ fun getRandomPhoto(): String {
     val randomCount: Int = Random.nextInt(0, randomImages.size-1)
     return randomImages[randomCount]
 }
+
+fun getRandomPhotoList(): List<String> {
+    val randomPhotos = mutableSetOf<String>()
+    val randomCount: Int = Random.nextInt(1, 7)
+    repeat(randomCount) {
+        randomPhotos.add(getRandomPhoto())
+    }
+    return randomPhotos.toList()
+}

@@ -7,6 +7,7 @@ import androidx.navigation.*
 import androidx.navigation.NavDestination.Companion.hierarchy
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.navigation
+import com.google.accompanist.pager.ExperimentalPagerApi
 import com.rasalexman.kodi.core.immutableInstance
 import ru.stogram.android.constants.ScreenNames
 import ru.stogram.android.features.create.Create
@@ -40,6 +41,7 @@ private sealed class LeafScreen(
     object Profile : LeafScreen(ScreenNames.PROFILE)
 }
 
+@ExperimentalPagerApi
 @ExperimentalAnimationApi
 @Composable
 internal fun AppNavigation(
@@ -64,6 +66,7 @@ internal fun AppNavigation(
     }
 }
 
+@ExperimentalPagerApi
 @ExperimentalAnimationApi
 private fun NavGraphBuilder.addHomeTopLevel(
     navController: NavController
@@ -118,6 +121,7 @@ private fun NavGraphBuilder.addCreateTopLevel(
     }
 }
 
+@ExperimentalPagerApi
 @ExperimentalAnimationApi
 private fun NavGraphBuilder.addReactionsTopLevel(
     navController: NavController
@@ -136,6 +140,7 @@ private fun NavGraphBuilder.addReactionsTopLevel(
     }
 }
 
+@ExperimentalPagerApi
 @ExperimentalAnimationApi
 private fun NavGraphBuilder.addProfileTopLevel(
     navController: NavController

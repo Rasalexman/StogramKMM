@@ -52,37 +52,7 @@ fun AvatarNameDescView(user: IUser, onClick: () -> Unit = {}) {
             .noRippleClickable(onClick = onClick)
     ) {
 
-        val localModifier =
-            if(user.hasStory) {
-                Modifier.size(48.dp)
-                    .aspectRatio(1f)
-                    .clip(CircleShape)
-                    .border(1.dp, Color.Red, CircleShape)
-            } else {
-                Modifier.size(48.dp)
-                    .aspectRatio(1f)
-                    .clip(CircleShape)
-                    .border(1.dp, Color.DarkGray, CircleShape)
-            }
-
-        val painter = if (LocalInspectionMode.current) {
-            painterResource(id = R.drawable.default_avatar)
-
-        } else {
-                rememberAsyncImagePainter(
-                    model = ImageRequest.Builder(LocalContext.current)
-                        .data(user.photo)
-                        .size(Size.ORIGINAL) // Set the target size to load the image at.
-                        .build()
-                )
-        }
-
-        Image(
-            painter = painter,
-            contentDescription = "avatar",
-            contentScale = ContentScale.Crop,
-            modifier = localModifier
-        )
+        UserAvatarView(user = user)
 
         Column(
             verticalArrangement = Arrangement.Center,
