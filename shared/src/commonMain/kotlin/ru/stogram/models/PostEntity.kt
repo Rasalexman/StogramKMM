@@ -21,6 +21,9 @@ class PostEntity : RealmObject {
     //
     var content: List<String> = getRandomPhotoList()
 
+    val firstPhoto: String
+        get() = content.firstOrNull() ?: getRandomPhoto()
+
     fun createUser(): IUser {
         val hasUserStory = hasStory
         return UserEntity().apply {

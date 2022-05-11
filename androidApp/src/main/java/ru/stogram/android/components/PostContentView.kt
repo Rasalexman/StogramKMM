@@ -50,5 +50,5 @@ fun PostContentView(postContent: List<String>) {
 @Preview(name = "PostContentView", showBackground = true)
 @Composable
 fun PostContentViewPreview() {
-    PostContentView(postContent = PostEntity.createRandom().content.orEmpty())
+    PostContentView(postContent = PostEntity.createRandom().content)
 }

@@ -85,6 +85,7 @@ private fun NavGraphBuilder.addHomeTopLevel(
     }
 }
 
+@ExperimentalPagerApi
 @ExperimentalAnimationApi
 private fun NavGraphBuilder.addSearchTopLevel(
     navController: NavController
