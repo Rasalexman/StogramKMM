@@ -1,5 +1,6 @@
 package ru.stogram.utils
 
+import ru.stogram.models.ReactionEntity
 import kotlin.random.Random
 
 private val namesCombs = listOf(
@@ -30,6 +31,21 @@ private val randomImages = listOf(
     "https://sun9-78.userapi.com/s/v1/if1/NJMnkmL46zFogqFOotTBPV_sAedT-LH6yrCzj18TD-Jp_NaaJXJ4JJOHTt1519kT0Aq52obH.jpg?size=730x730&quality=96&type=album",
     "https://sun9-85.userapi.com/s/v1/if1/vvw3gV1UVsPpwJsj0xFJWLNy9Cbh-M7hw1_axNPEddiD0mSfoyYzPemFrKBPc72ltnG9_0wo.jpg?size=730x730&quality=96&type=album",
     "https://sun9-23.userapi.com/s/v1/if1/v-Uz72F93Wg9rjUo6zKpPLh8shebo_E5DePl73eqY7cXpNfPRrcitC5EbiQRQXmfID7MXkuU.jpg?size=730x730&quality=96&type=album"
+)
+
+private val reactionsTypes = listOf(
+    ReactionEntity.photoComment,
+    ReactionEntity.likeOnComment,
+    ReactionEntity.photoLike,
+    ReactionEntity.historyComment,
+)
+
+private val reactionsTypeDates = listOf(
+    "вчера",
+    "3 часа назад",
+    "в 21:34",
+    "сегодня в 10:30",
+    "5 дней назад"
 )
 
 fun getRandomString(length: Int) : String {
@@ -69,4 +85,14 @@ fun getRandomPhotoList(): List<String> {
         randomPhotos.add(getRandomPhoto())
     }
     return randomPhotos.toList()
+}
+
+fun getRandomReaction(): String {
+    val randomCount: Int = Random.nextInt(0, reactionsTypes.size-1)
+    return reactionsTypes[randomCount]
+}
+
+fun getRandomReactionDateText(): String {
+    val randomCount: Int = Random.nextInt(0, reactionsTypeDates.size-1)
+    return reactionsTypeDates[randomCount]
 }

@@ -10,7 +10,6 @@ import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -27,11 +26,8 @@ import com.rasalexman.sresult.common.extensions.applyIfSuccess
 import com.rasalexman.sresult.common.extensions.emptyResult
 import com.rasalexman.sresult.common.extensions.logg
 import com.rasalexman.sresult.common.extensions.toSuccessResult
-import com.rasalexman.sresult.data.dto.SResult
 import ru.stogram.android.R
-import ru.stogram.android.common.bodyWidth
-import ru.stogram.android.common.rememberStateWithLifecycle
-import ru.stogram.android.components.PostView
+import ru.stogram.android.components.PostItemView
 import ru.stogram.android.components.StoriesView
 import ru.stogram.android.constants.PostsResult
 import ru.stogram.android.constants.StoriesResult
@@ -106,7 +102,7 @@ internal fun HomeView(
                         items = items,
                         key = { it.id }
                     ) { post ->
-                        PostView(post = post)
+                        PostItemView(post = post)
                         Divider(
                             color = colorResource(id = R.color.color_light_gray),
                             thickness = 1.dp,

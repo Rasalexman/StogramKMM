@@ -12,3 +12,7 @@ interface IUser {
     var observCount: String?
     var bio: String?
 }
+
+fun IUser?.orEmpty(): IUser {
+    return UserEntity.createRandom()
+}

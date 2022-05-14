@@ -51,4 +51,8 @@ class PostEntity : RealmObject {
     }
 }
 
+fun PostEntity?.orEmpty(): PostEntity {
+    return this ?: PostEntity.createRandom()
+}
+
 

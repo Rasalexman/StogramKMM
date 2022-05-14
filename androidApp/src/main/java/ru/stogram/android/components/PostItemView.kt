@@ -16,7 +16,7 @@ import ru.stogram.models.PostEntity
 
 @ExperimentalPagerApi
 @Composable
-fun PostView(post: PostEntity) {
+fun PostItemView(post: PostEntity) {
 
     var isLikedState by remember { mutableStateOf(post.isLiked) }
     //val postContent by remember { mutableStateOf(post.content.orEmpty()) }
@@ -68,5 +68,5 @@ class PostPreviewParameterProvider : PreviewParameterProvider<PostEntity> {
 fun PostViewPreview(
     @PreviewParameter(PostPreviewParameterProvider::class, limit = 1) post: PostEntity
 ) {
-    PostView(post = post)
+    PostItemView(post = post)
 }

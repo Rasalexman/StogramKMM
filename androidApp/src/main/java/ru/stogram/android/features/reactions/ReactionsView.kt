@@ -1,21 +1,31 @@
 package ru.stogram.android.features.reactions
 
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.Text
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material.TabRowDefaults
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import androidx.compose.ui.unit.dp
 import com.google.accompanist.insets.ui.Scaffold
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.rasalexman.kodi.core.immutableInstance
-import ru.stogram.android.common.Layout
+import com.rasalexman.sresult.common.extensions.applyIfSuccess
+import com.rasalexman.sresult.common.extensions.toSuccessResult
+import ru.stogram.android.R
 import ru.stogram.android.common.bodyWidth
+import ru.stogram.android.common.rememberStateWithLifecycle
+import ru.stogram.android.constants.ReactionsResult
+import ru.stogram.models.ReactionEntity
 
 @Composable
 fun Reactions() {
@@ -25,8 +35,12 @@ fun Reactions() {
 
 @Composable
 fun ReactionsView(viewModel: ReactionsViewModel) {
+
+    val reactionsState by rememberStateWithLifecycle(stateFlow = viewModel.reactionsState)
+
     ReactionsView(
         viewModel = viewModel,
+        reactionsState = reactionsState,
         refresh = viewModel::onSwipeRefresh
     )
 }
@@ -34,6 +48,7 @@ fun ReactionsView(viewModel: ReactionsViewModel) {
 @Composable
 internal fun ReactionsView(
     viewModel: ReactionsViewModel,
+    reactionsState: ReactionsResult,
     refresh: () -> Unit
 ) {
     val scaffoldState = rememberScaffoldState()
@@ -55,22 +70,37 @@ internal fun ReactionsView(
             }
         ) {
             LazyColumn(
-                contentPadding = paddingValues,
                 modifier = Modifier.bodyWidth(),
             ) {
-                item {
-                    Spacer(Modifier.height(Layout.gutter))
-                }
-                item {
-                    Text(text = "This is ReactionsView()")
+                reactionsState.applyIfSuccess { items ->
+                    items(items = items, key = { it.id }) { reaction ->
+                        ReactionItemView(reaction = reaction)
+
+                        TabRowDefaults.Divider(
+                            color = colorResource(id = R.color.color_light_gray),
+                            thickness = 1.dp,
+                            modifier = Modifier
+                                .padding(start = 8.dp)
+                        )
+                    }
                 }
             }
         }
     }
 }
 
+class ReactionsPreviewParameterProvider : PreviewParameterProvider<ReactionsResult> {
+    override val values = sequenceOf(
+        ReactionEntity.createRandomList().toSuccessResult()
+    )
+}
+
 @Preview
 @Composable
-fun SearchPreview() {
-    ReactionsView(viewModel = ReactionsViewModel())
+fun ReactionsPreview(
+    @PreviewParameter(ReactionsPreviewParameterProvider::class, limit = 1) result: ReactionsResult
+) {
+    ReactionsView(viewModel = ReactionsViewModel(), reactionsState = result) {
+
+    }
 }
