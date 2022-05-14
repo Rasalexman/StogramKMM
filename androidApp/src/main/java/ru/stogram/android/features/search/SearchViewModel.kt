@@ -8,9 +8,7 @@ import com.rasalexman.sresult.common.extensions.emptyResult
 import com.rasalexman.sresult.common.extensions.logg
 import com.rasalexman.sresult.common.extensions.toSuccessListResult
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.*
 import ru.stogram.android.constants.PostsResult
 import ru.stogram.android.di.ModuleNames
 import ru.stogram.models.PostEntity
@@ -21,16 +19,35 @@ import ru.stogram.models.PostEntity
 )
 class SearchViewModel : ViewModel() {
 
-    val postsState: StateFlow<PostsResult> = flow {
-        val posts = PostEntity.createRandomList()
-        val data = posts.toSuccessListResult()
-        logg { "posts counts = ${posts.size}" }
-        emit(data)
+    private val defaultPosts by lazy {
+        PostEntity.createRandomList() //emptyList<PostEntity>() //
+    }
+
+    private val defaultPostsFlow = flow<List<PostEntity>> {
+        emit(defaultPosts)
+    }
+
+    private val currentSearchQuery = MutableStateFlow("")
+
+    val searchQuery = MutableStateFlow("")
+
+    val postsState: StateFlow<PostsResult> = combine(currentSearchQuery, defaultPostsFlow) { query, defaults ->
+        if(query.isNotEmpty()) {
+            val searchedPosts = PostEntity.createRandomList()
+            searchedPosts.filter { it.userName?.lowercase()?.contains(query.lowercase()) == true }
+        } else {
+            defaults
+        }.toSuccessListResult()
     }.flowOn(Dispatchers.Default).asState(viewModelScope, emptyResult())
 
     val refreshing: Boolean = false
 
     fun onSwipeRefresh() {
 
+    }
+
+    fun onSearchButtonPressed() {
+        logg { "---> SEARCH QUERY IS ${searchQuery.value}" }
+        currentSearchQuery.value = searchQuery.value
     }
 }

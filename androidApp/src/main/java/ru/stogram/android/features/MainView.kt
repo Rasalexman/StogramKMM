@@ -74,8 +74,8 @@ fun MainView() {
                 )
             }
         }
-    ) {
-        Row(Modifier.fillMaxSize().statusBarsPadding()) {
+    ) { innerPadding ->
+        Row(Modifier.fillMaxSize().statusBarsPadding().padding(innerPadding)) {
             if (!useBottomNavigation) {
                 val currentSelectedItem by navController.currentScreenAsState()
                 MainNavigationRail(
@@ -104,7 +104,7 @@ fun MainView() {
                 navController = navController,
                 modifier = Modifier
                     .weight(1f)
-                    .fillMaxHeight(),
+                    .fillMaxHeight()
             )
         }
     }

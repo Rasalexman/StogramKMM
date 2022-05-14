@@ -3,37 +3,45 @@ package ru.stogram.android.components
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldDefaults
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.flow.MutableStateFlow
 import ru.stogram.android.R
 
 @Composable
-fun SearchBarView(state: MutableState<TextFieldValue>) {
+fun SearchBarView(
+    textFlow: MutableStateFlow<String>,
+    focusState: MutableState<Boolean>,
+    onSearch: () -> Unit
+) {
+    val state = textFlow.collectAsState(initial = "")
     TextField(
         value = state.value,
         onValueChange = { value ->
-            state.value = value
+            textFlow.value = value
         },
+        placeholder = { Text("Введите запрос...", color = Color.White.copy(alpha = 0.5f)) },
         modifier = Modifier
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .onFocusChanged { fState -> focusState.value = fState.hasFocus },
         textStyle = TextStyle(color = Color.White, fontSize = 18.sp),
         leadingIcon = {
             Icon(
@@ -44,12 +52,18 @@ fun SearchBarView(state: MutableState<TextFieldValue>) {
                     .size(24.dp)
             )
         },
+        keyboardOptions = KeyboardOptions(
+            imeAction = ImeAction.Search
+        ),
+        keyboardActions = KeyboardActions(onSearch = {
+            onSearch()
+        }),
         trailingIcon = {
-            if (state.value != TextFieldValue("")) {
+            if (state.value != "") {
                 IconButton(
                     onClick = {
-                        state.value =
-                            TextFieldValue("") // Remove text from TextField when you press the 'X' icon
+                        textFlow.value = ""
+                        onSearch()
                     }
                 ) {
                     Icon(
@@ -80,6 +94,9 @@ fun SearchBarView(state: MutableState<TextFieldValue>) {
 @Preview(showBackground = true)
 @Composable
 fun SearchViewPreview() {
-    val textState = remember { mutableStateOf(TextFieldValue("")) }
-    SearchBarView(textState)
+    val textState = remember { MutableStateFlow("") }
+    val focusState = remember { mutableStateOf(false) }
+    SearchBarView(textState, focusState) {
+
+    }
 }

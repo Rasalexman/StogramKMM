@@ -32,11 +32,11 @@ class HomeViewModel : BaseViewModel {
     }
 
     func startObservingPosts() {
-//        self.job = postsRepository.allPostsAsCommonFlowable().watch { posts in
-//            self.sharedPost = posts as! [PostEntity]
-//            //print("----> posts count \(posts?.count ?? 0)")
-//        }
-        let posts = realmDatabase.getAllPosts()
+        self.job = postsRepository.allPostsAsCommonFlowable().watch { posts in
+            self.sharedPost = posts as! [PostEntity]
+            print("----> posts count \(posts?.count ?? 0)")
+        }
+        //let posts = realmDatabase.getAllPosts()
     }
 
     func stopObservingPost() {

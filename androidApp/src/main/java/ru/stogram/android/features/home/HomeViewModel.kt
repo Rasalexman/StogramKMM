@@ -15,6 +15,7 @@ import ru.stogram.android.constants.PostsResult
 import ru.stogram.android.constants.StoriesResult
 import ru.stogram.android.di.ModuleNames
 import ru.stogram.models.PostEntity
+import ru.stogram.models.StoryEntity
 import ru.stogram.models.UserEntity
 
 @BindSingle(
@@ -23,17 +24,23 @@ import ru.stogram.models.UserEntity
 )
 class HomeViewModel : ViewModel() {
 
+    private val posts by lazy {
+        PostEntity.createRandomList() //emptyList<PostEntity>() //
+    }
+
+    private val userStories by lazy {
+        UserEntity.createRandomList(true) //emptyList<UserEntity>()//
+    }
+
     val postsState: StateFlow<PostsResult> = flow {
-        val posts = PostEntity.createRandomList()
         val data = posts.toSuccessListResult()
         logg { "posts counts = ${posts.size}" }
         emit(data)
     }.flowOn(Dispatchers.Default).asState(viewModelScope, emptyResult())
 
     val storiesState: StateFlow<StoriesResult> = flow {
-        val data = UserEntity.createRandomList(true)
-        val result = data.toSuccessListResult()
-        logg { "stories counts = ${data.size}" }
+        val result = userStories.toSuccessListResult()
+        logg { "stories counts = ${userStories.size}" }
         emit(result)
     }.flowOn(Dispatchers.Default).asState(viewModelScope, emptyResult())
 
