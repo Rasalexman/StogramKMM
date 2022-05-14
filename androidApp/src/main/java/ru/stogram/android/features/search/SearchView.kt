@@ -114,7 +114,7 @@ internal fun SearchView(
                         .fillMaxHeight()
                 ) {
                     postsState.applyIfSuccess { posts ->
-                        items(posts) { post ->
+                        items(items = posts, key = { it.id }) { post ->
                             PostImageView(post = post)
                         }
                     }

@@ -10,6 +10,11 @@ class UserEntity : IUser {
     override var desc: String? = null
     override var hasStory: Boolean = false
 
+    override var postCount: String? = null
+    override var subsCount: String? = null
+    override var observCount: String? = null
+    override var bio: String? = null
+
     companion object {
         fun createRandomList(hasUserStory: Boolean? = null): List<IUser> {
             val createData = mutableListOf<IUser>()
@@ -27,6 +32,15 @@ class UserEntity : IUser {
                 photo = getRandomPhoto()
                 desc = randomLocation
                 hasStory = hasUserStory ?: randomBool
+            }
+        }
+
+        fun createRandomDetailed(hasUserStory: Boolean? = null): IUser {
+            return createRandom(hasUserStory).apply {
+                postCount = randomCount
+                subsCount = randomCount
+                observCount = randomCount
+                bio = getRandomString(300)
             }
         }
     }

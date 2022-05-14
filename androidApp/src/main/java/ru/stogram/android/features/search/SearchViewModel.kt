@@ -34,7 +34,7 @@ class SearchViewModel : ViewModel() {
     val postsState: StateFlow<PostsResult> = combine(currentSearchQuery, defaultPostsFlow) { query, defaults ->
         if(query.isNotEmpty()) {
             val searchedPosts = PostEntity.createRandomList()
-            searchedPosts.filter { it.userName?.lowercase()?.contains(query.lowercase()) == true }
+            searchedPosts.filter { it.user?.name.orEmpty().lowercase().contains(query.lowercase()) }
         } else {
             defaults
         }.toSuccessListResult()

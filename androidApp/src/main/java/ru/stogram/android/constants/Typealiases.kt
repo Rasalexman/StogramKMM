@@ -6,3 +6,4 @@ import ru.stogram.models.PostEntity
 
 typealias PostsResult = SResult<List<PostEntity>>
 typealias StoriesResult = SResult<List<IUser>>
+typealias UserResult = SResult<IUser>
