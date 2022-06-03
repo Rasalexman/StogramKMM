@@ -2,25 +2,25 @@
 extra["appVersion"] = "1.0.1"
 
 //------- LIBS VERSIONS
-val kotlin_version = "1.6.10"
-val gson = "2.8.9"
+val kotlin_version = "1.6.21"
+val gson = "2.9.0"
 val kodi = "1.6.3"
 val leakcanary = "2.8.1"
 val kotpref = "2.13.2"
-val sresult = "1.3.44"
-val coil = "2.0.0-rc03"
+val sresult = "1.3.45"
+val coil = "2.1.0"
 
 val junit = "5.8.1"
 val runner = "1.1.0"
 val espresso = "3.1.0"
 val coroutines = "1.6.1"
 
-val core = "1.7.0"
-val lifecycle = "2.5.0-beta01"
+val core = "1.8.0"
+val lifecycle = "2.5.0-rc01"
 
-val composeVersion = "1.2.0-alpha07"
-val composeNavigation = "2.4.2"
-val composeActivity = "1.5.0-beta01"//"1.6.0-alpha03"
+val composeVersion = "1.2.0-beta03"
+val composeNavigation = "2.5.0-rc01"
+val composeActivity = "1.5.0-rc01"
 val accompanist = "0.24.6-alpha"
 
 val ktorVersion = "2.0.0"
@@ -34,11 +34,11 @@ extra["composeVersion"] = composeVersion
 extra["kotlinVersion"] = kotlin_version
 extra["apiVersion"] = "1.6"
 extra["jvmVersion"] = "11"
-extra["agpVersion"] = "7.2.0"
+extra["agpVersion"] = "7.2.1"
 extra["realmVersion"] = realmVersion
 
 extra["minSdkVersion"] = 24
-extra["buildSdkVersion"] = 31
+extra["buildSdkVersion"] = 32
 
 extra["jitpackPath"] = "https://jitpack.io"
 
