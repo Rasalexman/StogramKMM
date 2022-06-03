@@ -24,5 +24,10 @@ final class Consts {
     
     public static let IMAGE_LIKE = "suit.heart"
     public static let IMAGE_LIKE_FILLED = "suit.heart.fill"
+    public static let IMAGE_BUBBLE_FILLED = "text.bubble.fill"
+    public static let IMAGE_MORE_PICS = "doc.on.doc"
+    
+    public static let DATE_FORMAT_FROM_ISO = "yyyy-MM-dd HH:mm:ss"
+    public static let DATE_FORMAT_TO_LOCAL = "dd.MM.yyyy HH:mm"
 }
 

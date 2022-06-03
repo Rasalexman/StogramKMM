@@ -24,7 +24,7 @@ struct HomeView: BaseView {
                 Divider()
                 //------
                 ScrollView(.horizontal, showsIndicators: false) {
-                    HStack {
+                    LazyHStack {
                         ForEach(vm.userStories, id: \.id) { user in
                             UserAvatarView(user: user, cWidth: Consts.STORY_IMAGE_SIZE, cHeight: Consts.STORY_IMAGE_SIZE, border: Consts.STORY_BORDER_SIZE)
                         }

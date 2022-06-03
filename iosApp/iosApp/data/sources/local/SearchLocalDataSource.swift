@@ -18,7 +18,7 @@ final class SearchLocalDataSource : ISearchLocalDataSource {
             let lowerCasedQuery = query.lowercased()
             let randomPhotos = takeRandomPosts()
             let filtered = randomPhotos.filter {
-                let user = $0.user ?? UserEntity.companion.createRandom(hasUserStory: true)
+                let user = $0.user 
                 return user.name.lowercased().contains(lowerCasedQuery) || user.id.lowercased().contains(lowerCasedQuery)
             }
             lastQuery = query

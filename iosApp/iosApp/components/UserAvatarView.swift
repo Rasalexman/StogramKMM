@@ -18,25 +18,23 @@ struct UserAvatarView: View {
     var shadow: CGFloat = Consts.ZERO_SIZE
     var bColor: Color = Color.red
     
-    private var imageUrl: URL {
-        return URL(string: user.photo)!
-    }
-    
     var body: some View {
-        URLImage(imageUrl) { image in
-            image
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(width: cWidth, height: cHeight)
-                .clipShape(Circle())
-                .shadow(radius: shadow)
-                .overlay(Circle().stroke(bColor, lineWidth: border))
-        }
+        ZStack {
+            URLImage(user.photo.toUrl()) { image in
+                image
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: cWidth, height: cHeight, alignment: Alignment.center)
+                    .clipShape(Circle())
+                    //.shadow(radius: shadow)
+                    .overlay(Circle().stroke(bColor, lineWidth: border))
+            }
+        }.frame(width: cWidth, height: cHeight)
     }
 }
 
 struct UserAvatarView_Previews: PreviewProvider {
     static var previews: some View {
-        UserAvatarView(user: UserEntity.companion.createRandom(hasUserStory: true))
+        UserAvatarView(user: UserEntity.companion.createRandom(hasUserStory: true)).previewLayout(PreviewLayout.sizeThatFits)
     }
 }

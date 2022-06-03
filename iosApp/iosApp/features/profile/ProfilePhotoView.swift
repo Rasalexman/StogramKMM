@@ -16,7 +16,7 @@ struct ProfilePhotoView: BaseView {
     var cHeight: CGFloat? = nil
     
     private var imageUrl: URL {
-        return URL(string: post.firstPhoto)!
+        return post.firstPhoto.toUrl()
     }
     
     var body : some View
@@ -27,29 +27,15 @@ struct ProfilePhotoView: BaseView {
                     .aspectRatio(contentMode: .fit)
                     .foregroundColor(.clear)
                     .overlay {
-                        GeometryReader { geometry in
-                            URLImage(imageUrl) { image in
-                                image.resizable()
-                                    .scaledToFill()
-                                    .frame(width: chooseWidth(geometry), height: chooseHeight(geometry), alignment:.center)
-                                    .clipped()
-                            }
-                        }
+                        GeometryImageView(imageUrl: imageUrl, cWidth: cWidth, cHeight: cHeight)
                     }
             } else {
-                GeometryReader { geometry in
-                    URLImage(imageUrl) { image in
-                        image.resizable()
-                        .scaledToFill()
-                        .frame(width: chooseWidth(geometry), height: chooseHeight(geometry), alignment:.center)
-                        .clipped()
-                    }
-                }
+                GeometryImageView(imageUrl: imageUrl, cWidth: cWidth, cHeight: cHeight)
             }
             
             if post.hasMoreContent {
                 VStack(alignment: .trailing) {
-                    Image(systemName: "doc.on.doc")
+                    Image(systemName: Consts.IMAGE_MORE_PICS)
                         .resizable()
                         .frame(width: 14, height: 16, alignment: .bottomLeading)
                         .foregroundColor(.white)
@@ -58,24 +44,10 @@ struct ProfilePhotoView: BaseView {
             }
         }
     }
-    
-    private func chooseWidth(_ proxy: GeometryProxy) -> CGFloat {
-        if let currentWidth = cWidth {
-            return currentWidth
-        }
-        return proxy.size.width
-    }
-    
-    private func chooseHeight(_ proxy: GeometryProxy) -> CGFloat {
-        if let currentHeight = cHeight  {
-            return currentHeight
-        }
-        return proxy.size.height
-    }
 }
 
 struct ProfilePhotoView_Previews: PreviewProvider {
     static var previews: some View {
-        ProfilePhotoView(post: PostEntity.companion.createRandom())
+        ProfilePhotoView(post: PostEntity.companion.createRandom()).previewLayout(PreviewLayout.sizeThatFits)
     }
 }

@@ -9,11 +9,11 @@ import kotlin.random.Random
 class CommentEntity {
     var id: String = ""
     var postId: String = ""
-    var user: IUser = UserEntity.createRandom(false)
+    var user: IUser = UserEntity.createRandom(randomBool)
     var isLiked: Boolean = false
     var text: String = ""
     var likesCount: String = "56"
-    var date: String = "03.05.2022 21:55"
+    var date: String = getRandomDate()
 
     companion object {
         fun createRandomList(): List<CommentEntity> {
@@ -30,9 +30,8 @@ class CommentEntity {
                 id = getRandomString(1000)
                 postId = getRandomString(1000)
                 isLiked = randomBool
-                text = getRandomString(300)
+                text = getRandomString(128)
                 likesCount = randomCount
-                date = getRandomDate()
             }
         }
     }

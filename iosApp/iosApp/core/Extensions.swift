@@ -14,3 +14,9 @@ extension Int {
         return CGFloat(self)
     }
 }
+
+extension String {
+    func toUrl() -> URL {
+        return URL(string: self)!
+    }
+}

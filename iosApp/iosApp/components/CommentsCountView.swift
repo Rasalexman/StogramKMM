@@ -23,7 +23,7 @@ struct CommentsCountView: View {
                 self.isActive = true
             }, label: {
                 
-                Image(systemName: "text.bubble.fill")
+                Image(systemName: Consts.IMAGE_BUBBLE_FILLED)
                     .resizable()
                     .frame(width: 22, height: 22)
                 

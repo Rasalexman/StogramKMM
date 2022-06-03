@@ -14,7 +14,7 @@ struct PostContentView: View {
     var post: PostEntity
     private var images: [PhotoModel] {
         return post.content.map { photo in
-            PhotoModel(id: UUID().uuidString, url: URL(string: photo)!)
+            PhotoModel(id: UUID().uuidString, url: photo.toUrl())
         }
     }
     
@@ -23,22 +23,16 @@ struct PostContentView: View {
     var body: some View {
             TabView {
                 ForEach(images, id: \.id) { item in
-                    URLImage(item.url) { image in
-                        image.resizable()
-                            .scaledToFill()
-                            .frame(width: screenWidth, height: screenWidth, alignment:.center)
-                            .clipped()
-                        
-                    }
+                    GeometryImageView(imageUrl: item.url, cWidth: screenWidth, cHeight: screenWidth)
                 }
             }
-            .frame(height: screenWidth, alignment: .topLeading)
+            .frame(width: screenWidth, height: screenWidth, alignment: .topLeading)
            .tabViewStyle(PageTabViewStyle())
     }
 }
 
 struct PostContentView_Previews: PreviewProvider {
     static var previews: some View {
-        PostContentView(post: PostEntity.companion.createRandom())
+        PostContentView(post: PostEntity.companion.createRandom()).previewLayout(PreviewLayout.sizeThatFits)
     }
 }

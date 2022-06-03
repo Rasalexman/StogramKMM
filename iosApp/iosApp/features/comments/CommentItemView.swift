@@ -14,18 +14,16 @@ struct CommentItemView: View {
     @State var isLiked: Bool = false
     
     private var formattedDate: String {
-        let fromDateFormatter = DateFormatter()
-        fromDateFormatter.locale = Locale(identifier: "en_US_POSIX")
-        fromDateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZZ"
-        fromDateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
-        let dt = fromDateFormatter.date(from: comment.date)!
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = Consts.DATE_FORMAT_FROM_ISO
+        var currentDate = comment.date
+        //print("current date = \(currentDate)")
+        if let dt = dateFormatter.date(from: currentDate) {
+            dateFormatter.dateFormat = Consts.DATE_FORMAT_TO_LOCAL
+            currentDate = dateFormatter.string(from: dt)
+        }
         
-        let toDateFormatter = DateFormatter()
-        toDateFormatter.locale = Locale(identifier: "en_US_POSIX")
-        toDateFormatter.dateFormat = "dd.MM.yyyy HH:mm"
-        toDateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
-        
-        return toDateFormatter.string(from: dt)
+        return currentDate
     }
     
     var body: some View {

@@ -49,9 +49,14 @@ private val reactionsTypeDates = listOf(
     "5 дней назад"
 )
 
+private val allowedChars = ('A'..'Z') + ('a'..'z') + ('0'..'9')
 fun getRandomString(length: Int) : String {
-    val allowedChars = ('A'..'Z') + ('a'..'z') + ('0'..'9')
-    return (1..length)
+    val firstRange = if(length < 48) {
+        Random.nextInt(10, 48)
+    } else {
+        Random.nextInt(48, length)
+    }
+    return (1..firstRange)
         .map { allowedChars.random() }
         .joinToString("")
 }
@@ -99,10 +104,14 @@ fun getRandomReactionDateText(): String {
 }
 
 fun getRandomDate(): String {
-    val randBackTime = Random.nextInt(10, 99999)
+    val randBackTime = Random.nextInt(1000, 99999)
     val now = Clock.System.now()
     val systemTZ = TimeZone.currentSystemDefault()
     val lastDt = now.minus(randBackTime, DateTimeUnit.MILLISECOND, systemTZ)
     val dt = lastDt.toLocalDateTime(systemTZ)
-    return dt.toString()
+    val iso8601Date = dt.toString()
+    val replacedTDate = iso8601Date.replace("T", " ")
+    val cutAfterDotDate = replacedTDate.replaceAfterLast(".", "")
+    val finalDate = cutAfterDotDate.replace(".", "")
+    return finalDate
 }
