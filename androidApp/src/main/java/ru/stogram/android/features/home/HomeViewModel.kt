@@ -15,7 +15,6 @@ import ru.stogram.android.constants.PostsResult
 import ru.stogram.android.constants.StoriesResult
 import ru.stogram.android.di.ModuleNames
 import ru.stogram.models.PostEntity
-import ru.stogram.models.StoryEntity
 import ru.stogram.models.UserEntity
 
 @BindSingle(

@@ -6,18 +6,34 @@
 //
 
 import SwiftUI
+import shared
 
 struct CommentItemView: View {
     
-    var comment: CommentModel
+    var comment: CommentEntity
     @State var isLiked: Bool = false
+    
+    private var formattedDate: String {
+        let fromDateFormatter = DateFormatter()
+        fromDateFormatter.locale = Locale(identifier: "en_US_POSIX")
+        fromDateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZZ"
+        fromDateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
+        let dt = fromDateFormatter.date(from: comment.date)!
+        
+        let toDateFormatter = DateFormatter()
+        toDateFormatter.locale = Locale(identifier: "en_US_POSIX")
+        toDateFormatter.dateFormat = "dd.MM.yyyy HH:mm"
+        toDateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
+        
+        return toDateFormatter.string(from: dt)
+    }
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             
             AvatarDescView(
-                user: comment,
-                userDesc: comment.date,
+                user: comment.user,
+                desc: formattedDate,
                 imageSize: Consts.COMMENT_IMAGE_SIZE,
                 nameSize: 12
             )
@@ -57,7 +73,7 @@ struct CommentItemView: View {
 
 struct CommentItemView_Previews: PreviewProvider {
     static var previews: some View {
-        CommentItemView(comment: CommentModel())
+        CommentItemView(comment: CommentEntity.companion.createRandom())
             .previewLayout(PreviewLayout.sizeThatFits)
     }
 }

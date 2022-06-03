@@ -36,6 +36,7 @@ kotlin {
         val realmBase: String by rootProject.extra
         val coroutinesNative: String by rootProject.extra
         val serializationCore: String by rootProject.extra
+        val datetime: String by rootProject.extra
         val commonMain by getting {
             dependencies {
                 implementation(ktorCore)
@@ -43,6 +44,7 @@ kotlin {
                 implementation(ktorLogging)
                 implementation(coroutinesNative)
                 implementation(serializationCore)
+                implementation(datetime)
                 api(realmBase)
             }
         }

@@ -6,10 +6,11 @@
 //
 
 import SwiftUI
+import shared
 
 struct SearchDetailsView: View {
     
-    var post: PostModel
+    let post: PostEntity
     
     var body: some View {
         ScrollView(.vertical, showsIndicators: false)  {
@@ -23,6 +24,6 @@ struct SearchDetailsView: View {
 
 struct SearchDetailsView_Previews: PreviewProvider {
     static var previews: some View {
-        SearchDetailsView(post: PostModel())
+        SearchDetailsView(post: PostEntity.companion.createRandom())
     }
 }

@@ -6,9 +6,10 @@
 //
 
 import SwiftUI
+import shared
 
 struct PostView: View {
-    var post: PostModel
+    var post: PostEntity
     var showHeader: Bool = true
     var showCommentsCount: Bool = true
     var showContent: Bool = true
@@ -20,14 +21,14 @@ struct PostView: View {
         VStack(alignment: .leading, spacing: 0) {
             
             if(showHeader) {
-                AvatarDescView(user: post, userDesc: post.location)
+                AvatarDescView(user: post.user, desc: post.user.desc)
             }
             
             if(showContent) {
                 if(post.hasMoreContent) {
-                    PostSliderView(images: post.allPhotos)
+                    PostContentView(post: post)
                 } else {
-                    ProfilePhotoView(postModel: post)
+                    ProfilePhotoView(post: post)
                 }
             }
             
@@ -71,6 +72,7 @@ struct PostView: View {
 
 struct PostView_Previews: PreviewProvider {
     static var previews: some View {
-        PostView(post: PostModel()).previewLayout(PreviewLayout.sizeThatFits).previewLayout(PreviewLayout.sizeThatFits)
+        PostView(post:PostEntity.companion.createRandom())
+            .previewLayout(PreviewLayout.sizeThatFits).previewLayout(PreviewLayout.sizeThatFits)
     }
 }

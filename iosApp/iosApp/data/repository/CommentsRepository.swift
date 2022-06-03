@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import shared
 
 final class CommentsRepository : ICommentsRepository {
     private let localDataSource: ICommentsLocalDataSource
@@ -13,11 +14,11 @@ final class CommentsRepository : ICommentsRepository {
         localDataSource = lds
     }
     
-    func takePostComments() -> [CommentModel] {
+    func takePostComments() -> [CommentEntity] {
         return localDataSource.takePostComments()
     }
 }
 
 protocol ICommentsRepository {
-    func takePostComments() -> [CommentModel]
+    func takePostComments() -> [CommentEntity]
 }

@@ -7,21 +7,15 @@
 
 import Foundation
 import Sodi
+import shared
 
 final class ProfileViewModel : BaseViewModel {
     
-    private let repository: IUserRepository = instance()
+    @Published var selectedUser: IUser = UserEntity.companion.createRandomDetailed(hasUserStory: true)
     
-    @Published var postCount: String = "957"
-    @Published var subsCount: String = "349"
-    @Published var observCount: String = "453"
-    
-    @Published var userName: String = "Александр Минкин"
-    @Published var userDesc: String = randomString(256)
-    
-    @Published var userPosts: [PostModel] = []
+    @Published var userPosts: [PostEntity] = []
     
     func fetchProfileData(userId: String) {
-        userPosts = repository.takeUserPosts(userId: userId)
+        userPosts = PostEntity.companion.createRandomList()
     }
 }

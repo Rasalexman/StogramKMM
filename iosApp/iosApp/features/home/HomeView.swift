@@ -25,8 +25,8 @@ struct HomeView: BaseView {
                 //------
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack {
-                        ForEach(vm.userStories) { story in
-                            StoryView(story: story)
+                        ForEach(vm.userStories, id: \.id) { user in
+                            UserAvatarView(user: user, cWidth: Consts.STORY_IMAGE_SIZE, cHeight: Consts.STORY_IMAGE_SIZE, border: Consts.STORY_BORDER_SIZE)
                         }
                     }.padding(8)
                 }

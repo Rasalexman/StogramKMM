@@ -6,15 +6,16 @@
 //
 
 import SwiftUI
+import shared
 
 struct ReactionItemView: View {
     
-    var reaction: ReactionModel
+    var reaction: ReactionEntity
     
     var body: some View {
         HStack(alignment: .center, spacing: 0) {
                         
-            CircleImageView(photo: reaction.reactionUserPhoto)
+            UserAvatarView(user: reaction.from)
                 
             Text(reaction.fullDescription)
                 .font(.system(size: 12))
@@ -24,7 +25,7 @@ struct ReactionItemView: View {
                 .frame(minWidth: 0, maxWidth: .infinity, alignment: .topLeading)
             
             ZStack {
-                ProfilePhotoView(postModel: reaction.postModel, cWidth: Consts.REACTION_IMAGE_SIZE, cHeight: Consts.REACTION_IMAGE_SIZE)
+                ProfilePhotoView(post: reaction.post, cWidth: Consts.REACTION_IMAGE_SIZE, cHeight: Consts.REACTION_IMAGE_SIZE)
                     .frame(width: Consts.REACTION_IMAGE_SIZE, height: Consts.REACTION_IMAGE_SIZE, alignment:.center)
             }.frame(alignment: .trailing)
             
@@ -35,10 +36,6 @@ struct ReactionItemView: View {
 
 struct ReactionItemView_Previews: PreviewProvider {
     static var previews: some View {
-        ReactionItemView(reaction: ReactionModel(
-            reactionType: ReactionType.photoComment,
-            reactionUserPhoto: randomPhoto(),
-            comment: randomString(400)
-        ))
+        ReactionItemView(reaction: ReactionEntity.companion.createRandom())
     }
 }

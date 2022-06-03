@@ -7,13 +7,14 @@
 
 import Foundation
 import Sodi
+import shared
 
 final class CommentsViewModel : BaseViewModel {
     
-    private let repository: ICommentsRepository = instance()
-    @Published var postComments: [CommentModel] = []
+    //private let repository: ICommentsRepository = instance()
+    @Published var postComments: [CommentEntity] = []
     
     override init() {
-        postComments = repository.takePostComments()
+        postComments = CommentEntity.companion.createRandomList()
     }
 }

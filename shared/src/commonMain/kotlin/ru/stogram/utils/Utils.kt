@@ -1,5 +1,6 @@
 package ru.stogram.utils
 
+import kotlinx.datetime.*
 import ru.stogram.models.ReactionEntity
 import kotlin.random.Random
 
@@ -87,7 +88,7 @@ fun getRandomPhotoList(): List<String> {
     return randomPhotos.toList()
 }
 
-fun getRandomReaction(): String {
+fun getRandomReactionType(): String {
     val randomCount: Int = Random.nextInt(0, reactionsTypes.size-1)
     return reactionsTypes[randomCount]
 }
@@ -95,4 +96,13 @@ fun getRandomReaction(): String {
 fun getRandomReactionDateText(): String {
     val randomCount: Int = Random.nextInt(0, reactionsTypeDates.size-1)
     return reactionsTypeDates[randomCount]
+}
+
+fun getRandomDate(): String {
+    val randBackTime = Random.nextInt(10, 99999)
+    val now = Clock.System.now()
+    val systemTZ = TimeZone.currentSystemDefault()
+    val lastDt = now.minus(randBackTime, DateTimeUnit.MILLISECOND, systemTZ)
+    val dt = lastDt.toLocalDateTime(systemTZ)
+    return dt.toString()
 }

@@ -7,11 +7,12 @@
 
 import SwiftUI
 import Sodi
+import shared
 
 struct PostDetailsView: BaseView {
     
     @ObservedObject private var vm: PostDetailsViewModel = instance()
-    @State var selectedPost: PostModel
+    @State var selectedPost: PostEntity
     var showContent: Bool = true
     var showHeader: Bool = false
     var showCommentsCount: Bool = false
@@ -45,7 +46,7 @@ struct PostDetailsView: BaseView {
         }
     }
     
-    static func getNavLink(onSelection: Binding<String?>, selectedPost: PostModel) -> some View {
+    static func getNavLink(onSelection: Binding<String?>, selectedPost: PostEntity) -> some View {
         return NavigationLink(
             destination: PostDetailsView(selectedPost: selectedPost)
         ) { EmptyView() }
@@ -54,6 +55,6 @@ struct PostDetailsView: BaseView {
 
 struct PostDetailsView_Previews: PreviewProvider {
     static var previews: some View {
-        PostDetailsView(selectedPost: PostModel())
+        PostDetailsView(selectedPost: PostEntity.companion.createRandom())
     }
 }

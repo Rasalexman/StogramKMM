@@ -6,9 +6,10 @@
 //
 
 import SwiftUI
+import shared
 
 struct CommentsCountView: View {
-    var post: PostModel
+    var post: PostEntity
     
     @State private var isActive: Bool = false
     
@@ -38,6 +39,6 @@ struct CommentsCountView: View {
 
 struct CommentsCountView_Previews: PreviewProvider {
     static var previews: some View {
-        CommentsCountView(post: PostModel())
+        CommentsCountView(post: PostEntity.companion.createRandom())
     }
 }

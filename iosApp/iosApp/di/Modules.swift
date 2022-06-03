@@ -7,13 +7,6 @@
 
 import Foundation
 import Sodi
-import RealmSwift
-
-let providersModule = sodiModule(moduleName: "providersModule") { sodi in
-    sodi.bindSingle(to: Realm.self) {
-        try! Realm()
-    }
-}
 
 let ldsModule = sodiModule(moduleName: "ldsModule") { sodi in
     sodi.bindProvider(to: IUserLocalDataSource.self) { UserLocalDataSource() }

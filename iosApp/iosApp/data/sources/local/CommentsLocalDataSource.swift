@@ -6,20 +6,15 @@
 //
 
 import Foundation
+import shared
 
 final class CommentsLocalDataSource : ICommentsLocalDataSource {
     
-    func takePostComments() -> [CommentModel] {
-        var createdComments:[CommentModel] = []
-        let randomInt = Int.random(in: 20..<48)
-        for _ in 0...randomInt {
-            createdComments.append(CommentModel())
-        }
-        
-        return createdComments
+    func takePostComments() -> [CommentEntity] {
+        return CommentEntity.companion.createRandomList()
     }
 }
 
 protocol ICommentsLocalDataSource {
-    func takePostComments() -> [CommentModel]
+    func takePostComments() -> [CommentEntity]
 }

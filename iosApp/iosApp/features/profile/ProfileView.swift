@@ -35,7 +35,7 @@ struct ProfileView: BaseView {
                         NavigationLink(
                             destination: PostDetailsView(selectedPost: postModel, showHeader: false, showCommentsCount: false)
                         ) {
-                            ProfilePhotoView(postModel: postModel)
+                            ProfilePhotoView(post: postModel)
                         }
                     }
                 }

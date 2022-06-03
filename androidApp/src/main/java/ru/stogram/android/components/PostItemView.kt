@@ -25,7 +25,7 @@ fun PostItemView(post: PostEntity) {
         .fillMaxWidth()
         .padding(bottom = 8.dp)) {
         Box(modifier = Modifier.padding(all = 8.dp)) {
-            AvatarNameDescView(user = post.createUser())
+            AvatarNameDescView(user = post.user)
         }
 
         PostContentView(post.content)

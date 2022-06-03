@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import shared
 
 final class ReactionsRepository : IReactionsRepository {
     private let localDataSource: IReactionsLocalDataSource
@@ -13,11 +14,11 @@ final class ReactionsRepository : IReactionsRepository {
         localDataSource = lds
     }
     
-    func takeUserReactions() -> [ReactionModel] {
+    func takeUserReactions() -> [ReactionEntity] {
         return localDataSource.takeUserReactions()
     }
 }
 
 protocol IReactionsRepository {
-    func takeUserReactions() -> [ReactionModel]
+    func takeUserReactions() -> [ReactionEntity]
 }

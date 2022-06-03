@@ -14,6 +14,8 @@ final class Consts {
     
     //--- actual photo size
     public static let ZERO_SIZE = 0.toCGFloat()
+    public static let PROFILE_IMAGE_SIZE = 78.toCGFloat()
+    public static let STORY_IMAGE_SIZE = 64.toCGFloat()
     public static let STORY_BORDER_SIZE = 2.toCGFloat()
     public static let POST_IMAGE_SIZE = 32.toCGFloat()
     public static let DEFAULT_IMAGE_SIZE = 48.toCGFloat()

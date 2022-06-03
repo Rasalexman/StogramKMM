@@ -6,16 +6,17 @@
 //
 
 import SwiftUI
+import shared
 
 struct AvatarDescView: View {
     
-    var user: IUserModel
-    var userDesc: String = ""
+    var user: IUser
+    var desc: String = ""
     var imageSize: CGFloat = Consts.POST_IMAGE_SIZE
     var nameSize: CGFloat = 16
     
     var isShowDesc: Bool {
-        return !userDesc.isEmpty
+        return !desc.isEmpty
     }
     
     var borderSize: CGFloat {
@@ -23,19 +24,19 @@ struct AvatarDescView: View {
     }
     
     var body: some View {
-        NavigationLink(destination: ProfileView(profileId: user.userId)) {
+        NavigationLink(destination: ProfileView(profileId: user.id)) {
             HStack {
-                CircleImageView(photo: user.userPhoto, cWidth: imageSize, cHeight: imageSize, border: borderSize)
+                UserAvatarView(user: user, cWidth: imageSize, cHeight: imageSize, border: borderSize)
                 
                 VStack(alignment: .leading, spacing: 0) {
-                    Text(user.userName)
+                    Text(user.name)
                         .font(.system(size: nameSize))
                         .bold()
                         .lineLimit(1)
                         .frame(maxWidth: .infinity, alignment: .leading)
                     
                     if isShowDesc {
-                        Text(userDesc)
+                        Text(desc)
                             .font(.system(size: 12))
                             .lineLimit(1)
                     }
@@ -49,6 +50,6 @@ struct AvatarDescView: View {
 
 struct AvatarDescView_Previews: PreviewProvider {
     static var previews: some View {
-        AvatarDescView(user: PostModel(), userDesc: "Hello world").previewLayout(PreviewLayout.sizeThatFits)
+        AvatarDescView(user: PostEntity().user).previewLayout(PreviewLayout.sizeThatFits)
     }
 }

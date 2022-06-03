@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import shared
 
 final class HomeReposotory : IHomeRepository {
     
@@ -14,17 +15,17 @@ final class HomeReposotory : IHomeRepository {
         localDataSource = lds
     }
     
-    func takeUserPosts() -> [PostModel] {
+    func takeUserPosts() -> [PostEntity] {
         return localDataSource.takeUserPosts()
     }
     
-    func takeUserStories() -> [StoryModel] {
+    func takeUserStories() -> [UserEntity] {
         return localDataSource.takeUserStories()
     }
     
 }
 
 protocol IHomeRepository {
-    func takeUserPosts() -> [PostModel]
-    func takeUserStories() -> [StoryModel]
+    func takeUserPosts() -> [PostEntity]
+    func takeUserStories() -> [UserEntity]
 }

@@ -6,38 +6,21 @@
 //
 
 import Foundation
+import shared
 
 final class ReactionsLocalDataSource : IReactionsLocalDataSource {
     
-    private var userReactions: [ReactionModel] = []
+    private var userReactions: [ReactionEntity] = []
     
-    func takeUserReactions() -> [ReactionModel] {
+    func takeUserReactions() -> [ReactionEntity] {
         if userReactions.isEmpty {
-            userReactions = createReactions()
+            userReactions = ReactionEntity.companion.createRandomList()
         }
         
         return userReactions
     }
-    
-    private func createReactions() -> [ReactionModel] {
-        var createdReactions:[ReactionModel] = []
-        let randomInt = Int.random(in: 20..<48)
-        for rnd in 0...randomInt {
-            createdReactions.append(
-                ReactionModel(
-                    reactionType: randomReaction(),
-                    userName: randomUserName(),
-                    userPhoto: randomPhoto(),
-                    reactionUserPhoto: randomPhoto(),
-                    liked: rnd%2==0,
-                    comment: randomString(100)
-                )
-            )
-        }
-        return createdReactions
-    }
 }
 
 protocol IReactionsLocalDataSource {
-    func takeUserReactions() -> [ReactionModel]
+    func takeUserReactions() -> [ReactionEntity]
 }

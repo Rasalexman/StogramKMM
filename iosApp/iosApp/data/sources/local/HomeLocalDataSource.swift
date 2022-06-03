@@ -6,63 +6,27 @@
 //
 
 import Foundation
-import RealmSwift
 import Sodi
+import shared
 
 final class HomeLocalDataSource : IHomeLocalDataSource {
     
-    private var localRealm: Realm = instance()
+    private var allPosts: [PostEntity] = []
     
-    private var allPosts: [PostModel] = []
-    
-//    init() {
-//        try! localRealm.write {
-//            localRealm.deleteAll()
-//        }
-//    }
-    
-    func takeUserPosts() -> [PostModel] {
+    func takeUserPosts() -> [PostEntity] {
 //        if allPosts.isEmpty {
 //            allPosts = createPosts()
 //        }
         
-        let allPostsResult = localRealm.objects(PostModel.self)
-        var allPosts:[PostModel] = []
-        if allPostsResult.isEmpty {
-            allPosts = createPosts()
-        } else {
-            allPosts = Array(allPostsResult)
-        }
-        return allPosts
+        return PostEntity.companion.createRandomList()
     }
     
-    func takeUserStories() -> [StoryModel] {
-        var createdStories:[StoryModel] = []
-        let randomInt = Int.random(in: 10..<24)
-        for _ in 0...randomInt {
-            let localStory = StoryModel(userName: randomUserName(), userPhoto: randomPhoto())
-            createdStories.append(localStory)
-        }
-        
-        return createdStories
-    }
-    
-    private func createPosts() -> [PostModel] {
-        var createdPosts:[PostModel] = []
-        let randomInt = Int.random(in: 10..<24)
-        for rnd in 0...randomInt {
-            try! localRealm.write {
-                let localPost = PostModel(rnd)
-                localRealm.add(localPost)
-                createdPosts.append(localPost)
-            }
-        }
-        
-        return createdPosts
+    func takeUserStories() -> [UserEntity] {
+        return UserEntity.companion.createRandomList(hasUserStory: true)
     }
 }
 
 protocol IHomeLocalDataSource {
-    func takeUserPosts() -> [PostModel]
-    func takeUserStories() -> [StoryModel]
+    func takeUserPosts() -> [PostEntity]
+    func takeUserStories() -> [UserEntity]
 }

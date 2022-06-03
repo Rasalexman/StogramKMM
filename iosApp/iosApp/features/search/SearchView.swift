@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Sodi
+import shared
 
 struct SearchView: BaseView {
     
@@ -34,7 +35,7 @@ struct SearchView: BaseView {
                         NavigationLink(
                             destination: SearchDetailsView(post: postModel)
                         ) {
-                            ProfilePhotoView(postModel: postModel)
+                            ProfilePhotoView(post: postModel)
                         }
                     }
                 }
@@ -42,7 +43,7 @@ struct SearchView: BaseView {
         }.frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .topLeading)
     }
     
-    var searchResult: [PostModel] {
+    var searchResult: [PostEntity] {
         guard !searchText.isEmpty else { return vm.randomPosts }
         return vm.searchPosts(query: searchText)
     }

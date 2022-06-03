@@ -11,11 +11,8 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.google.accompanist.pager.ExperimentalPagerApi
 import ru.stogram.android.components.PostImageView
-import ru.stogram.android.components.PostItemView
 import ru.stogram.android.components.UserAvatarView
-import ru.stogram.models.PostEntity
 import ru.stogram.models.ReactionEntity
 import ru.stogram.models.orEmpty
 

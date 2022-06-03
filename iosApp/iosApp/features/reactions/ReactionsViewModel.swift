@@ -7,15 +7,16 @@
 
 import Foundation
 import Sodi
+import shared
 
 final class ReactionsViewModel : BaseViewModel {
     private let repository: IReactionsRepository = instance()
     
-    @Published var reactions: [ReactionModel] = []
+    @Published var reactions: [ReactionEntity] = []
     
     override init() {
         super.init()
-        reactions = repository.takeUserReactions()
+        reactions = ReactionEntity.companion.createRandomList()
     }
     
 }

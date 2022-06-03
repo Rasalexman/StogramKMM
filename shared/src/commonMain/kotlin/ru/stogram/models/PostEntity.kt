@@ -6,24 +6,22 @@ import kotlin.random.Random
 
 class PostEntity : RealmObject {
     var id: String = ""
-    var postId: String? = null
-    var text: String? = null
-    var likesCount: String? = null
-    var commentsCount: String? = null
+    var postId: String = ""
+    var text: String = ""
+    var likesCount: String = "0"
+    var commentsCount: String = "0"
     var isLiked: Boolean = false
-    var date: String? = null
-
-    var user: IUser? = null
+    var date: String = ""
+    var user: IUser = UserEntity.createRandom()
 
     //
     var content: List<String> = getRandomPhotoList()
 
+    val hasMoreContent: Boolean
+        get() = content.size > 1
+
     val firstPhoto: String
         get() = content.firstOrNull() ?: getRandomPhoto()
-
-    fun createUser(): IUser {
-        return user ?: UserEntity.createRandom()
-    }
 
     companion object {
         fun createRandomList(): List<PostEntity> {
@@ -44,8 +42,7 @@ class PostEntity : RealmObject {
                 commentsCount = randomCount
                 isLiked = randomBool
                 content = getRandomPhotoList()
-                date = "10.05.2022"
-                user = UserEntity.createRandom()
+                date = getRandomDate()
             }
         }
     }

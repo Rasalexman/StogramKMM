@@ -6,12 +6,18 @@
 //
 
 import SwiftUI
+import shared
+import URLImage
 
 struct ProfilePhotoView: BaseView {
-    let postModel : PostModel
+    let post : PostEntity
     
     var cWidth: CGFloat? = nil
     var cHeight: CGFloat? = nil
+    
+    private var imageUrl: URL {
+        return URL(string: post.firstPhoto)!
+    }
     
     var body : some View
     {
@@ -22,24 +28,26 @@ struct ProfilePhotoView: BaseView {
                     .foregroundColor(.clear)
                     .overlay {
                         GeometryReader { geometry in
-                            Image(postModel.takeSinglePhoto())
-                                .resizable()
-                                .scaledToFill()
-                                .frame(width: chooseWidth(geometry), height: chooseHeight(geometry), alignment:.center)
-                                .clipped()
+                            URLImage(imageUrl) { image in
+                                image.resizable()
+                                    .scaledToFill()
+                                    .frame(width: chooseWidth(geometry), height: chooseHeight(geometry), alignment:.center)
+                                    .clipped()
+                            }
                         }
                     }
             } else {
                 GeometryReader { geometry in
-                    Image(postModel.takeSinglePhoto())
-                        .resizable()
+                    URLImage(imageUrl) { image in
+                        image.resizable()
                         .scaledToFill()
                         .frame(width: chooseWidth(geometry), height: chooseHeight(geometry), alignment:.center)
                         .clipped()
+                    }
                 }
             }
             
-            if postModel.hasMoreContent {
+            if post.hasMoreContent {
                 VStack(alignment: .trailing) {
                     Image(systemName: "doc.on.doc")
                         .resizable()
@@ -68,6 +76,6 @@ struct ProfilePhotoView: BaseView {
 
 struct ProfilePhotoView_Previews: PreviewProvider {
     static var previews: some View {
-        ProfilePhotoView(postModel: PostModel())
+        ProfilePhotoView(post: PostEntity.companion.createRandom())
     }
 }

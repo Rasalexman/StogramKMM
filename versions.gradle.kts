@@ -24,6 +24,7 @@ val composeActivity = "1.5.0-rc01"
 val accompanist = "0.24.6-alpha"
 
 val ktorVersion = "2.0.0"
+val datetimeVersion = "0.3.2"
 val realmVersion = "0.11.1"
 val coroutinesMt = "1.6.1-native-mt"
 val serializationVersion = "1.3.2"
@@ -79,6 +80,7 @@ extra["companistPagerIndicators"] = "com.google.accompanist:accompanist-pager-in
 extra["ktorIOS"] = "io.ktor:ktor-client-darwin:$ktorVersion"
 
 //------- Common Libs
+extra["datetime"] = "org.jetbrains.kotlinx:kotlinx-datetime:$datetimeVersion"
 extra["ktorCore"] = "io.ktor:ktor-client-core:$ktorVersion"
 extra["ktorCio"] = "io.ktor:ktor-client-cio:$ktorVersion"
 extra["ktorLogging"] = "io.ktor:ktor-client-logging:$ktorVersion"

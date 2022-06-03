@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import shared
 
 final class SearchRepository : ISearchRepository {
     private let localDataSource: ISearchLocalDataSource
@@ -13,16 +14,16 @@ final class SearchRepository : ISearchRepository {
         localDataSource = lds
     }
     
-    func searchPosts(query: String) -> [PostModel] {
+    func searchPosts(query: String) -> [PostEntity] {
         return localDataSource.searchPosts(query: query)
     }
     
-    func takeRandomPosts() -> [PostModel] {
+    func takeRandomPosts() -> [PostEntity] {
         return localDataSource.takeRandomPosts()
     }
 }
 
 protocol ISearchRepository {
-    func searchPosts(query: String) -> [PostModel]
-    func takeRandomPosts() -> [PostModel]
+    func searchPosts(query: String) -> [PostEntity]
+    func takeRandomPosts() -> [PostEntity]
 }
