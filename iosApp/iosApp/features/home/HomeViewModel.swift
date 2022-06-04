@@ -32,27 +32,16 @@ class HomeViewModel : BaseViewModel {
             self.userStoriesRepository.getStoriesAsCommonFlow().mapCFlow(mapBlock: { stories in
                 if let currentPosts = posts as? [PostEntity] {
                     if let currentStories = stories as? [UserEntity] {
-                        return HomeUI(posts: currentPosts, stories: currentStories)
+                        return HomeState(posts: currentPosts, stories: currentStories)
                     }
                 }
-                return HomeUI.EMPTY
+                return HomeState.EMPTY
             })
         }).watch { resultModel in
-            if let currentModel = resultModel as? HomeUI {
+            if let currentModel = resultModel as? HomeState {
                 self.userPosts = currentModel.posts
                 self.userStories = currentModel.stories
             }
         })
-//
-//        addObserver(postsRepository.allPostsAsCommonFlowable().watch { result in
-//            if let posts = result as? [PostEntity] {
-//                self.userPosts = posts
-//            }
-//         })
-//        addObserver(userStoriesRepository.getStoriesAsCommonFlow().watch { result in
-//            if let stories = result as? [UserEntity] {
-//                self.userStories = stories
-//            }
-//        })
     }
 }

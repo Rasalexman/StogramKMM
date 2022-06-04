@@ -9,9 +9,9 @@
 import Foundation
 import shared
 
-struct HomeUI {
+struct HomeState {
     let posts: [PostEntity]
     let stories: [UserEntity]
     
-    public static let EMPTY = HomeUI(posts: [], stories: [])
+    public static let EMPTY = HomeState(posts: [], stories: [])
 }

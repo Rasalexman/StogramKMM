@@ -24,11 +24,11 @@ import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.rasalexman.kodi.core.immutableInstance
 import com.rasalexman.sresult.common.extensions.*
+import com.rasalexman.sresult.data.dto.SResult
 import ru.stogram.android.R
 import ru.stogram.android.components.PostItemView
 import ru.stogram.android.components.StoriesView
 import ru.stogram.android.components.TopCircleProgressView
-import ru.stogram.android.constants.PostsResult
 import ru.stogram.android.constants.StoriesResult
 import ru.stogram.models.PostEntity
 import ru.stogram.models.UserEntity
@@ -44,12 +44,10 @@ fun Home() {
 @Composable
 fun HomeView(viewModel: HomeViewModel) {
 
-    val storiesState by viewModel.storiesState.collectAsState(initial = StoriesResult.emptyResult())
-    val postsState by viewModel.postsState.collectAsState(initial = PostsResult.emptyResult())
+    val homeState by viewModel.homeState.collectAsState(initial = StoriesResult.emptyResult())
 
     HomeView(
-        storiesState = storiesState,
-        postsState = postsState,
+        homeState = homeState,
         viewModel = viewModel,
         refresh = viewModel::onSwipeRefresh
     )
@@ -58,8 +56,7 @@ fun HomeView(viewModel: HomeViewModel) {
 @ExperimentalPagerApi
 @Composable
 internal fun HomeView(
-    storiesState: StoriesResult,
-    postsState: PostsResult,
+    homeState: SResult<HomeState>,
     viewModel: HomeViewModel,
     refresh: () -> Unit
 ) {
@@ -85,9 +82,9 @@ internal fun HomeView(
                 LazyColumn(
                     modifier = Modifier.fillMaxWidth(),
                 ) {
-                    storiesState.applyIfSuccess { stories ->
+                    homeState.applyIfSuccess { state ->
                         item {
-                            StoriesView(stories = stories) { user ->
+                            StoriesView(stories = state.stories) { user ->
                                 logg { "----> stories user name = ${user.name}" }
                             }
                         }
@@ -97,11 +94,9 @@ internal fun HomeView(
                                 thickness = 1.dp
                             )
                         }
-                    }
 
-                    postsState.applyIfSuccess { items ->
                         items(
-                            items = items,
+                            items = state.posts,
                             key = { it.id }
                         ) { post ->
                             PostItemView(post = post)
@@ -116,16 +111,19 @@ internal fun HomeView(
                 }
             }
 
-            if(postsState.isLoading && storiesState.isLoading) {
+            if (homeState.isLoading) {
                 TopCircleProgressView()
             }
         }
     }
 }
 
-class HomePreviewParameterProvider : PreviewParameterProvider<Pair<StoriesResult, PostsResult>> {
+class HomePreviewParameterProvider : PreviewParameterProvider<SResult<HomeState>> {
     override val values = sequenceOf(
-        UserEntity.createRandomList(true).toSuccessResult() to PostEntity.createRandomList().toSuccessResult()
+        HomeState(
+            PostEntity.createRandomList(),
+            UserEntity.createRandomList(true)
+        ).toSuccessResult()
     )
 }
 
@@ -133,7 +131,7 @@ class HomePreviewParameterProvider : PreviewParameterProvider<Pair<StoriesResult
 @Preview(name = "HomePreview", showBackground = true)
 @Composable
 fun HomePreview(
-    @PreviewParameter(HomePreviewParameterProvider::class, limit = 1) result: Pair<StoriesResult, PostsResult>
+    @PreviewParameter(HomePreviewParameterProvider::class, limit = 1) result: SResult<HomeState>
 ) {
-    HomeView(storiesState = result.first, postsState = result.second, viewModel = HomeViewModel(), refresh = {})
+    HomeView(homeState = result, viewModel = HomeViewModel(), refresh = {})
 }
