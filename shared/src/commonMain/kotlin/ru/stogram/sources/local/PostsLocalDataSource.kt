@@ -1,19 +1,19 @@
 package ru.stogram.sources.local
 
-import io.realm.Realm
 import io.realm.query
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import ru.stogram.database.CFlow
+import ru.stogram.database.RealmDataBase
 import ru.stogram.database.wrap
 import ru.stogram.models.PostEntity
 
 class PostsLocalDataSource(
-    private val realm: Realm
+    private val database: RealmDataBase
 ) : IPostsLocalDataSource {
 
     override fun getAllPostsAsFlow(): Flow<List<PostEntity>> {
-        return realm.query<PostEntity>().asFlow().map { result ->
+        return database.realm.query<PostEntity>().asFlow().map { result ->
             result.list.ifEmpty {
                 createLocalData()
             }
@@ -25,7 +25,7 @@ class PostsLocalDataSource(
     }
 
     override fun clearAllPosts() {
-        realm.writeBlocking {
+        database.realm.writeBlocking {
             delete(query<PostEntity>())
         }
     }
@@ -33,7 +33,7 @@ class PostsLocalDataSource(
     private fun createLocalData(): List<PostEntity> {
         val createdData = PostEntity.createRandomList()
         createdData.forEach { entity ->
-            realm.writeBlocking {
+            database.realm.writeBlocking {
                 copyToRealm(entity)
             }
         }

@@ -13,7 +13,7 @@ struct PostContentView: View {
     
     var post: PostEntity
     private var images: [PhotoModel] {
-        return post.content.map { photo in
+        return post.takeContent().map { photo in
             PhotoModel(id: UUID().uuidString, url: photo.toUrl())
         }
     }

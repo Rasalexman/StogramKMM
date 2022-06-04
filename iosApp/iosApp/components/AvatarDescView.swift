@@ -50,6 +50,6 @@ struct AvatarDescView: View {
 
 struct AvatarDescView_Previews: PreviewProvider {
     static var previews: some View {
-        AvatarDescView(user: PostEntity().user).previewLayout(PreviewLayout.sizeThatFits)
+        AvatarDescView(user: PostEntity().takePostUser()).previewLayout(PreviewLayout.sizeThatFits)
     }
 }

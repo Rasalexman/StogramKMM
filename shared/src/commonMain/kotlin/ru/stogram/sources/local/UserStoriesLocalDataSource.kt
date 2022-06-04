@@ -1,19 +1,19 @@
 package ru.stogram.sources.local
 
-import io.realm.Realm
 import io.realm.query
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import ru.stogram.database.CFlow
+import ru.stogram.database.RealmDataBase
 import ru.stogram.database.wrap
 import ru.stogram.models.UserEntity
 
 class UserStoriesLocalDataSource(
-    private val realm: Realm
+    private val database: RealmDataBase
 ) : IUserStoriesLocalDataSource {
 
     override fun getAllStoriesAsFlow(): Flow<List<UserEntity>> {
-        return realm.query<UserEntity>().asFlow().map { result ->
+        return database.realm.query<UserEntity>().asFlow().map { result ->
             result.list.ifEmpty {
                 createLocalData()
             }
@@ -27,7 +27,7 @@ class UserStoriesLocalDataSource(
     private fun createLocalData(): List<UserEntity> {
         val createdData = UserEntity.createRandomList()
         createdData.forEach { entity ->
-            realm.writeBlocking {
+            database.realm.writeBlocking {
                 copyToRealm(entity)
             }
         }

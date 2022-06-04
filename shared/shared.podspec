@@ -2,25 +2,21 @@ Pod::Spec.new do |spec|
     spec.name                     = 'shared'
     spec.version                  = '0.11.1'
     spec.homepage                 = 'https://github.com/realm/realm-kotlin'
-    spec.source                   = { :git => "Not Published", :tag => "Cocoapods/#{spec.name}/#{spec.version}" }
+    spec.source                   = { :http=> ''}
     spec.authors                  = ''
     spec.license                  = ''
-    spec.summary                  = 'Realm Kotlin Bookshelf shared Library'
-
-    spec.vendored_frameworks      = "build/cocoapods/framework/shared.framework"
-    spec.libraries                = "c++"
-    spec.module_name              = "#{spec.name}_umbrella"
-
-    spec.ios.deployment_target = '14.1'
+    spec.summary                  = 'Realm Kotlin Stogram shared Library'
+    spec.vendored_frameworks      = 'build/cocoapods/framework/shared.framework'
+    spec.libraries                = 'c++'
+    spec.ios.deployment_target = '15.4'
     spec.osx.deployment_target = '11.0'
-
-
-
+                
+                
     spec.pod_target_xcconfig = {
         'KOTLIN_PROJECT_PATH' => ':shared',
         'PRODUCT_MODULE_NAME' => 'shared',
     }
-
+                
     spec.script_phases = [
         {
             :name => 'Build shared',
@@ -36,8 +32,9 @@ Pod::Spec.new do |spec|
                 "$REPO_ROOT/../gradlew" -p "$REPO_ROOT" $KOTLIN_PROJECT_PATH:syncFramework \
                     -Pkotlin.native.cocoapods.platform=$PLATFORM_NAME \
                     -Pkotlin.native.cocoapods.archs="$ARCHS" \
-                    -Pkotlin.native.cocoapods.configuration=$CONFIGURATION
+                    -Pkotlin.native.cocoapods.configuration="$CONFIGURATION"
             SCRIPT
         }
     ]
+                
 end

@@ -35,6 +35,7 @@ struct MainView: BaseView {
                 CreateView()
                     .tag(Tab.create)
                     .tabItem { Label("Добавить", systemImage: "plus.app") }
+                    .navigationBarTitleDisplayMode(.inline)
                 
                 ReactionsView()
                     .tag(Tab.reactions)

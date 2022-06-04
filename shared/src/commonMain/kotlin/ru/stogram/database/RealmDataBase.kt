@@ -10,13 +10,9 @@ import ru.stogram.models.PostEntity
 import ru.stogram.models.UserEntity
 
 class RealmDataBase {
-    private val realm: Realm by lazy {
+    val realm: Realm by lazy {
         val configuration = RealmConfiguration.with(schema = setOf(PostEntity::class, UserEntity::class))
             //.deleteRealmIfMigrationNeeded().schemaVersion(1).build()
         Realm.open(configuration)
-    }
-
-    fun openRealm(): Realm {
-        return realm
     }
 }

@@ -16,16 +16,20 @@ struct PostView: View {
     
     @State var hasLike: Bool = false
     
+    private var user: IUser {
+        return post.takePostUser()
+    }
+    
     var body: some View {
         
         VStack(alignment: .leading, spacing: 0) {
             
             if(showHeader) {
-                AvatarDescView(user: post.user, desc: post.user.desc)
+                AvatarDescView(user: user, desc: user.desc)
             }
             
             if(showContent) {
-                if(post.hasMoreContent) {
+                if(post.hasMoreContent()) {
                     PostContentView(post: post)
                 } else {
                     ProfilePhotoView(post: post)

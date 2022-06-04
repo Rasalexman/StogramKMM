@@ -1,7 +1,6 @@
 package ru.stogram.android.di
 
 import com.rasalexman.kodi.core.*
-import io.realm.Realm
 import ru.stogram.database.RealmDataBase
 import ru.stogram.repository.IPostsRepository
 import ru.stogram.repository.IUserStoriesRepository
@@ -13,7 +12,7 @@ import ru.stogram.sources.local.PostsLocalDataSource
 import ru.stogram.sources.local.UserStoriesLocalDataSource
 
 val databaseModule = kodiModule {
-    bind<Realm>() with single { RealmDataBase().openRealm() }
+    bind<RealmDataBase>() with provider { RealmDataBase() }
 }
 
 val ldsModule = kodiModule {

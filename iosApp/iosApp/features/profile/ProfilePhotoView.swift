@@ -15,10 +15,6 @@ struct ProfilePhotoView: BaseView {
     var cWidth: CGFloat? = nil
     var cHeight: CGFloat? = nil
     
-    private var imageUrl: URL {
-        return post.firstPhoto.toUrl()
-    }
-    
     var body : some View
     {
         ZStack(alignment: .bottomTrailing) {
@@ -27,13 +23,13 @@ struct ProfilePhotoView: BaseView {
                     .aspectRatio(contentMode: .fit)
                     .foregroundColor(.clear)
                     .overlay {
-                        GeometryImageView(imageUrl: imageUrl, cWidth: cWidth, cHeight: cHeight)
+                        GeometryImageView(imageUrl: post.takeFirstPhoto().toUrl(), cWidth: cWidth, cHeight: cHeight)
                     }
             } else {
-                GeometryImageView(imageUrl: imageUrl, cWidth: cWidth, cHeight: cHeight)
+                GeometryImageView(imageUrl: post.takeFirstPhoto().toUrl(), cWidth: cWidth, cHeight: cHeight)
             }
             
-            if post.hasMoreContent {
+            if post.hasMoreContent() {
                 VStack(alignment: .trailing) {
                     Image(systemName: Consts.IMAGE_MORE_PICS)
                         .resizable()

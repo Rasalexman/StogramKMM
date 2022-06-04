@@ -47,6 +47,6 @@ struct GeometryImageView: View {
 
 struct GeometryImageView_Previews: PreviewProvider {
     static var previews: some View {
-        GeometryImageView(imageUrl: PostEntity.companion.createRandom().firstPhoto.toUrl()).previewLayout(PreviewLayout.sizeThatFits)
+        GeometryImageView(imageUrl: PostEntity.companion.createRandom().takeFirstPhoto().toUrl()).previewLayout(PreviewLayout.sizeThatFits)
     }
 }

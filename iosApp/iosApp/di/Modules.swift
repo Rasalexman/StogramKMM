@@ -7,18 +7,23 @@
 
 import Foundation
 import Sodi
+import shared
+
+let databaseModule = sodiModule(moduleName: "databaseModule") { sodi in
+    sodi.bindProvider(to: RealmDataBase.self) { RealmDataBase() }
+}
 
 let ldsModule = sodiModule(moduleName: "ldsModule") { sodi in
-    sodi.bindProvider(to: IUserLocalDataSource.self) { UserLocalDataSource() }
-    sodi.bindProvider(to: IHomeLocalDataSource.self) { HomeLocalDataSource() }
+    sodi.bindProvider(to: IUserStoriesLocalDataSource.self) { UserStoriesLocalDataSource(database: instance()) }
+    sodi.bindProvider(to: IPostsLocalDataSource.self) { PostsLocalDataSource(database: instance()) }
     sodi.bindProvider(to: ISearchLocalDataSource.self) { SearchLocalDataSource() }
     sodi.bindProvider(to: IReactionsLocalDataSource.self) { ReactionsLocalDataSource() }
     sodi.bindProvider(to: ICommentsLocalDataSource.self) { CommentsLocalDataSource() }
 }
 
 let repositoryModule = sodiModule(moduleName: "repositoryModule") { sodi in
-    sodi.bindSingle(to: IUserRepository.self) { UserRepository(lds: instance()) }
-    sodi.bindSingle(to: IHomeRepository.self) { HomeReposotory(lds: instance()) }
+    sodi.bindSingle(to: IUserStoriesRepository.self) { UserStoriesRepository(localDataSource: instance()) }
+    sodi.bindSingle(to: IPostsRepository.self) { PostsRepository(localDataSource: instance()) }
     sodi.bindSingle(to: ISearchRepository.self) { SearchRepository(lds: instance()) }
     sodi.bindSingle(to: IReactionsRepository.self) { ReactionsRepository(lds: instance()) }
     sodi.bindSingle(to: ICommentsRepository.self) { CommentsRepository(lds: instance()) }

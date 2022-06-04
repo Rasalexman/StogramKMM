@@ -10,6 +10,7 @@ struct iOSApp: SwiftUI.App, ISodi {
                                               inMemoryStore: URLImageInMemoryStore())
     
     init() {
+        importModule(sodiModule: databaseModule)
         importModule(sodiModule: ldsModule)
         importModule(sodiModule: repositoryModule)
         importModule(sodiModule: viewModelModule)

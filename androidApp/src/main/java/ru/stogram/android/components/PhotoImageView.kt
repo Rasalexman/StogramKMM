@@ -35,7 +35,7 @@ fun PhotoImageView(url: String) {
                     circularProgressDrawable.start()
                 }, onSuccess = { _, _ ->
                     circularProgressDrawable.stop()
-                }, onError = { _, error ->
+                }, onError = { _, _ ->
                     //error.loggE(exception = error.throwable)
                 })
                 .build(),

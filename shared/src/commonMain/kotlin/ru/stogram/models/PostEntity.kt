@@ -25,6 +25,10 @@ class PostEntity : RealmObject {
         it.list.toList()
     }
 
+    fun takeContent(): List<String> {
+        return content.toList()
+    }
+
     fun takeFirstPhoto(): String {
         return content.firstOrNull() ?: getRandomPhoto()
     }

@@ -10,20 +10,15 @@ import Sodi
 import shared
 
 class HomeViewModel : BaseViewModel {
-    private let repository: IHomeRepository = instance()
 
-//    private var job: Closeable? = nil
-//    private let postsRepository = PostsRepository()
+    private var job: Closeable? = nil
+    private var storiesJob: Closeable? = nil
+    
+    private let postsRepository: IPostsRepository = instance()
+    private let userStoriesRepository: IUserStoriesRepository = instance()
     
     @Published var userPosts: [PostEntity] = []
     @Published var userStories: [UserEntity] = []
-
-    //private var sharedPost = [PostEntity]()
-    
-    override init() {
-        super.init()
-        self.fetchHomeData()
-    }
     
     private func fetchHomeData() {
         userPosts = PostEntity.companion.createRandomList()
@@ -31,14 +26,25 @@ class HomeViewModel : BaseViewModel {
     }
 
     func startObservingPosts() {
-//        self.job = postsRepository.allPostsAsCommonFlowable().watch { posts in
-//            self.sharedPost = posts as! [PostEntity]
-//            print("----> posts count \(posts?.count ?? 0)")
-//        }
-        //let posts = realmDatabase.getAllPosts()
+        stopObservingPost()
+        self.job = postsRepository.allPostsAsCommonFlowable().watch { result in
+            if let posts = result as? [PostEntity] {
+                self.userPosts = posts
+                print("----> posts count \(posts.count)")
+            }
+        }
+        self.storiesJob = userStoriesRepository.getStoriesAsCommonFlow().watch { result in
+            if let stories = result as? [UserEntity] {
+                self.userStories = stories
+                print("----> stories count \(stories.count)")
+            }
+        }
     }
 
     func stopObservingPost() {
-//        self.job?.close()
+        self.job?.close()
+        self.job = nil
+        self.storiesJob?.close()
+        self.storiesJob = nil
     }
 }
