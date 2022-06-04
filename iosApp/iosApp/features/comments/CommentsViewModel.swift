@@ -11,10 +11,15 @@ import shared
 
 final class CommentsViewModel : BaseViewModel {
     
-    //private let repository: ICommentsRepository = instance()
-    @Published var postComments: [CommentEntity] = []
+    private let repository: ICommentsRepository = instance()
     
-    override init() {
-        postComments = CommentEntity.companion.createRandomList()
+    @Published var comments: [CommentEntity] = []
+    
+    func start(selectedPostId: String) {
+        addObserver(repository.getAllCommentsAsCommonFlow(postId: selectedPostId).watch { result in
+            if let postComments = result as? [CommentEntity] {
+                self.comments = postComments
+            }
+        })
     }
 }

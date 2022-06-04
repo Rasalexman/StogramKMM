@@ -27,9 +27,15 @@ open class CFlow<T>(protected val origin: Flow<T>) : Flow<T> by origin {
         }
     }
 
-    fun <R> flatMap(combineBlock: (T) -> CFlow<R>): CFlow<R> {
+    fun <R> flatMapCFlow(flatBlock: (T) -> CFlow<R>): CFlow<R> {
         return this.flatMapLatest {
-            combineBlock(it)
+            flatBlock(it)
+        }.wrap()
+    }
+
+    fun <R> mapCFlow(mapBlock: (T) -> R): CFlow<R> {
+        return this.map {
+            mapBlock(it)
         }.wrap()
     }
 

@@ -30,7 +30,7 @@ struct CommentItemView: View {
         VStack(alignment: .leading, spacing: 0) {
             
             AvatarDescView(
-                user: comment.user,
+                user: comment.takeCommentUser(),
                 desc: formattedDate,
                 imageSize: Consts.COMMENT_IMAGE_SIZE,
                 nameSize: 12

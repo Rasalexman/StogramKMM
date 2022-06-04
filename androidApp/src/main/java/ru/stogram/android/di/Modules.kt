@@ -13,6 +13,7 @@ val ldsModule = kodiModule {
     bind<IUserStoriesLocalDataSource>() with provider { UserStoriesLocalDataSource(instance()) }
     bind<IPostsLocalDataSource>() with provider { PostsLocalDataSource(instance()) }
     bind<IReactionsLocalDataSource>() with provider { ReactionsLocalDataSource(instance()) }
+    bind<ICommentsLocalDataSource>() with provider { CommentsLocalDataSource(instance()) }
 }
 
 val dataModule = kodiModule {
@@ -20,5 +21,6 @@ val dataModule = kodiModule {
     bind<IPostsRepository>() with single { PostsRepository(instance()) }
     bind<IReactionsRepository>() with single { ReactionsRepository(instance()) }
     bind<ISearchRepository>() with single { SearchRepository() }
+    bind<ICommentsRepository>() with single { CommentsRepository(instance()) }
 }
 

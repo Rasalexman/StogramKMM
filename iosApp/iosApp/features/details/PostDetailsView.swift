@@ -38,7 +38,7 @@ struct PostDetailsView: BaseView {
                         .frame(minWidth: 0, maxWidth: .infinity, alignment: .topLeading)
                         .padding([.top, .leading], 8)
                     
-                    CommentsView()
+                    CommentsView(postId: selectedPost.id)
                 }
             }
             Divider()

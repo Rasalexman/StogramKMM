@@ -1,19 +1,24 @@
 package ru.stogram.models
 
+import io.realm.RealmObject
 import ru.stogram.utils.getRandomDate
 import ru.stogram.utils.getRandomString
 import ru.stogram.utils.randomBool
 import ru.stogram.utils.randomCount
 import kotlin.random.Random
 
-class CommentEntity {
+class CommentEntity : RealmObject {
     var id: String = ""
     var postId: String = ""
-    var user: IUser = UserEntity.createRandom(randomBool)
-    var isLiked: Boolean = false
+    var user: UserEntity? = UserEntity.createRandom(randomBool)
+    var isLiked: Boolean = randomBool
     var text: String = ""
     var likesCount: String = "56"
     var date: String = getRandomDate()
+
+    fun takeCommentUser(): IUser {
+        return user ?: UserEntity.createRandom(randomBool)
+    }
 
     companion object {
         fun createRandomList(): List<CommentEntity> {
@@ -29,7 +34,6 @@ class CommentEntity {
             return CommentEntity().apply {
                 id = getRandomString(1000)
                 postId = getRandomString(1000)
-                isLiked = randomBool
                 text = getRandomString(128)
                 likesCount = randomCount
             }

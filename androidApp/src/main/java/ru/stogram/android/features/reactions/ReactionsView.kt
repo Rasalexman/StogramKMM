@@ -111,7 +111,7 @@ class ReactionsPreviewParameterProvider : PreviewParameterProvider<ReactionsResu
 fun ReactionsPreview(
     @PreviewParameter(ReactionsPreviewParameterProvider::class, limit = 1) result: ReactionsResult
 ) {
-    ReactionsView(viewModel = ReactionsViewModel(), reactionsState = SResult.Empty) {
+    ReactionsView(viewModel = ReactionsViewModel(), reactionsState = result) {
 
     }
 }

@@ -17,7 +17,6 @@ class ReactionsRepository(
     override fun getAllReactionsAsFlow(): Flow<List<ReactionEntity>> {
         return localDataSource.getAllReactionsAsFlow()
     }
-
 }
 
 interface IReactionsRepository {
