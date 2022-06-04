@@ -14,17 +14,11 @@ class UserLocalDataSource(
         return database.realm.query<UserEntity>("id = $0", userId).asFlow().map {
             val foundUser = it.list.firstOrNull()
             // if we pass default user id and cannot find "MY" profile
-            if(userId == UserEntity.DEFAULT_USER_ID && foundUser == null) {
-                createDefaultUser()
+            if(userId == UserEntity.DEFAULT_USER_ID || foundUser == null) {
+                database.getCurrentUser()
             } else {
                 foundUser
             }
-        }
-    }
-
-    private fun createDefaultUser(): UserEntity {
-        return database.realm.writeBlocking {
-            copyToRealm(UserEntity.createDefaultUser())
         }
     }
 }

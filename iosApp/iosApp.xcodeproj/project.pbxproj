@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		058557BB273AAA24004C7B11 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 058557BA273AAA24004C7B11 /* Assets.xcassets */; };
 		058557D9273AAEEB004C7B11 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 058557D8273AAEEB004C7B11 /* Preview Assets.xcassets */; };
+		112AFE92284BB21D000E4843 /* CreatePostViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 112AFE91284BB21D000E4843 /* CreatePostViewModel.swift */; };
 		116961FF284A7A6D00679A8A /* URLImage in Frameworks */ = {isa = PBXBuildFile; productRef = 116961FE284A7A6D00679A8A /* URLImage */; settings = {ATTRIBUTES = (Required, ); }; };
 		11696201284A7A6D00679A8A /* URLImageStore in Frameworks */ = {isa = PBXBuildFile; productRef = 11696200284A7A6D00679A8A /* URLImageStore */; settings = {ATTRIBUTES = (Required, ); }; };
 		11696203284A963800679A8A /* PhotoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11696202284A963800679A8A /* PhotoModel.swift */; };
@@ -75,6 +76,7 @@
 /* Begin PBXFileReference section */
 		058557BA273AAA24004C7B11 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		058557D8273AAEEB004C7B11 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		112AFE91284BB21D000E4843 /* CreatePostViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatePostViewModel.swift; sourceTree = "<group>"; };
 		11696202284A963800679A8A /* PhotoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoModel.swift; sourceTree = "<group>"; };
 		11696204284A97C300679A8A /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		11696206284AB15000679A8A /* GeometryImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeometryImageView.swift; sourceTree = "<group>"; };
@@ -241,6 +243,7 @@
 			isa = PBXGroup;
 			children = (
 				11DBC2A428274852009E28DB /* CreateView.swift */,
+				112AFE91284BB21D000E4843 /* CreatePostViewModel.swift */,
 			);
 			path = create;
 			sourceTree = "<group>";
@@ -467,6 +470,7 @@
 				11DBC2AF2827488F009E28DB /* PostView.swift in Sources */,
 				11DBC2B12827488F009E28DB /* HomeViewModel.swift in Sources */,
 				11DBC2A828274862009E28DB /* PostDetailsView.swift in Sources */,
+				112AFE92284BB21D000E4843 /* CreatePostViewModel.swift in Sources */,
 				11DBC2A928274862009E28DB /* PostDetailsViewModel.swift in Sources */,
 				11DBC2A528274852009E28DB /* CreateView.swift in Sources */,
 				118B7984284B919D003F48CF /* ProfileState.swift in Sources */,

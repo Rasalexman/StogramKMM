@@ -55,8 +55,10 @@ struct ProfileView: BaseView {
         }.onDisappear {
             vm.stop()
         }
-        
-        
+    }
+    
+    static func getNavLink(onSelection: Binding<String?>, selectedProfileId: String, showBack: Bool = false) -> some View {
+        return NavigationLink(destination: ProfileView(profileId: selectedProfileId).navigationBarBackButtonHidden(!showBack), tag: NavTag.PROFILE.rawValue, selection: onSelection) { EmptyView() }
     }
 }
 

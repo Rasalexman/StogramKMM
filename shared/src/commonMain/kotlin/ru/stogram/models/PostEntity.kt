@@ -27,10 +27,6 @@ class PostEntity : RealmObject {
         it.list.toList()
     }
 
-    fun takeContentCommonFlow(): CFlow<List<String>> {
-        return takeContentFlow().wrap()
-    }
-
     fun takeContent(): List<String> {
         return content.toList()
     }
@@ -66,6 +62,19 @@ class PostEntity : RealmObject {
                 commentsCount = randomCount
                 isLiked = randomBool
                 user = defaultUser ?: UserEntity.createRandomDetailed(randomBool)
+                date = getRandomDate()
+                content.addAll(getRandomPhotoList())
+            }
+        }
+
+        fun createRandomWithoutUser(): PostEntity {
+            return PostEntity().apply {
+                id = getRandomString(100)
+                postId = getRandomString(100)
+                text = getRandomString(300)
+                likesCount = randomCount
+                commentsCount = randomCount
+                isLiked = randomBool
                 date = getRandomDate()
                 content.addAll(getRandomPhotoList())
             }

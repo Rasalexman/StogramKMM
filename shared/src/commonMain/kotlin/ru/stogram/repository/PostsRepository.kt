@@ -26,6 +26,14 @@ class PostsRepository(
     override fun findUserPostsAsCommonFlow(user: UserEntity): CFlow<List<PostEntity>> {
         return findUserPostsAsFlow(user).wrap()
     }
+
+    override fun addUserPostAsFlow(): Flow<PostEntity> {
+        return localDataSource.addUserPostAsFlow()
+    }
+
+    override fun addUserPostAsCommonFlow(): CFlow<PostEntity> {
+        return addUserPostAsFlow().wrap()
+    }
 }
 
 interface IPostsRepository {
@@ -34,4 +42,7 @@ interface IPostsRepository {
 
     fun findUserPostsAsFlow(user: UserEntity): Flow<List<PostEntity>>
     fun findUserPostsAsCommonFlow(user: UserEntity): CFlow<List<PostEntity>>
+
+    fun addUserPostAsFlow(): Flow<PostEntity>
+    fun addUserPostAsCommonFlow(): CFlow<PostEntity>
 }

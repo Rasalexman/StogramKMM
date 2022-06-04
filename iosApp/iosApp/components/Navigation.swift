@@ -10,6 +10,7 @@ import Foundation
 enum NavTag: String {
     case MAIN = "MainView"
     case DETAILS = "Details"
+    case PROFILE = "Profile"
 }
 
 enum Tab {

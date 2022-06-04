@@ -38,4 +38,5 @@ let viewModelModule = sodiModule(moduleName: ModulesNames.VIEWMODELS) { sodi in
     sodi.bindSingle { ReactionsViewModel() }
     sodi.bindSingle { PostDetailsViewModel() }
     sodi.bindSingle { CommentsViewModel() }
+    sodi.bindSingle { CreatePostViewModel() }
 }

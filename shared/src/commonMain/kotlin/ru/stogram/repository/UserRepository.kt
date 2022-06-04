@@ -3,6 +3,7 @@ package ru.stogram.repository
 import kotlinx.coroutines.flow.Flow
 import ru.stogram.database.CFlow
 import ru.stogram.database.wrap
+import ru.stogram.models.PostEntity
 import ru.stogram.models.UserEntity
 import ru.stogram.sources.local.IUserLocalDataSource
 

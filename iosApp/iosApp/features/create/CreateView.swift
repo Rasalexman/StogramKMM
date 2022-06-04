@@ -6,10 +6,20 @@
 //
 
 import SwiftUI
+import Sodi
 
 struct CreateView: BaseView {
+    
+    @ObservedObject private var vm: CreatePostViewModel = instance()
+    
     var body: some View {
-        Text("Create view")
+        HStack {
+            Button(action: {
+                vm.start()
+            }, label: {
+                Text("Add Random Pics")
+            })
+        }.frame(width: .infinity, height: .infinity, alignment: Alignment.center)
     }
 }
 
