@@ -11,7 +11,7 @@ import shared
 
 struct ProfileView: BaseView {
     
-    var profileId: String = UserEntity.companion.DEFAULT_USER_ID
+    let profileId: String
     @ObservedObject private var vm: ProfileViewModel = instance()
     
     private let threeColumnGrid = [
@@ -20,6 +20,7 @@ struct ProfileView: BaseView {
         GridItem(.flexible(minimum: 40), spacing: 0),
     ]
     
+    
     var body: some View {
         
         ZStack {
@@ -27,18 +28,22 @@ struct ProfileView: BaseView {
                 ScrollView(.vertical, showsIndicators: false) {
                     VStack(alignment: .leading, spacing: 0) {
                         Divider()
+
                         ///---- top layout
                         ProfileTopView(selectedUser: currentUser)
                             .padding(EdgeInsets(top:8, leading: 8, bottom: 0, trailing: 8))
                             .frame(minWidth: 0, maxWidth: .infinity, alignment: .topLeading)
-                        
+
                         //--- photo view
                         LazyVGrid(columns: threeColumnGrid, alignment: .leading, spacing: 0) {
                             ForEach(vm.userPosts, id: \.id) { postModel in
                                 NavigationLink(
                                     destination: PostDetailsView(selectedPost: postModel, showHeader: false, showCommentsCount: false)
                                 ) {
-                                    ProfilePhotoView(post: postModel)
+                                    ProfilePhotoView(
+                                        photoUrl: postModel.takeFirstPhoto().toUrl(),
+                                        hasMoreContent: postModel.hasMoreContent()
+                                    )
                                 }
                             }
                         }
@@ -48,10 +53,10 @@ struct ProfileView: BaseView {
                 ProgressView().progressViewStyle(CircularProgressViewStyle())
                     .frame(width: Consts.PROFILE_IMAGE_SIZE, height: Consts.PROFILE_IMAGE_SIZE, alignment: Alignment.center)
             }
-            
-                
+
+
         }.onAppear {
-            vm.fetchProfileData(userId: profileId)
+            vm.fetchProfileData(currentUserId: profileId)
         }.onDisappear {
             vm.stop()
         }
@@ -64,6 +69,6 @@ struct ProfileView: BaseView {
 
 struct ProfileView_Previews: PreviewProvider {
     static var previews: some View {
-        ProfileView()
+        ProfileView(profileId: UserEntity.companion.DEFAULT_USER_ID)
     }
 }

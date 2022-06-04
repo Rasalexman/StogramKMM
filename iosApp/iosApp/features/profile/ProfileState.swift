@@ -10,6 +10,6 @@ import Foundation
 import shared
 
 struct ProfileState {
-    let user: IUser
+    let user: IUser?
     var posts: [PostEntity] = []
 }

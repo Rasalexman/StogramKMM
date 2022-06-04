@@ -49,7 +49,7 @@ class UserEntity : RealmObject, IUser {
         }
 
         fun createDefaultUser(): UserEntity {
-            return createRandomDetailed(false).apply {
+            return createRandomDetailed(true).apply {
                 id = DEFAULT_USER_ID
             }
         }

@@ -10,7 +10,7 @@ import shared
 
 struct SearchDetailsView: View {
     
-    let post: PostEntity
+    @State var post: PostEntity
     
     var body: some View {
         ScrollView(.vertical, showsIndicators: false)  {

@@ -43,7 +43,7 @@ fun ReactionItemView(reaction: ReactionEntity) {
 
 class ReactionItemPreviewParameterProvider : PreviewParameterProvider<ReactionEntity> {
     override val values = sequenceOf(
-        ReactionEntity.createRandomList().shuffled().first()
+        ReactionEntity.createRandom()
     )
 }
 

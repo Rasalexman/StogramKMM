@@ -14,12 +14,13 @@ final class ProfileViewModel : BaseViewModel {
     private let userRepository: IUserRepository = instance()
     private let postsRepository: IPostsRepository = instance()
     
+    
     @Published var selectedUser: IUser? = nil
     @Published var userPosts: [PostEntity] = []
+    @Published var profileState: ProfileState = ProfileState(user: nil)
     
-    func fetchProfileData(userId: String) {
-        addObserver(userRepository.findUserDetailsAsCommonFlow(userId: userId).flatMapCFlow { user in
-            let currentUser = user ?? UserEntity.companion.createRandomDetailed(hasUserStory: false)
+    func fetchProfileData(currentUserId: String) {
+        addObserver(userRepository.findUserDetailsAsCommonFlow(userId: currentUserId).flatMapCFlow { currentUser in
             return self.postsRepository.findUserPostsAsCommonFlow(user: currentUser).mapCFlow { posts in
                 if let currentPosts = posts as? [PostEntity] {
                     return ProfileState(user: currentUser, posts: currentPosts)
@@ -31,6 +32,7 @@ final class ProfileViewModel : BaseViewModel {
                 self.selectedUser = currentState.user
                 self.userPosts = currentState.posts
             }
+            
         })
     }
 }

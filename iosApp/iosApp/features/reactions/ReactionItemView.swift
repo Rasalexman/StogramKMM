@@ -10,12 +10,22 @@ import shared
 
 struct ReactionItemView: View {
     
-    var reaction: ReactionEntity
+    @State var reaction: ReactionEntity
+    
+    private var user: IUser {
+        return reaction.takeUserFrom()
+    }
+    
+    private var postPhoto: URL {
+        return reaction.takeReactionPost().takeFirstPhoto().toUrl()
+    }
     
     var body: some View {
         HStack(alignment: .center, spacing: 0) {
-                        
-            UserAvatarView(user: reaction.takeUserFrom())
+                     
+            UserAvatarView(photoUrl: user.photo.toUrl()).background(
+                NavigationLink(destination: ProfileView(profileId: user.id)) { EmptyView() }
+            )
                 
             Text(reaction.createFullDescription())
                 .font(.system(size: 12))
@@ -25,7 +35,8 @@ struct ReactionItemView: View {
                 .frame(minWidth: 0, maxWidth: .infinity, alignment: .topLeading)
             
             ZStack {
-                ProfilePhotoView(post: reaction.takeReactionPost(), cWidth: Consts.REACTION_IMAGE_SIZE, cHeight: Consts.REACTION_IMAGE_SIZE)
+                ProfilePhotoView(photoUrl: postPhoto, hasMoreContent: false,
+                                 cWidth: Consts.REACTION_IMAGE_SIZE, cHeight: Consts.REACTION_IMAGE_SIZE)
                     .frame(width: Consts.REACTION_IMAGE_SIZE, height: Consts.REACTION_IMAGE_SIZE, alignment:.center)
             }.frame(alignment: .trailing)
             

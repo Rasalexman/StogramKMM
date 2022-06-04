@@ -10,7 +10,7 @@ import shared
 
 struct AvatarDescView: View {
     
-    var user: IUser
+    @State var user: IUser
     var desc: String = ""
     var imageSize: CGFloat = Consts.POST_IMAGE_SIZE
     var nameSize: CGFloat = 16
@@ -26,7 +26,7 @@ struct AvatarDescView: View {
     var body: some View {
         NavigationLink(destination: ProfileView(profileId: user.id)) {
             HStack {
-                UserAvatarView(user: user, cWidth: imageSize, cHeight: imageSize, border: borderSize)
+                UserAvatarView(photoUrl: user.photo.toUrl(), cWidth: imageSize, cHeight: imageSize, border: borderSize)
                 
                 VStack(alignment: .leading, spacing: 0) {
                     Text(user.name)

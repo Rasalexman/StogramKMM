@@ -10,7 +10,7 @@ import shared
 
 struct CommentItemView: View {
     
-    var comment: CommentEntity
+    @State var comment: CommentEntity
     @State var isLiked: Bool = false
     
     private var formattedDate: String {
@@ -71,7 +71,7 @@ struct CommentItemView: View {
 
 struct CommentItemView_Previews: PreviewProvider {
     static var previews: some View {
-        CommentItemView(comment: CommentEntity.companion.createRandom())
+        CommentItemView(comment: CommentEntity.companion.createRandom(forPostId: "sasas"))
             .previewLayout(PreviewLayout.sizeThatFits)
     }
 }

@@ -10,7 +10,8 @@ import shared
 import URLImage
 
 struct ProfilePhotoView: BaseView {
-    let post : PostEntity
+    @State var photoUrl: URL
+    @State var hasMoreContent: Bool
     
     var cWidth: CGFloat? = nil
     var cHeight: CGFloat? = nil
@@ -23,13 +24,13 @@ struct ProfilePhotoView: BaseView {
                     .aspectRatio(contentMode: .fit)
                     .foregroundColor(.clear)
                     .overlay {
-                        GeometryImageView(imageUrl: post.takeFirstPhoto().toUrl(), cWidth: cWidth, cHeight: cHeight)
+                        GeometryImageView(imageUrl: photoUrl, cWidth: cWidth, cHeight: cHeight)
                     }
             } else {
-                GeometryImageView(imageUrl: post.takeFirstPhoto().toUrl(), cWidth: cWidth, cHeight: cHeight)
+                GeometryImageView(imageUrl: photoUrl, cWidth: cWidth, cHeight: cHeight)
             }
             
-            if post.hasMoreContent() {
+            if hasMoreContent {
                 VStack(alignment: .trailing) {
                     Image(systemName: Consts.IMAGE_MORE_PICS)
                         .resizable()
@@ -43,7 +44,9 @@ struct ProfilePhotoView: BaseView {
 }
 
 struct ProfilePhotoView_Previews: PreviewProvider {
+    static let post = PostEntity.companion.createRandom(defaultUser: nil)
+    
     static var previews: some View {
-        ProfilePhotoView(post: PostEntity.companion.createRandom(defaultUser: nil)).previewLayout(PreviewLayout.sizeThatFits)
+        ProfilePhotoView(photoUrl: post.takeFirstPhoto().toUrl(), hasMoreContent: post.hasMoreContent() ).previewLayout(PreviewLayout.sizeThatFits)
     }
 }

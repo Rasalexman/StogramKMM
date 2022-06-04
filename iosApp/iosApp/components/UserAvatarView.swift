@@ -11,7 +11,7 @@ import shared
 
 struct UserAvatarView: View {
     
-    var user: IUser
+    var photoUrl: URL
     var cWidth: CGFloat = Consts.DEFAULT_IMAGE_SIZE
     var cHeight: CGFloat = Consts.DEFAULT_IMAGE_SIZE
     var border: CGFloat = Consts.ZERO_SIZE
@@ -20,7 +20,7 @@ struct UserAvatarView: View {
     
     var body: some View {
         ZStack {
-            URLImage(user.photo.toUrl()) { image in
+            URLImage(photoUrl) { image in
                 image
                     .resizable()
                     .aspectRatio(contentMode: .fill)
@@ -35,6 +35,6 @@ struct UserAvatarView: View {
 
 struct UserAvatarView_Previews: PreviewProvider {
     static var previews: some View {
-        UserAvatarView(user: UserEntity.companion.createRandom(hasUserStory: true)).previewLayout(PreviewLayout.sizeThatFits)
+        UserAvatarView(photoUrl: UserEntity.companion.createRandom(hasUserStory: true).photo.toUrl()).previewLayout(PreviewLayout.sizeThatFits)
     }
 }

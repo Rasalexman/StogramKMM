@@ -11,11 +11,12 @@ import Sodi
 struct HomeView: BaseView {
     
     @ObservedObject private var vm: HomeViewModel = instance()
-    @State private var listViewId = UUID()
     
     init() {
         UITableView.appearance().showsVerticalScrollIndicator = false
     }
+    
+    private let dividerWidth = UIScreen.screenWidth-8
     
     var body: some View {
         
@@ -26,7 +27,7 @@ struct HomeView: BaseView {
                 ScrollView(.horizontal, showsIndicators: false) {
                     LazyHStack {
                         ForEach(vm.userStories, id: \.id) { user in
-                            UserAvatarView(user: user, cWidth: Consts.STORY_IMAGE_SIZE, cHeight: Consts.STORY_IMAGE_SIZE, border: Consts.STORY_BORDER_SIZE)
+                            UserAvatarView(photoUrl: user.photo.toUrl(), cWidth: Consts.STORY_IMAGE_SIZE, cHeight: Consts.STORY_IMAGE_SIZE, border: Consts.STORY_BORDER_SIZE)
                         }
                     }.padding(8)
                 }
@@ -39,7 +40,7 @@ struct HomeView: BaseView {
                             .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
                         
                         Divider()
-                            .frame(width: UIScreen.screenWidth-8, height: 2, alignment: .trailing)
+                            .frame(width: dividerWidth, height: 2, alignment: .trailing)
                     }
                 }
             }

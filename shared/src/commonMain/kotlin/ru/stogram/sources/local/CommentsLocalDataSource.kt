@@ -11,15 +11,15 @@ class CommentsLocalDataSource(
 ) : ICommentsLocalDataSource {
 
     override fun getAllCommentsAsFlow(postId: String): Flow<List<CommentEntity>> {
-        return database.realm.query<CommentEntity>().asFlow().map { result ->
+        return database.realm.query<CommentEntity>("postId = $0", postId).find().asFlow().map { result ->
             result.list.ifEmpty {
-                createLocalData()
+                createLocalData(postId)
             }
         }
     }
 
-    private fun createLocalData(): List<CommentEntity> {
-        val createdData = CommentEntity.createRandomList()
+    private fun createLocalData(postId: String): List<CommentEntity> {
+        val createdData = CommentEntity.createRandomList(postId)
         createdData.forEach { entity ->
             database.realm.writeBlocking {
                 copyToRealm(entity)

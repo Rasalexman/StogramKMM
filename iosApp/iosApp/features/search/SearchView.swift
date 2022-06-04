@@ -14,7 +14,6 @@ struct SearchView: BaseView {
     @ObservedObject private var vm: SearchViewModel = instance()
     @State private var searchText: String = ""
     
-    
     private let threeColumnGrid = [
         GridItem(.flexible(minimum: 40), spacing: 0),
         GridItem(.flexible(minimum: 40), spacing: 0),
@@ -36,7 +35,10 @@ struct SearchView: BaseView {
                         NavigationLink(
                             destination: SearchDetailsView(post: postModel)
                         ) {
-                            ProfilePhotoView(post: postModel)
+                            ProfilePhotoView(
+                                photoUrl: postModel.takeFirstPhoto().toUrl(),
+                                hasMoreContent: postModel.hasMoreContent()
+                            )
                         }
                     }
                 }

@@ -16,7 +16,7 @@ struct ProfileTopView: BaseView {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             HStack {
-                UserAvatarView(user: selectedUser, cWidth: Consts.PROFILE_IMAGE_SIZE, cHeight: Consts.PROFILE_IMAGE_SIZE)
+                UserAvatarView(photoUrl: selectedUser.photo.toUrl(), cWidth: Consts.PROFILE_IMAGE_SIZE, cHeight: Consts.PROFILE_IMAGE_SIZE)
                 
                 TextCounterView(count: $selectedUser.postCount, desc: "Публикации")
                 TextCounterView(count: $selectedUser.subsCount, desc: "Подписки")

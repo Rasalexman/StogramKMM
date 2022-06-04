@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Sodi
+import shared
 
 struct MainView: BaseView {
     
@@ -43,7 +44,7 @@ struct MainView: BaseView {
                     .tabItem { Label("Реакции", systemImage: "bolt.heart.fill") }
                     .navigationBarTitleDisplayMode(.inline)
                 
-                ProfileView()
+                ProfileView(profileId: UserEntity.companion.DEFAULT_USER_ID)
                     .tag(Tab.profile)
                     .tabItem { Label("Профиль", systemImage: "person.fill") }
                     .navigationBarTitleDisplayMode(.inline)
@@ -56,8 +57,9 @@ struct MainView: BaseView {
                         .font(.largeTitle.bold())
                         .accessibilityAddTraits(.isHeader)
                 }
-            }
-        }
+            }.navigationBarTitleDisplayMode(.inline)
+        }.navigationBarHidden(true).navigationBarTitleDisplayMode(.inline)
+            
     }
     
     static func getNavLink(onSelection: Binding<String?>) -> some View {

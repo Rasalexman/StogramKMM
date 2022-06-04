@@ -20,7 +20,7 @@ struct iOSApp: SwiftUI.App, ISodi {
         WindowGroup {
             MainView()
                 .environment(\.urlImageService, urlImageService)
-                .environment(\.urlImageOptions, URLImageOptions(loadOptions: [ .loadOnAppear, .cancelOnDisappear ]))
+                //.environment(\.urlImageOptions, URLImageOptions(loadOptions: [ .loadOnAppear, .cancelOnDisappear ]))
         }
     }
 }

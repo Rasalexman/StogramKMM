@@ -1,9 +1,7 @@
 package ru.stogram.sources.local
 
 import io.realm.query
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.*
 import ru.stogram.database.RealmDataBase
 import ru.stogram.models.PostEntity
 import ru.stogram.models.UserEntity
@@ -20,10 +18,12 @@ class PostsLocalDataSource(
         }
     }
 
-    override fun findUserPostsFlow(user: UserEntity): Flow<List<PostEntity>> {
-        return database.realm.query<PostEntity>("user.id = $0", user.id).asFlow().map { result ->
-            result.list
-        }
+    override fun findUserPostsFlow(user: UserEntity?): Flow<List<PostEntity>> {
+        return user?.run {
+            database.realm.query<PostEntity>("user.id = $0", id).find().asFlow().map { result ->
+                result.list
+            }
+        } ?: flowOf(emptyList())
     }
 
     override fun addUserPostAsFlow(): Flow<PostEntity>  {
@@ -52,6 +52,6 @@ class PostsLocalDataSource(
 
 interface IPostsLocalDataSource {
     fun getAllPostsAsFlow(): Flow<List<PostEntity>>
-    fun findUserPostsFlow(user: UserEntity): Flow<List<PostEntity>>
+    fun findUserPostsFlow(user: UserEntity?): Flow<List<PostEntity>>
     fun addUserPostAsFlow(): Flow<PostEntity>
 }

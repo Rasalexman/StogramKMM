@@ -10,7 +10,7 @@ import kotlin.random.Random
 class CommentEntity : RealmObject {
     var id: String = ""
     var postId: String = ""
-    var user: UserEntity? = UserEntity.createRandom(randomBool)
+    var user: UserEntity? = null
     var isLiked: Boolean = randomBool
     var text: String = ""
     var likesCount: String = "56"
@@ -21,21 +21,22 @@ class CommentEntity : RealmObject {
     }
 
     companion object {
-        fun createRandomList(): List<CommentEntity> {
+        fun createRandomList(postId: String): List<CommentEntity> {
             val createData = mutableListOf<CommentEntity>()
             val randomInt: Int = Random.nextInt(24, 56)
             repeat(randomInt) {
-                createData.add(createRandom())
+                createData.add(createRandom(postId))
             }
             return createData
         }
 
-        fun createRandom(): CommentEntity {
+        fun createRandom(forPostId: String? = null): CommentEntity {
             return CommentEntity().apply {
-                id = getRandomString(1000)
-                postId = getRandomString(1000)
+                id = getRandomString(100)
+                postId = forPostId ?: getRandomString(100)
                 text = getRandomString(128)
                 likesCount = randomCount
+                user = UserEntity.createRandomDetailed(randomBool)
             }
         }
     }

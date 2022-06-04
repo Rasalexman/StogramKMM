@@ -9,7 +9,8 @@ import SwiftUI
 import shared
 
 struct PostView: View {
-    var post: PostEntity
+    
+    @State var post: PostEntity
     var showHeader: Bool = true
     var showCommentsCount: Bool = true
     var showContent: Bool = true
@@ -29,11 +30,7 @@ struct PostView: View {
             }
             
             if(showContent) {
-                if(post.hasMoreContent()) {
-                    PostContentView(post: post)
-                } else {
-                    ProfilePhotoView(post: post)
-                }
+                PostContentView(post: post)
             }
             
             HStack {
