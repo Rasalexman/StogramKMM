@@ -17,6 +17,9 @@ class UserEntity : RealmObject, IUser {
     override var bio: String = ""
 
     companion object {
+
+        const val DEFAULT_USER_ID = "sdsa23das34fdfg434sdGsa"
+
         fun createRandomList(hasUserStory: Boolean? = null): List<UserEntity> {
             val createData = mutableListOf<UserEntity>()
             val randomInt: Int = Random.nextInt(10, 56)
@@ -36,12 +39,18 @@ class UserEntity : RealmObject, IUser {
             }
         }
 
-        fun createRandomDetailed(hasUserStory: Boolean? = null): IUser {
+        fun createRandomDetailed(hasUserStory: Boolean? = null): UserEntity {
             return createRandom(hasUserStory).apply {
                 postCount = randomCount
                 subsCount = randomCount
                 observCount = randomCount
-                bio = getRandomString(300)
+                bio = getRandomString(156)
+            }
+        }
+
+        fun createDefaultUser(): UserEntity {
+            return createRandomDetailed(false).apply {
+                id = DEFAULT_USER_ID
             }
         }
     }

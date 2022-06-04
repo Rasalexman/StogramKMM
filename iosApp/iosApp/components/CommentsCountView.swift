@@ -39,6 +39,6 @@ struct CommentsCountView: View {
 
 struct CommentsCountView_Previews: PreviewProvider {
     static var previews: some View {
-        CommentsCountView(post: PostEntity.companion.createRandom())
+        CommentsCountView(post: PostEntity.companion.createRandom(defaultUser: nil))
     }
 }

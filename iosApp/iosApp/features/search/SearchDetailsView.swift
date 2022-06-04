@@ -24,6 +24,6 @@ struct SearchDetailsView: View {
 
 struct SearchDetailsView_Previews: PreviewProvider {
     static var previews: some View {
-        SearchDetailsView(post: PostEntity.companion.createRandom())
+        SearchDetailsView(post: PostEntity.companion.createRandom(defaultUser: nil))
     }
 }

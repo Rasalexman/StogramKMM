@@ -44,6 +44,6 @@ struct ProfilePhotoView: BaseView {
 
 struct ProfilePhotoView_Previews: PreviewProvider {
     static var previews: some View {
-        ProfilePhotoView(post: PostEntity.companion.createRandom()).previewLayout(PreviewLayout.sizeThatFits)
+        ProfilePhotoView(post: PostEntity.companion.createRandom(defaultUser: nil)).previewLayout(PreviewLayout.sizeThatFits)
     }
 }

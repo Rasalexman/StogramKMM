@@ -7,10 +7,11 @@
 
 import SwiftUI
 import Sodi
+import shared
 
 struct ProfileView: BaseView {
     
-    var profileId: String = Consts.USER_ID
+    var profileId: String = UserEntity.companion.DEFAULT_USER_ID
     @ObservedObject private var vm: ProfileViewModel = instance()
     
     private let threeColumnGrid = [
@@ -20,30 +21,41 @@ struct ProfileView: BaseView {
     ]
     
     var body: some View {
-        ScrollView(.vertical, showsIndicators: false) {
-            VStack(alignment: .leading, spacing: 0) {
-                
-                Divider()
-                ///---- top layout
-                ProfileTopView()
-                    .padding(EdgeInsets(top:8, leading: 8, bottom: 0, trailing: 8))
-                    .frame(minWidth: 0, maxWidth: .infinity, alignment: .topLeading)
-                
-                //--- photo view
-                LazyVGrid(columns: threeColumnGrid, alignment: .leading, spacing: 0) {
-                    ForEach(vm.userPosts, id: \.id) { postModel in
-                        NavigationLink(
-                            destination: PostDetailsView(selectedPost: postModel, showHeader: false, showCommentsCount: false)
-                        ) {
-                            ProfilePhotoView(post: postModel)
+        
+        ZStack {
+            if let currentUser = vm.selectedUser {
+                ScrollView(.vertical, showsIndicators: false) {
+                    VStack(alignment: .leading, spacing: 0) {
+                        Divider()
+                        ///---- top layout
+                        ProfileTopView(selectedUser: currentUser)
+                            .padding(EdgeInsets(top:8, leading: 8, bottom: 0, trailing: 8))
+                            .frame(minWidth: 0, maxWidth: .infinity, alignment: .topLeading)
+                        
+                        //--- photo view
+                        LazyVGrid(columns: threeColumnGrid, alignment: .leading, spacing: 0) {
+                            ForEach(vm.userPosts, id: \.id) { postModel in
+                                NavigationLink(
+                                    destination: PostDetailsView(selectedPost: postModel, showHeader: false, showCommentsCount: false)
+                                ) {
+                                    ProfilePhotoView(post: postModel)
+                                }
+                            }
                         }
                     }
-                }
+                }.frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .topLeading)
+            } else {
+                ProgressView().progressViewStyle(CircularProgressViewStyle())
+                    .frame(width: Consts.PROFILE_IMAGE_SIZE, height: Consts.PROFILE_IMAGE_SIZE, alignment: Alignment.center)
             }
-        }.frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .topLeading)
-            .onAppear {
-                vm.fetchProfileData(userId: profileId)
-            }
+            
+                
+        }.onAppear {
+            vm.fetchProfileData(userId: profileId)
+        }.onDisappear {
+            vm.stop()
+        }
+        
         
     }
 }

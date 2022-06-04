@@ -55,6 +55,6 @@ struct PostDetailsView: BaseView {
 
 struct PostDetailsView_Previews: PreviewProvider {
     static var previews: some View {
-        PostDetailsView(selectedPost: PostEntity.companion.createRandom())
+        PostDetailsView(selectedPost: PostEntity.companion.createRandom(defaultUser: nil))
     }
 }

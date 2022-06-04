@@ -76,7 +76,7 @@ struct PostView: View {
 
 struct PostView_Previews: PreviewProvider {
     static var previews: some View {
-        PostView(post:PostEntity.companion.createRandom())
+        PostView(post:PostEntity.companion.createRandom(defaultUser: nil))
             .previewLayout(PreviewLayout.sizeThatFits).previewLayout(PreviewLayout.sizeThatFits)
     }
 }

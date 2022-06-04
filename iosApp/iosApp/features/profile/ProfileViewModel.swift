@@ -11,11 +11,26 @@ import shared
 
 final class ProfileViewModel : BaseViewModel {
     
-    @Published var selectedUser: IUser = UserEntity.companion.createRandomDetailed(hasUserStory: true)
+    private let userRepository: IUserRepository = instance()
+    private let postsRepository: IPostsRepository = instance()
     
+    @Published var selectedUser: IUser? = nil
     @Published var userPosts: [PostEntity] = []
     
     func fetchProfileData(userId: String) {
-        userPosts = PostEntity.companion.createRandomList()
+        addObserver(userRepository.findUserDetailsAsCommonFlow(userId: userId).flatMapCFlow { user in
+            let currentUser = user ?? UserEntity.companion.createRandomDetailed(hasUserStory: false)
+            return self.postsRepository.findUserPostsAsCommonFlow(user: currentUser).mapCFlow { posts in
+                if let currentPosts = posts as? [PostEntity] {
+                    return ProfileState(user: currentUser, posts: currentPosts)
+                }
+                return ProfileState(user: currentUser)
+            }
+        }.watch { state in
+            if let currentState = state as? ProfileState {
+                self.selectedUser = currentState.user
+                self.userPosts = currentState.posts
+            }
+        })
     }
 }

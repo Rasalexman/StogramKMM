@@ -5,6 +5,8 @@ import io.realm.RealmObject
 import io.realm.realmListOf
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import ru.stogram.database.CFlow
+import ru.stogram.database.wrap
 import ru.stogram.utils.*
 import kotlin.random.Random
 
@@ -23,6 +25,10 @@ class PostEntity : RealmObject {
 
     fun takeContentFlow(): Flow<List<String>> = content.asFlow().map {
         it.list.toList()
+    }
+
+    fun takeContentCommonFlow(): CFlow<List<String>> {
+        return takeContentFlow().wrap()
     }
 
     fun takeContent(): List<String> {
@@ -51,7 +57,7 @@ class PostEntity : RealmObject {
             return createData
         }
 
-        fun createRandom(): PostEntity {
+        fun createRandom(defaultUser: UserEntity? = null): PostEntity {
             return PostEntity().apply {
                 id = getRandomString(100)
                 postId = getRandomString(100)
@@ -59,7 +65,7 @@ class PostEntity : RealmObject {
                 likesCount = randomCount
                 commentsCount = randomCount
                 isLiked = randomBool
-                user = UserEntity.createRandom(randomBool)
+                user = defaultUser ?: UserEntity.createRandomDetailed(randomBool)
                 date = getRandomDate()
                 content.addAll(getRandomPhotoList())
             }

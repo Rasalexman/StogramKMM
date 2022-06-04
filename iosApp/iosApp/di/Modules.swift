@@ -14,6 +14,7 @@ let databaseModule = sodiModule(moduleName: ModulesNames.DATABASE) { sodi in
 }
 
 let ldsModule = sodiModule(moduleName: ModulesNames.LDS) { sodi in
+    sodi.bindProvider(to: IUserLocalDataSource.self) { UserLocalDataSource(database: instance()) }
     sodi.bindProvider(to: IUserStoriesLocalDataSource.self) { UserStoriesLocalDataSource(database: instance()) }
     sodi.bindProvider(to: IPostsLocalDataSource.self) { PostsLocalDataSource(database: instance()) }
     sodi.bindProvider(to: IReactionsLocalDataSource.self) { ReactionsLocalDataSource(database: instance()) }
@@ -21,6 +22,7 @@ let ldsModule = sodiModule(moduleName: ModulesNames.LDS) { sodi in
 }
 
 let repositoryModule = sodiModule(moduleName: ModulesNames.REPOSITORY) { sodi in
+    sodi.bindSingle(to: IUserRepository.self) { UserRepository(localDataSource: instance()) }
     sodi.bindSingle(to: IUserStoriesRepository.self) { UserStoriesRepository(localDataSource: instance()) }
     sodi.bindSingle(to: IPostsRepository.self) { PostsRepository(localDataSource: instance()) }
     sodi.bindSingle(to: ISearchRepository.self) { SearchRepository() }

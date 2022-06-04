@@ -11,24 +11,24 @@ import shared
 
 struct ProfileTopView: BaseView {
     
-    @ObservedObject private var vm: ProfileViewModel = instance()
+    @State var selectedUser: IUser
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             HStack {
-                UserAvatarView(user: vm.selectedUser, cWidth: Consts.PROFILE_IMAGE_SIZE, cHeight: Consts.PROFILE_IMAGE_SIZE)
+                UserAvatarView(user: selectedUser, cWidth: Consts.PROFILE_IMAGE_SIZE, cHeight: Consts.PROFILE_IMAGE_SIZE)
                 
-                TextCounterView(count: $vm.selectedUser.postCount, desc: "Публикации")
-                TextCounterView(count: $vm.selectedUser.subsCount, desc: "Подписки")
-                TextCounterView(count: $vm.selectedUser.observCount, desc: "Наблюдатели")
+                TextCounterView(count: $selectedUser.postCount, desc: "Публикации")
+                TextCounterView(count: $selectedUser.subsCount, desc: "Подписки")
+                TextCounterView(count: $selectedUser.observCount, desc: "Наблюдатели")
             }.frame(maxWidth: .infinity, alignment: .topLeading)
             
-            Text(vm.selectedUser.name)
+            Text(selectedUser.name)
                 .font(.system(size: 16))
                 .bold()
                 .padding(EdgeInsets(top:8, leading: 0, bottom: 4, trailing: 0))
             
-            Text(vm.selectedUser.bio)
+            Text(selectedUser.bio)
                 .font(.system(size: 12))
                 .padding(EdgeInsets(top:0, leading: 0, bottom: 10, trailing: 0))
             
@@ -38,6 +38,6 @@ struct ProfileTopView: BaseView {
 
 struct ProfileTopView_Previews: PreviewProvider {
     static var previews: some View {
-        ProfileTopView()
+        ProfileTopView(selectedUser: UserEntity.companion.createRandomDetailed(hasUserStory: true))
     }
 }

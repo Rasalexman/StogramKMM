@@ -16,6 +16,7 @@
 		11696207284AB15000679A8A /* GeometryImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11696206284AB15000679A8A /* GeometryImageView.swift */; };
 		118B7980284B7E98003F48CF /* ModulesNames.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118B797F284B7E98003F48CF /* ModulesNames.swift */; };
 		118B7982284B85F6003F48CF /* HomeState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118B7981284B85F6003F48CF /* HomeState.swift */; };
+		118B7984284B919D003F48CF /* ProfileState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118B7983284B919D003F48CF /* ProfileState.swift */; };
 		11CF055E28277B30004EC94C /* (null) in Resources */ = {isa = PBXBuildFile; };
 		11DBC21828273CFD009E28DB /* Sodi in Frameworks */ = {isa = PBXBuildFile; productRef = 11DBC21728273CFD009E28DB /* Sodi */; };
 		11DBC23D282742EE009E28DB /* BaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11DBC239282742EE009E28DB /* BaseView.swift */; };
@@ -31,8 +32,6 @@
 		11DBC26428274573009E28DB /* PostContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11DBC25B28274573009E28DB /* PostContentView.swift */; };
 		11DBC26528274573009E28DB /* UserAvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11DBC25C28274573009E28DB /* UserAvatarView.swift */; };
 		11DBC26628274573009E28DB /* CommentsCountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11DBC25D28274573009E28DB /* CommentsCountView.swift */; };
-		11DBC282282746A2009E28DB /* UserLocalDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11DBC27D282746A1009E28DB /* UserLocalDataSource.swift */; };
-		11DBC28C282746E0009E28DB /* UserRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11DBC287282746E0009E28DB /* UserRepository.swift */; };
 		11DBC29328274722009E28DB /* Modules.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11DBC29228274722009E28DB /* Modules.swift */; };
 		11DBC2A02827483D009E28DB /* CommentsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11DBC29C2827483C009E28DB /* CommentsViewModel.swift */; };
 		11DBC2A12827483D009E28DB /* EnterBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11DBC29D2827483C009E28DB /* EnterBarView.swift */; };
@@ -81,6 +80,7 @@
 		11696206284AB15000679A8A /* GeometryImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeometryImageView.swift; sourceTree = "<group>"; };
 		118B797F284B7E98003F48CF /* ModulesNames.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModulesNames.swift; sourceTree = "<group>"; };
 		118B7981284B85F6003F48CF /* HomeState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeState.swift; sourceTree = "<group>"; };
+		118B7983284B919D003F48CF /* ProfileState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileState.swift; sourceTree = "<group>"; };
 		11DBC239282742EE009E28DB /* BaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseView.swift; sourceTree = "<group>"; };
 		11DBC23A282742EE009E28DB /* Consts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Consts.swift; sourceTree = "<group>"; };
 		11DBC23B282742EE009E28DB /* ResultState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultState.swift; sourceTree = "<group>"; };
@@ -94,8 +94,6 @@
 		11DBC25B28274573009E28DB /* PostContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostContentView.swift; sourceTree = "<group>"; };
 		11DBC25C28274573009E28DB /* UserAvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAvatarView.swift; sourceTree = "<group>"; };
 		11DBC25D28274573009E28DB /* CommentsCountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsCountView.swift; sourceTree = "<group>"; };
-		11DBC27D282746A1009E28DB /* UserLocalDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserLocalDataSource.swift; sourceTree = "<group>"; };
-		11DBC287282746E0009E28DB /* UserRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRepository.swift; sourceTree = "<group>"; };
 		11DBC29228274722009E28DB /* Modules.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Modules.swift; sourceTree = "<group>"; };
 		11DBC29C2827483C009E28DB /* CommentsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsViewModel.swift; sourceTree = "<group>"; };
 		11DBC29D2827483C009E28DB /* EnterBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnterBarView.swift; sourceTree = "<group>"; };
@@ -180,39 +178,6 @@
 			path = components;
 			sourceTree = "<group>";
 		};
-		11DBC27928274658009E28DB /* data */ = {
-			isa = PBXGroup;
-			children = (
-				11DBC27B2827466B009E28DB /* sources */,
-				11DBC27A28274660009E28DB /* repository */,
-			);
-			path = data;
-			sourceTree = "<group>";
-		};
-		11DBC27A28274660009E28DB /* repository */ = {
-			isa = PBXGroup;
-			children = (
-				11DBC287282746E0009E28DB /* UserRepository.swift */,
-			);
-			path = repository;
-			sourceTree = "<group>";
-		};
-		11DBC27B2827466B009E28DB /* sources */ = {
-			isa = PBXGroup;
-			children = (
-				11DBC27C28274679009E28DB /* local */,
-			);
-			path = sources;
-			sourceTree = "<group>";
-		};
-		11DBC27C28274679009E28DB /* local */ = {
-			isa = PBXGroup;
-			children = (
-				11DBC27D282746A1009E28DB /* UserLocalDataSource.swift */,
-			);
-			path = local;
-			sourceTree = "<group>";
-		};
 		11DBC29128274703009E28DB /* di */ = {
 			isa = PBXGroup;
 			children = (
@@ -256,6 +221,7 @@
 				11DBC2B2282748CE009E28DB /* ProfileTopView.swift */,
 				11DBC2B4282748CE009E28DB /* ProfileView.swift */,
 				11DBC2B3282748CE009E28DB /* ProfileViewModel.swift */,
+				118B7983284B919D003F48CF /* ProfileState.swift */,
 			);
 			path = profile;
 			sourceTree = "<group>";
@@ -340,7 +306,6 @@
 			children = (
 				11DBC29428274736009E28DB /* features */,
 				11DBC29128274703009E28DB /* di */,
-				11DBC27928274658009E28DB /* data */,
 				11DBC2542827454C009E28DB /* components */,
 				11DBC238282742CF009E28DB /* core */,
 				058557BA273AAA24004C7B11 /* Assets.xcassets */,
@@ -504,6 +469,7 @@
 				11DBC2A828274862009E28DB /* PostDetailsView.swift in Sources */,
 				11DBC2A928274862009E28DB /* PostDetailsViewModel.swift in Sources */,
 				11DBC2A528274852009E28DB /* CreateView.swift in Sources */,
+				118B7984284B919D003F48CF /* ProfileState.swift in Sources */,
 				11DBC2A02827483D009E28DB /* CommentsViewModel.swift in Sources */,
 				11DBC2A12827483D009E28DB /* EnterBarView.swift in Sources */,
 				118B7982284B85F6003F48CF /* HomeState.swift in Sources */,
@@ -511,9 +477,7 @@
 				118B7980284B7E98003F48CF /* ModulesNames.swift in Sources */,
 				11DBC2A32827483D009E28DB /* CommentsView.swift in Sources */,
 				11DBC29328274722009E28DB /* Modules.swift in Sources */,
-				11DBC28C282746E0009E28DB /* UserRepository.swift in Sources */,
 				11696207284AB15000679A8A /* GeometryImageView.swift in Sources */,
-				11DBC282282746A2009E28DB /* UserLocalDataSource.swift in Sources */,
 				11696203284A963800679A8A /* PhotoModel.swift in Sources */,
 				11DBC25E28274573009E28DB /* LikesCountView.swift in Sources */,
 				11DBC25F28274573009E28DB /* Navigation.swift in Sources */,

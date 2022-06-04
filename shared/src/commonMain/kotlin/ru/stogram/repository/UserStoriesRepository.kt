@@ -2,6 +2,7 @@ package ru.stogram.repository
 
 import kotlinx.coroutines.flow.Flow
 import ru.stogram.database.CFlow
+import ru.stogram.database.wrap
 import ru.stogram.models.UserEntity
 import ru.stogram.sources.local.IUserStoriesLocalDataSource
 
@@ -14,7 +15,7 @@ class UserStoriesRepository(
     }
 
     override fun getStoriesAsCommonFlow(): CFlow<List<UserEntity>> {
-        return localDataSource.getStoriesAsCommonFlow()
+        return getAllStoriesAsFlow().wrap()
     }
 
 }

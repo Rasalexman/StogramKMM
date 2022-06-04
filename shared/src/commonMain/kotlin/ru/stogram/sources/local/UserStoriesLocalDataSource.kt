@@ -20,10 +20,6 @@ class UserStoriesLocalDataSource(
         }
     }
 
-    override fun getStoriesAsCommonFlow(): CFlow<List<UserEntity>> {
-        return getAllStoriesAsFlow().wrap()
-    }
-
     private fun createLocalData(): List<UserEntity> {
         val createdData = UserEntity.createRandomList()
         createdData.forEach { entity ->
@@ -37,5 +33,4 @@ class UserStoriesLocalDataSource(
 
 interface IUserStoriesLocalDataSource {
     fun getAllStoriesAsFlow(): Flow<List<UserEntity>>
-    fun getStoriesAsCommonFlow(): CFlow<List<UserEntity>>
 }

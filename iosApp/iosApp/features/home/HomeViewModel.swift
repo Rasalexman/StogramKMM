@@ -15,17 +15,7 @@ class HomeViewModel : BaseViewModel {
     private let userStoriesRepository: IUserStoriesRepository = instance()
     
     @Published var userPosts: [PostEntity] = []
-    @Published var userStories: [UserEntity] = []
-    
-    override init() {
-        super.init()
-        //fetchHomeData()
-    }
-    
-    private func fetchHomeData() {
-        userPosts = PostEntity.companion.createRandomList()
-        userStories = UserEntity.companion.createRandomList(hasUserStory: true)
-    }
+    @Published var userStories: [UserEntity] = []    
 
     func start() {
         addObserver(postsRepository.allPostsAsCommonFlowable().flatMapCFlow(flatBlock: { posts in
@@ -37,8 +27,8 @@ class HomeViewModel : BaseViewModel {
                 }
                 return HomeState.EMPTY
             })
-        }).watch { resultModel in
-            if let currentModel = resultModel as? HomeState {
+        }).watch { resultState in
+            if let currentModel = resultState as? HomeState {
                 self.userPosts = currentModel.posts
                 self.userStories = currentModel.stories
             }
