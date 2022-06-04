@@ -1,6 +1,10 @@
 package ru.stogram.models
 
+import io.realm.RealmList
 import io.realm.RealmObject
+import io.realm.realmListOf
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import ru.stogram.utils.*
 import kotlin.random.Random
 
@@ -12,16 +16,26 @@ class PostEntity : RealmObject {
     var commentsCount: String = "0"
     var isLiked: Boolean = false
     var date: String = ""
-    var user: IUser = UserEntity.createRandom()
+    var user: UserEntity? = null
 
     //
-    var content: List<String> = getRandomPhotoList()
+    var content: RealmList<String> = realmListOf()
 
-    val hasMoreContent: Boolean
-        get() = content.size > 1
+    fun takeContentFlow(): Flow<List<String>> = content.asFlow().map {
+        it.list.toList()
+    }
 
-    val firstPhoto: String
-        get() = content.firstOrNull() ?: getRandomPhoto()
+    fun takeFirstPhoto(): String {
+        return content.firstOrNull() ?: getRandomPhoto()
+    }
+
+    fun takePostUser(): IUser {
+        return user ?: UserEntity.createRandom(randomBool)
+    }
+
+    fun hasMoreContent(): Boolean {
+        return content.size > 1
+    }
 
     companion object {
         fun createRandomList(): List<PostEntity> {
@@ -41,8 +55,9 @@ class PostEntity : RealmObject {
                 likesCount = randomCount
                 commentsCount = randomCount
                 isLiked = randomBool
-                content = getRandomPhotoList()
+                user = UserEntity.createRandom(randomBool)
                 date = getRandomDate()
+                content.addAll(getRandomPhotoList())
             }
         }
     }

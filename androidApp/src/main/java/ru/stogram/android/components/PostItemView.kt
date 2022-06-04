@@ -11,6 +11,8 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.pager.ExperimentalPagerApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.flowOn
 import ru.stogram.android.common.orZero
 import ru.stogram.models.PostEntity
 
@@ -19,21 +21,23 @@ import ru.stogram.models.PostEntity
 fun PostItemView(post: PostEntity) {
 
     var isLikedState by remember { mutableStateOf(post.isLiked) }
-    //val postContent by remember { mutableStateOf(post.content.orEmpty()) }
+    val postPhotos: List<String> by post.takeContentFlow().collectAsState(
+        initial = emptyList()
+    )
 
     Column(modifier = Modifier
         .fillMaxWidth()
         .padding(bottom = 8.dp)) {
         Box(modifier = Modifier.padding(all = 8.dp)) {
-            AvatarNameDescView(user = post.user)
+            AvatarNameDescView(user = post.takePostUser())
         }
 
-        PostContentView(post.content)
+        PostContentView(postPhotos)
 
         Row(modifier = Modifier.padding(all = 8.dp)) {
 
             LikesView(count = post.likesCount.orZero(), isSelected = isLikedState) {
-                post.isLiked = !post.isLiked
+                //post.isLiked = !post.isLiked
                 isLikedState = post.isLiked
             }
 
@@ -45,7 +49,7 @@ fun PostItemView(post: PostEntity) {
         }
 
         Text(
-            text = post.text.orEmpty(),
+            text = post.text,
             modifier = Modifier.padding(start = 8.dp, end = 8.dp, bottom = 8.dp),
             fontSize = 14.sp,
             maxLines = 3,

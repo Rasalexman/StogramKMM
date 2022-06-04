@@ -1,9 +1,10 @@
 package ru.stogram.models
 
+import io.realm.RealmObject
 import ru.stogram.utils.*
 import kotlin.random.Random
 
-class UserEntity : IUser {
+class UserEntity : RealmObject, IUser {
     override var id: String = ""
     override var name: String = ""
     override var photo: String = ""

@@ -6,6 +6,9 @@ import coil.ImageLoaderFactory
 import com.kodi.generated.modules.viewmodels.viewModelsModule
 import com.rasalexman.kodi.core.import
 import com.rasalexman.kodi.core.kodi
+import ru.stogram.android.di.dataModule
+import ru.stogram.android.di.databaseModule
+import ru.stogram.android.di.ldsModule
 import timber.log.Timber
 
 class StogramApp : Application(), ImageLoaderFactory {
@@ -14,6 +17,9 @@ class StogramApp : Application(), ImageLoaderFactory {
         super.onCreate()
         initTimber()
         kodi {
+            import(databaseModule)
+            import(ldsModule)
+            import(dataModule)
             import(viewModelsModule)
         }
     }

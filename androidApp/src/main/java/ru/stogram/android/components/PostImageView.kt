@@ -5,5 +5,5 @@ import ru.stogram.models.PostEntity
 
 @Composable
 fun PostImageView(post: PostEntity) {
-    PhotoImageView(url = post.firstPhoto)
+    PhotoImageView(url = post.takeFirstPhoto())
 }

@@ -45,7 +45,6 @@ fun Home() {
 @Composable
 fun HomeView(viewModel: HomeViewModel) {
 
-    // by rememberStateWithLifecycle(stateFlow = viewModel.storiesState)
     val storiesState by viewModel.storiesState.collectAsState(initial = StoriesResult.emptyResult())
     val postsState by viewModel.postsState.collectAsState(initial = PostsResult.emptyResult())
 

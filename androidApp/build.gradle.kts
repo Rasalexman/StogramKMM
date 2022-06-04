@@ -72,11 +72,13 @@ dependencies {
     val core: String by rootProject.extra
     val lifecycleVM: String by rootProject.extra
     val coroutinesAndroid: String by rootProject.extra
+    val realmBase: String by rootProject.extra
 
     val leakCanary: String by rootProject.extra
     val kodiksp: String by rootProject.extra
     val timber: String by rootProject.extra
     val coil: String by rootProject.extra
+    val swiperefreshlayout: String by rootProject.extra
 
     implementation(project(":shared"))
     implementation(core)
@@ -84,8 +86,10 @@ dependencies {
     implementation(coroutinesAndroid)
     implementation(timber)
     implementation(coil)
+    compileOnly(realmBase)
 
     implementation(composeUI)
+    implementation(swiperefreshlayout)
     implementation(composeMaterial)
     implementation(composePreview)
     implementation(composeActivity)

@@ -13,7 +13,7 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.google.accompanist.pager.rememberPagerState
-import ru.stogram.models.PostEntity
+import ru.stogram.utils.getRandomPhotoList
 
 @ExperimentalPagerApi
 @Composable
@@ -50,5 +50,5 @@ fun PostContentView(postContent: List<String>) {
 @Preview(name = "PostContentView", showBackground = true)
 @Composable
 fun PostContentViewPreview() {
-    PostContentView(postContent = PostEntity.createRandom().content)
+    PostContentView(postContent = getRandomPhotoList())
 }

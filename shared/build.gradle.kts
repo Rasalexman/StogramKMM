@@ -37,6 +37,8 @@ kotlin {
         val coroutinesNative: String by rootProject.extra
         val serializationCore: String by rootProject.extra
         val datetime: String by rootProject.extra
+        val kodi: String by rootProject.extra
+
         val commonMain by getting {
             dependencies {
                 implementation(ktorCore)
@@ -45,7 +47,7 @@ kotlin {
                 implementation(coroutinesNative)
                 implementation(serializationCore)
                 implementation(datetime)
-                api(realmBase)
+                implementation(realmBase)
             }
         }
 
@@ -56,7 +58,6 @@ kotlin {
         }
 
         val ktorAndroid: String by rootProject.extra
-        val kodi: String by rootProject.extra
         val sresult: String by rootProject.extra
         val androidMain by getting {
             dependencies {
@@ -95,10 +96,16 @@ kotlin {
 }
 
 android {
-    compileSdk = 31
+    compileSdk = 32
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
     defaultConfig {
         minSdk = 23
-        targetSdk = 31
+        targetSdk = 32
+    }
+}
+
+kotlin.targets.withType(org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget::class.java) {
+    binaries.all {
+        binaryOptions["freezing"] = "disabled"
     }
 }

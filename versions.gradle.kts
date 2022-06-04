@@ -17,6 +17,7 @@ val coroutines = "1.6.1"
 
 val core = "1.8.0"
 val lifecycle = "2.5.0-rc01"
+val swiperefreshlayout = "1.2.0-alpha01"
 
 val composeVersion = "1.2.0-beta03"
 val composeNavigation = "2.5.0-rc01"
@@ -58,6 +59,7 @@ extra["ktorAndroid"] = "io.ktor:ktor-client-android:$ktorVersion"
 extra["sresult"] = "com.github.Rasalexman.SResult:sresult:$sresult"
 extra["timber"] = "com.jakewharton.timber:timber:5.0.1"
 extra["coil"] = "io.coil-kt:coil-compose:$coil"
+extra["swiperefreshlayout"] = "androidx.swiperefreshlayout:swiperefreshlayout:$swiperefreshlayout"
 
 //------- Compose
 extra["composeUI"] = "androidx.compose.ui:ui:$composeVersion"
