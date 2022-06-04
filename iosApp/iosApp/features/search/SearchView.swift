@@ -14,6 +14,7 @@ struct SearchView: BaseView {
     @ObservedObject private var vm: SearchViewModel = instance()
     @State private var searchText: String = ""
     
+    
     private let threeColumnGrid = [
         GridItem(.flexible(minimum: 40), spacing: 0),
         GridItem(.flexible(minimum: 40), spacing: 0),
@@ -41,10 +42,14 @@ struct SearchView: BaseView {
                 }
             }
         }.frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .topLeading)
+            .onAppear {
+                vm.start()
+            }.onDisappear {
+                vm.stop()
+            }
     }
     
     var searchResult: [PostEntity] {
-        guard !searchText.isEmpty else { return vm.randomPosts }
         return vm.searchPosts(query: searchText)
     }
     

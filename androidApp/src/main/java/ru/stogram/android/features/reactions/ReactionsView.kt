@@ -1,5 +1,6 @@
 package ru.stogram.android.features.reactions
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -20,10 +21,13 @@ import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.rasalexman.kodi.core.immutableInstance
 import com.rasalexman.sresult.common.extensions.applyIfSuccess
+import com.rasalexman.sresult.common.extensions.isLoading
 import com.rasalexman.sresult.common.extensions.toSuccessResult
+import com.rasalexman.sresult.data.dto.SResult
 import ru.stogram.android.R
 import ru.stogram.android.common.bodyWidth
 import ru.stogram.android.common.rememberStateWithLifecycle
+import ru.stogram.android.components.TopCircleProgressView
 import ru.stogram.android.constants.ReactionsResult
 import ru.stogram.models.ReactionEntity
 
@@ -57,33 +61,40 @@ internal fun ReactionsView(
         scaffoldState = scaffoldState,
         modifier = Modifier.fillMaxSize(),
     ) { paddingValues ->
-        SwipeRefresh(
-            state = rememberSwipeRefreshState(viewModel.refreshing),
-            onRefresh = refresh,
-            indicatorPadding = paddingValues,
-            indicator = { state, trigger ->
-                SwipeRefreshIndicator(
-                    state = state,
-                    refreshTriggerDistance = trigger,
-                    scale = true
-                )
-            }
-        ) {
-            LazyColumn(
-                modifier = Modifier.bodyWidth(),
-            ) {
-                reactionsState.applyIfSuccess { items ->
-                    items(items = items, key = { it.id }) { reaction ->
-                        ReactionItemView(reaction = reaction)
+        Box(modifier = Modifier.fillMaxSize()) {
 
-                        TabRowDefaults.Divider(
-                            color = colorResource(id = R.color.color_light_gray),
-                            thickness = 1.dp,
-                            modifier = Modifier
-                                .padding(start = 8.dp)
-                        )
+            SwipeRefresh(
+                state = rememberSwipeRefreshState(viewModel.refreshing),
+                onRefresh = refresh,
+                indicatorPadding = paddingValues,
+                indicator = { state, trigger ->
+                    SwipeRefreshIndicator(
+                        state = state,
+                        refreshTriggerDistance = trigger,
+                        scale = true
+                    )
+                }
+            ) {
+                LazyColumn(
+                    modifier = Modifier.bodyWidth(),
+                ) {
+                    reactionsState.applyIfSuccess { items ->
+                        items(items = items, key = { it.id }) { reaction ->
+                            ReactionItemView(reaction = reaction)
+
+                            TabRowDefaults.Divider(
+                                color = colorResource(id = R.color.color_light_gray),
+                                thickness = 1.dp,
+                                modifier = Modifier
+                                    .padding(start = 8.dp)
+                            )
+                        }
                     }
                 }
+            }
+
+            if(reactionsState.isLoading) {
+                TopCircleProgressView()
             }
         }
     }
@@ -100,7 +111,7 @@ class ReactionsPreviewParameterProvider : PreviewParameterProvider<ReactionsResu
 fun ReactionsPreview(
     @PreviewParameter(ReactionsPreviewParameterProvider::class, limit = 1) result: ReactionsResult
 ) {
-    ReactionsView(viewModel = ReactionsViewModel(), reactionsState = result) {
+    ReactionsView(viewModel = ReactionsViewModel(), reactionsState = SResult.Empty) {
 
     }
 }

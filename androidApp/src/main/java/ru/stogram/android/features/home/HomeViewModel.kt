@@ -6,11 +6,13 @@ import com.rasalexman.kodi.annotations.BindSingle
 import com.rasalexman.kodi.core.immutableInstance
 import com.rasalexman.sresult.common.extensions.asState
 import com.rasalexman.sresult.common.extensions.emptyResult
+import com.rasalexman.sresult.common.extensions.loadingResult
 import com.rasalexman.sresult.common.extensions.toSuccessListResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
 import ru.stogram.android.constants.PostsResult
 import ru.stogram.android.constants.StoriesResult
 import ru.stogram.android.di.ModuleNames
@@ -28,10 +30,14 @@ class HomeViewModel : ViewModel() {
 
     val postsState: StateFlow<PostsResult> = postsRepository.allPostsAsFlowable().map { posts ->
         posts.toSuccessListResult()
+    }.onStart {
+        emit(loadingResult())
     }.flowOn(Dispatchers.IO).asState(viewModelScope, emptyResult())
 
     val storiesState: StateFlow<StoriesResult> = userStoriesRepository.getAllStoriesAsFlow().map { stories ->
         stories.toSuccessListResult()
+    }.onStart {
+        emit(loadingResult())
     }.flowOn(Dispatchers.Default).asState(viewModelScope, emptyResult())
 
     val refreshing: Boolean = false

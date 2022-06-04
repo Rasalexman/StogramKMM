@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import shared
 
 protocol ViewModel {
     var showAlert: Bool {get set}
@@ -20,6 +21,8 @@ protocol ViewModel {
 }
 
 class BaseViewModel : ViewModel, ObservableObject {
+    
+    private var jobs = Array<Closeable>() // List of Kotlin Coroutine Jobs
     
     @Published var isLoading: Bool = false
     @Published var showAlert: Bool = false
@@ -60,6 +63,14 @@ class BaseViewModel : ViewModel, ObservableObject {
         isLoading = false
         showAlert = true
         errorText = errorMessage
+    }
+    
+    func addObserver(_ observer: Closeable) {
+        jobs.append(observer)
+    }
+        
+    func stop() {
+        jobs.forEach { job in job.close() }
     }
     
     func onEmptyState() {

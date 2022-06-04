@@ -18,7 +18,7 @@ struct iOSApp: SwiftUI.App, ISodi {
     
     var body: some Scene {
         WindowGroup {
-            MainView().edgesIgnoringSafeArea(.all)
+            MainView()
                 .environment(\.urlImageService, urlImageService)
                 .environment(\.urlImageOptions, URLImageOptions(loadOptions: [ .loadOnAppear, .cancelOnDisappear ]))
         }

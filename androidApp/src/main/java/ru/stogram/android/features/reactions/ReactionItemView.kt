@@ -14,7 +14,6 @@ import androidx.compose.ui.unit.sp
 import ru.stogram.android.components.PostImageView
 import ru.stogram.android.components.UserAvatarView
 import ru.stogram.models.ReactionEntity
-import ru.stogram.models.orEmpty
 
 
 @Composable
@@ -24,11 +23,11 @@ fun ReactionItemView(reaction: ReactionEntity) {
             .fillMaxWidth()
             .wrapContentHeight()
             .padding(horizontal = 8.dp, vertical = 8.dp), verticalAlignment = Alignment.CenterVertically) {
-        UserAvatarView(user = reaction.from.orEmpty())
+        UserAvatarView(user = reaction.takeUserFrom())
 
 
         Text(
-            text = reaction.fullDescription,
+            text = reaction.createFullDescription(),
             fontSize = 12.sp,
             maxLines = 5,
             overflow = TextOverflow.Ellipsis,
@@ -36,7 +35,7 @@ fun ReactionItemView(reaction: ReactionEntity) {
         )
 
         Box(modifier = Modifier.size(72.dp)) {
-            PostImageView(post = reaction.post.orEmpty())
+            PostImageView(post = reaction.takeReactionPost())
         }
 
     }

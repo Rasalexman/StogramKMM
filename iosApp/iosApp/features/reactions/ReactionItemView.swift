@@ -15,9 +15,9 @@ struct ReactionItemView: View {
     var body: some View {
         HStack(alignment: .center, spacing: 0) {
                         
-            UserAvatarView(user: reaction.from)
+            UserAvatarView(user: reaction.takeUserFrom())
                 
-            Text(reaction.fullDescription)
+            Text(reaction.createFullDescription())
                 .font(.system(size: 12))
                 .lineLimit(5)
                 .multilineTextAlignment(.leading)
@@ -25,7 +25,7 @@ struct ReactionItemView: View {
                 .frame(minWidth: 0, maxWidth: .infinity, alignment: .topLeading)
             
             ZStack {
-                ProfilePhotoView(post: reaction.post, cWidth: Consts.REACTION_IMAGE_SIZE, cHeight: Consts.REACTION_IMAGE_SIZE)
+                ProfilePhotoView(post: reaction.takeReactionPost(), cWidth: Consts.REACTION_IMAGE_SIZE, cHeight: Consts.REACTION_IMAGE_SIZE)
                     .frame(width: Consts.REACTION_IMAGE_SIZE, height: Consts.REACTION_IMAGE_SIZE, alignment:.center)
             }.frame(alignment: .trailing)
             

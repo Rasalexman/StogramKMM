@@ -3,6 +3,7 @@ package ru.stogram.android.features.search
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rasalexman.kodi.annotations.BindSingle
+import com.rasalexman.kodi.core.immutableInstance
 import com.rasalexman.sresult.common.extensions.asState
 import com.rasalexman.sresult.common.extensions.emptyResult
 import com.rasalexman.sresult.common.extensions.logg
@@ -11,7 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import ru.stogram.android.constants.PostsResult
 import ru.stogram.android.di.ModuleNames
-import ru.stogram.models.PostEntity
+import ru.stogram.repository.ISearchRepository
 
 @BindSingle(
     toClass = SearchViewModel::class,
@@ -19,28 +20,14 @@ import ru.stogram.models.PostEntity
 )
 class SearchViewModel : ViewModel() {
 
-    private val defaultPosts by lazy {
-        PostEntity.createRandomList() //emptyList<PostEntity>() //
-    }
-
-    private val defaultPostsFlow = flow<List<PostEntity>> {
-        emit(defaultPosts)
-    }
-
-    private val currentSearchQuery = MutableStateFlow("")
+    private val searchRepository: ISearchRepository by immutableInstance()
 
     val searchQuery = MutableStateFlow("")
-
-    val postsState: StateFlow<PostsResult> = combine(currentSearchQuery, defaultPostsFlow) { query, defaults ->
-        if(query.isNotEmpty()) {
-            val searchedPosts = PostEntity.createRandomList()
-            searchedPosts.filter { it.takePostUser().name.lowercase().contains(query.lowercase()) }
-        } else {
-            defaults
-        }.toSuccessListResult()
-    }.flowOn(Dispatchers.Default).asState(viewModelScope, emptyResult())
-
     val refreshing: Boolean = false
+
+    val postsState: StateFlow<PostsResult> = searchRepository.takeSearchedPostsFlow().map { posts ->
+        posts.toSuccessListResult()
+    }.flowOn(Dispatchers.Default).asState(viewModelScope, emptyResult())
 
     fun onSwipeRefresh() {
 
@@ -48,6 +35,6 @@ class SearchViewModel : ViewModel() {
 
     fun onSearchButtonPressed() {
         logg { "---> SEARCH QUERY IS ${searchQuery.value}" }
-        currentSearchQuery.value = searchQuery.value
+        searchRepository.onQueryChanged(searchQuery.value)
     }
 }

@@ -30,12 +30,8 @@
 		11DBC26528274573009E28DB /* UserAvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11DBC25C28274573009E28DB /* UserAvatarView.swift */; };
 		11DBC26628274573009E28DB /* CommentsCountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11DBC25D28274573009E28DB /* CommentsCountView.swift */; };
 		11DBC282282746A2009E28DB /* UserLocalDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11DBC27D282746A1009E28DB /* UserLocalDataSource.swift */; };
-		11DBC284282746A2009E28DB /* ReactionsLocalDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11DBC27F282746A2009E28DB /* ReactionsLocalDataSource.swift */; };
-		11DBC285282746A2009E28DB /* SearchLocalDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11DBC280282746A2009E28DB /* SearchLocalDataSource.swift */; };
 		11DBC286282746A2009E28DB /* CommentsLocalDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11DBC281282746A2009E28DB /* CommentsLocalDataSource.swift */; };
 		11DBC28C282746E0009E28DB /* UserRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11DBC287282746E0009E28DB /* UserRepository.swift */; };
-		11DBC28D282746E0009E28DB /* SearchRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11DBC288282746E0009E28DB /* SearchRepository.swift */; };
-		11DBC28E282746E0009E28DB /* ReactionsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11DBC289282746E0009E28DB /* ReactionsRepository.swift */; };
 		11DBC290282746E0009E28DB /* CommentsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11DBC28B282746E0009E28DB /* CommentsRepository.swift */; };
 		11DBC29328274722009E28DB /* Modules.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11DBC29228274722009E28DB /* Modules.swift */; };
 		11DBC2A02827483D009E28DB /* CommentsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11DBC29C2827483C009E28DB /* CommentsViewModel.swift */; };
@@ -97,12 +93,8 @@
 		11DBC25C28274573009E28DB /* UserAvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAvatarView.swift; sourceTree = "<group>"; };
 		11DBC25D28274573009E28DB /* CommentsCountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsCountView.swift; sourceTree = "<group>"; };
 		11DBC27D282746A1009E28DB /* UserLocalDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserLocalDataSource.swift; sourceTree = "<group>"; };
-		11DBC27F282746A2009E28DB /* ReactionsLocalDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactionsLocalDataSource.swift; sourceTree = "<group>"; };
-		11DBC280282746A2009E28DB /* SearchLocalDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchLocalDataSource.swift; sourceTree = "<group>"; };
 		11DBC281282746A2009E28DB /* CommentsLocalDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsLocalDataSource.swift; sourceTree = "<group>"; };
 		11DBC287282746E0009E28DB /* UserRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRepository.swift; sourceTree = "<group>"; };
-		11DBC288282746E0009E28DB /* SearchRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchRepository.swift; sourceTree = "<group>"; };
-		11DBC289282746E0009E28DB /* ReactionsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactionsRepository.swift; sourceTree = "<group>"; };
 		11DBC28B282746E0009E28DB /* CommentsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsRepository.swift; sourceTree = "<group>"; };
 		11DBC29228274722009E28DB /* Modules.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Modules.swift; sourceTree = "<group>"; };
 		11DBC29C2827483C009E28DB /* CommentsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsViewModel.swift; sourceTree = "<group>"; };
@@ -201,8 +193,6 @@
 			isa = PBXGroup;
 			children = (
 				11DBC28B282746E0009E28DB /* CommentsRepository.swift */,
-				11DBC289282746E0009E28DB /* ReactionsRepository.swift */,
-				11DBC288282746E0009E28DB /* SearchRepository.swift */,
 				11DBC287282746E0009E28DB /* UserRepository.swift */,
 			);
 			path = repository;
@@ -220,8 +210,6 @@
 			isa = PBXGroup;
 			children = (
 				11DBC281282746A2009E28DB /* CommentsLocalDataSource.swift */,
-				11DBC27F282746A2009E28DB /* ReactionsLocalDataSource.swift */,
-				11DBC280282746A2009E28DB /* SearchLocalDataSource.swift */,
 				11DBC27D282746A1009E28DB /* UserLocalDataSource.swift */,
 			);
 			path = local;
@@ -522,14 +510,10 @@
 				11DBC2A32827483D009E28DB /* CommentsView.swift in Sources */,
 				11DBC29328274722009E28DB /* Modules.swift in Sources */,
 				11DBC28C282746E0009E28DB /* UserRepository.swift in Sources */,
-				11DBC28D282746E0009E28DB /* SearchRepository.swift in Sources */,
 				11696207284AB15000679A8A /* GeometryImageView.swift in Sources */,
-				11DBC28E282746E0009E28DB /* ReactionsRepository.swift in Sources */,
 				11DBC290282746E0009E28DB /* CommentsRepository.swift in Sources */,
 				11DBC282282746A2009E28DB /* UserLocalDataSource.swift in Sources */,
-				11DBC284282746A2009E28DB /* ReactionsLocalDataSource.swift in Sources */,
 				11696203284A963800679A8A /* PhotoModel.swift in Sources */,
-				11DBC285282746A2009E28DB /* SearchLocalDataSource.swift in Sources */,
 				11DBC286282746A2009E28DB /* CommentsLocalDataSource.swift in Sources */,
 				11DBC25E28274573009E28DB /* LikesCountView.swift in Sources */,
 				11DBC25F28274573009E28DB /* Navigation.swift in Sources */,

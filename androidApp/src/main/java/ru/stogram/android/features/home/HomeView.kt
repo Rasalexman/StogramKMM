@@ -1,5 +1,6 @@
 package ru.stogram.android.features.home
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -22,13 +23,11 @@ import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.rasalexman.kodi.core.immutableInstance
-import com.rasalexman.sresult.common.extensions.applyIfSuccess
-import com.rasalexman.sresult.common.extensions.emptyResult
-import com.rasalexman.sresult.common.extensions.logg
-import com.rasalexman.sresult.common.extensions.toSuccessResult
+import com.rasalexman.sresult.common.extensions.*
 import ru.stogram.android.R
 import ru.stogram.android.components.PostItemView
 import ru.stogram.android.components.StoriesView
+import ru.stogram.android.components.TopCircleProgressView
 import ru.stogram.android.constants.PostsResult
 import ru.stogram.android.constants.StoriesResult
 import ru.stogram.models.PostEntity
@@ -71,45 +70,54 @@ internal fun HomeView(
         modifier = Modifier.fillMaxSize(),
     ) {
 
-        SwipeRefresh(
-            state = rememberSwipeRefreshState(viewModel.refreshing),
-            onRefresh = refresh,
-            indicator = { state, trigger ->
-                SwipeRefreshIndicator(
-                    state = state,
-                    refreshTriggerDistance = trigger,
-                    scale = true
-                )
-            }
-        ) {
-            LazyColumn(
-                modifier = Modifier.fillMaxWidth(),
+        Box(modifier = Modifier.fillMaxSize()) {
+            SwipeRefresh(
+                state = rememberSwipeRefreshState(viewModel.refreshing),
+                onRefresh = refresh,
+                indicator = { state, trigger ->
+                    SwipeRefreshIndicator(
+                        state = state,
+                        refreshTriggerDistance = trigger,
+                        scale = true
+                    )
+                }
             ) {
-                storiesState.applyIfSuccess { stories ->
-                    item {
-                        StoriesView(stories = stories) { user ->
-                            logg { "----> stories user name = ${user.name}" }
+                LazyColumn(
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    storiesState.applyIfSuccess { stories ->
+                        item {
+                            StoriesView(stories = stories) { user ->
+                                logg { "----> stories user name = ${user.name}" }
+                            }
+                        }
+                        item {
+                            Divider(
+                                color = colorResource(id = R.color.color_light_gray),
+                                thickness = 1.dp
+                            )
                         }
                     }
-                    item {
-                        Divider(color = colorResource(id = R.color.color_light_gray), thickness = 1.dp)
-                    }
-                }
 
-                postsState.applyIfSuccess { items ->
-                    items(
-                        items = items,
-                        key = { it.id }
-                    ) { post ->
-                        PostItemView(post = post)
-                        Divider(
-                            color = colorResource(id = R.color.color_light_gray),
-                            thickness = 1.dp,
-                            modifier = Modifier
-                                .padding(start = 8.dp)
-                        )
+                    postsState.applyIfSuccess { items ->
+                        items(
+                            items = items,
+                            key = { it.id }
+                        ) { post ->
+                            PostItemView(post = post)
+                            Divider(
+                                color = colorResource(id = R.color.color_light_gray),
+                                thickness = 1.dp,
+                                modifier = Modifier
+                                    .padding(start = 8.dp)
+                            )
+                        }
                     }
                 }
+            }
+
+            if(postsState.isLoading && storiesState.isLoading) {
+                TopCircleProgressView()
             }
         }
     }

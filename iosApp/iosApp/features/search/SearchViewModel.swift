@@ -10,24 +10,25 @@ import Sodi
 import shared
 
 final class SearchViewModel : BaseViewModel {
+    
     private let repository: ISearchRepository = instance()
     
-    var randomPosts: [PostEntity] = []
-    
-    override init() {
-        super.init()
-        randomPosts = PostEntity.companion.createRandomList()
-    }
-    
-    func takeRandomPosts() -> [PostEntity] {
-        return randomPosts.isEmpty ? repository.takeRandomPosts() : randomPosts
-    }
+    @Published var searchResult: [PostEntity] = []
     
     func searchPosts(query: String) -> [PostEntity] {
-        return repository.searchPosts(query: query.lowercased())
+        repository.onQueryChanged(query: query)
+        return searchResult
     }
     
     func showPostDetails() {
         onNavigateState(navTag: NavTag.DETAILS.rawValue)
+    }
+    
+    func start() {
+        addObserver(repository.takeSearchedPostsCommonFlow().watch { posts in
+            if let defaultPosts = posts as? [PostEntity] {
+                self.searchResult = defaultPosts
+            }
+        })
     }
 }

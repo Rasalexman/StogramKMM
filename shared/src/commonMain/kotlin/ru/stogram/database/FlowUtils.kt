@@ -3,16 +3,14 @@ package ru.stogram.database
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.*
 
 
 // Credit - https://github.com/JetBrains/kotlinconf-app/blob/master/common/src/mobileMain/kotlin/org/jetbrains/kotlinconf/FlowUtils.kt
 // Wrapper to consume Flow based API from Obj-C/Swift
 // Alternatively we can use the 'Kotlinx_coroutines_coreFlowCollector' protocol from Swift as demonstrated in https://stackoverflow.com/a/66030092
 // however the below wrapper gives us more control and hides the complexity in the shared Kotlin code.
-class CFlow<T>(private val origin: Flow<T>) : Flow<T> by origin {
+open class CFlow<T>(protected val origin: Flow<T>) : Flow<T> by origin {
     fun watch(block: (T) -> Unit): Closeable {
         val job = Job()
 
@@ -28,7 +26,38 @@ class CFlow<T>(private val origin: Flow<T>) : Flow<T> by origin {
             }
         }
     }
+
+    fun <R> flatMap(combineBlock: (T) -> CFlow<R>): CFlow<R> {
+        return this.flatMapLatest {
+            combineBlock(it)
+        }.wrap()
+    }
+
+    fun <P, R> combineSingle(input: CFlow<P>, block: (T, P) -> R): CFlow<R> {
+        return combine(this, input) { first, second ->
+            block(first, second)
+        } .wrap()
+    }
+
+    open fun emit(data: T): Boolean {
+        return false
+    }
 }
+
+class CStateFlow<T>(value: T) : CFlow<T>(MutableStateFlow<T>(value)) {
+
+    override fun emit(data: T): Boolean {
+        return (this.origin as? MutableStateFlow<T>)?.tryEmit(data) ?: false
+    }
+
+    companion object {
+        fun convertString(data: String): CStateFlow<String> {
+            return CStateFlow(data)
+        }
+    }
+
+}
+
 // Helper extension
 internal fun <T> Flow<T>.wrap(): CFlow<T> = CFlow(this)
 

@@ -16,6 +16,7 @@ struct MainView: BaseView {
     init() {
         UITabBar.appearance().isTranslucent = false
         UITabBar.appearance().unselectedItemTintColor = UIColor(Color.primary)
+
         //UITabBar.appearance().barTintColor = UIColor(Color("tab_background"))
     }
     
