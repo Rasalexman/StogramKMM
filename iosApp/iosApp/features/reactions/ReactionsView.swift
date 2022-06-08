@@ -13,13 +13,17 @@ struct ReactionsView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            Divider()
+            //Divider()
             //------
             List {
                 ForEach(vm.reactions, id: \.id) { reaction in
                     ReactionItemView(reaction: reaction).listRowInsets(EdgeInsets())
                 }
             }.listStyle(.plain)
+        }.onAppear {
+            vm.start()
+        }.onDisappear {
+            vm.stop()
         }
     }
 }

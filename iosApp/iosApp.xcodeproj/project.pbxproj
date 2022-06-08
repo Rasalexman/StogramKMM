@@ -10,6 +10,7 @@
 		058557BB273AAA24004C7B11 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 058557BA273AAA24004C7B11 /* Assets.xcassets */; };
 		058557D9273AAEEB004C7B11 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 058557D8273AAEEB004C7B11 /* Preview Assets.xcassets */; };
 		112AFE92284BB21D000E4843 /* CreatePostViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 112AFE91284BB21D000E4843 /* CreatePostViewModel.swift */; };
+		113377DB2851011200FED988 /* AvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 113377DA2851011200FED988 /* AvatarView.swift */; };
 		116961FF284A7A6D00679A8A /* URLImage in Frameworks */ = {isa = PBXBuildFile; productRef = 116961FE284A7A6D00679A8A /* URLImage */; settings = {ATTRIBUTES = (Required, ); }; };
 		11696201284A7A6D00679A8A /* URLImageStore in Frameworks */ = {isa = PBXBuildFile; productRef = 11696200284A7A6D00679A8A /* URLImageStore */; settings = {ATTRIBUTES = (Required, ); }; };
 		11696203284A963800679A8A /* PhotoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11696202284A963800679A8A /* PhotoModel.swift */; };
@@ -77,6 +78,7 @@
 		058557BA273AAA24004C7B11 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		058557D8273AAEEB004C7B11 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		112AFE91284BB21D000E4843 /* CreatePostViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatePostViewModel.swift; sourceTree = "<group>"; };
+		113377DA2851011200FED988 /* AvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarView.swift; sourceTree = "<group>"; };
 		11696202284A963800679A8A /* PhotoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoModel.swift; sourceTree = "<group>"; };
 		11696204284A97C300679A8A /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		11696206284AB15000679A8A /* GeometryImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeometryImageView.swift; sourceTree = "<group>"; };
@@ -176,6 +178,7 @@
 				11DBC25A28274573009E28DB /* TextCounterView.swift */,
 				11DBC25728274572009E28DB /* UIScreen.swift */,
 				11696206284AB15000679A8A /* GeometryImageView.swift */,
+				113377DA2851011200FED988 /* AvatarView.swift */,
 			);
 			path = components;
 			sourceTree = "<group>";
@@ -472,6 +475,7 @@
 				11DBC2A828274862009E28DB /* PostDetailsView.swift in Sources */,
 				112AFE92284BB21D000E4843 /* CreatePostViewModel.swift in Sources */,
 				11DBC2A928274862009E28DB /* PostDetailsViewModel.swift in Sources */,
+				113377DB2851011200FED988 /* AvatarView.swift in Sources */,
 				11DBC2A528274852009E28DB /* CreateView.swift in Sources */,
 				118B7984284B919D003F48CF /* ProfileState.swift in Sources */,
 				11DBC2A02827483D009E28DB /* CommentsViewModel.swift in Sources */,
@@ -514,6 +518,7 @@
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UIRequiresFullScreen = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.4;
@@ -538,6 +543,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/../shared/build/xcode-frameworks/$(CONFIGURATION)/$(SDK_NAME)";
 				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UIRequiresFullScreen = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.4;

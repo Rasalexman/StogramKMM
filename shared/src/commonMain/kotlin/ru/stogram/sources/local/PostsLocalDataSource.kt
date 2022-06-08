@@ -20,7 +20,7 @@ class PostsLocalDataSource(
 
     override fun findUserPostsFlow(user: UserEntity?): Flow<List<PostEntity>> {
         return user?.run {
-            database.realm.query<PostEntity>("user.id = $0", id).find().asFlow().map { result ->
+            database.realm.query<PostEntity>("user.id = $0", id).asFlow().map { result ->
                 result.list
             }
         } ?: flowOf(emptyList())

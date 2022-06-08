@@ -9,6 +9,7 @@ import SwiftUI
 import shared
 
 struct CommentsCountView: View {
+    
     var post: PostEntity
     
     @State private var isActive: Bool = false
@@ -19,7 +20,6 @@ struct CommentsCountView: View {
             isActive: $isActive
         ) {
             Button(action: {
-                print("-----> HELLO COMMENT")
                 self.isActive = true
             }, label: {
                 

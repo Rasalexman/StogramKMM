@@ -48,7 +48,7 @@ struct PostView: View {
                     Button(action: {
                         print("-----> HELLO SHARE")
                     }, label: {
-                        Image(systemName: "paperplane")
+                        Image(systemName: Consts.IMAGE_POST_SHARE)
                             .resizable()
                             .frame(width: 22, height: 22)
                     }).padding(4)
@@ -64,9 +64,10 @@ struct PostView: View {
                 .lineLimit(5)
                 .padding(EdgeInsets(top:2, leading: 8, bottom: 10, trailing: 8))
             
-        }.frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .topLeading).onAppear {
-            hasLike = post.isLiked
-        }
+        }.frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .topLeading)
+            .onAppear {
+                hasLike = post.isLiked
+            }
         
     }
 }
@@ -74,6 +75,6 @@ struct PostView: View {
 struct PostView_Previews: PreviewProvider {
     static var previews: some View {
         PostView(post:PostEntity.companion.createRandom(defaultUser: nil))
-            .previewLayout(PreviewLayout.sizeThatFits).previewLayout(PreviewLayout.sizeThatFits)
+            .previewLayout(PreviewLayout.sizeThatFits)
     }
 }

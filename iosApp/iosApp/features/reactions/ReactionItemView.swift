@@ -22,11 +22,9 @@ struct ReactionItemView: View {
     
     var body: some View {
         HStack(alignment: .center, spacing: 0) {
-                     
-            UserAvatarView(photoUrl: user.photo.toUrl()).background(
-                NavigationLink(destination: ProfileView(profileId: user.id)) { EmptyView() }
-            )
-                
+            
+            AvatarView(user: self.user)
+            
             Text(reaction.createFullDescription())
                 .font(.system(size: 12))
                 .lineLimit(5)
@@ -34,19 +32,18 @@ struct ReactionItemView: View {
                 .padding(EdgeInsets(top:0, leading: 8, bottom: 0, trailing: 8))
                 .frame(minWidth: 0, maxWidth: .infinity, alignment: .topLeading)
             
-            ZStack {
-                ProfilePhotoView(photoUrl: postPhoto, hasMoreContent: false,
-                                 cWidth: Consts.REACTION_IMAGE_SIZE, cHeight: Consts.REACTION_IMAGE_SIZE)
-                    .frame(width: Consts.REACTION_IMAGE_SIZE, height: Consts.REACTION_IMAGE_SIZE, alignment:.center)
-            }.frame(alignment: .trailing)
+            ProfilePhotoView(photoUrl: postPhoto, hasMoreContent: false,
+                             cWidth: Consts.REACTION_IMAGE_SIZE, cHeight: Consts.REACTION_IMAGE_SIZE)
+            .frame(width: Consts.REACTION_IMAGE_SIZE, height: Consts.REACTION_IMAGE_SIZE, alignment:.center)
             
-        }.padding(EdgeInsets(top:8, leading: 8, bottom: 8, trailing: 8))
-            .frame(minWidth: 0, maxWidth: .infinity, alignment: .topLeading)
+        }.frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .topLeading)
+            .padding(EdgeInsets(top:8, leading: 8, bottom: 8, trailing: 8))
+            .buttonStyle(PlainButtonStyle())
     }
 }
 
 struct ReactionItemView_Previews: PreviewProvider {
     static var previews: some View {
-        ReactionItemView(reaction: ReactionEntity.companion.createRandom())
+        ReactionItemView(reaction: ReactionEntity.companion.createRandom()).previewLayout(PreviewLayout.sizeThatFits)
     }
 }

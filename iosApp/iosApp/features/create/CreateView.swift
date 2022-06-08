@@ -19,7 +19,7 @@ struct CreateView: BaseView {
             }, label: {
                 Text("Add Random Pics")
             })
-        }.frame(width: .infinity, height: .infinity, alignment: Alignment.center)
+        }.frame(alignment: Alignment.center)
     }
 }
 

@@ -3,6 +3,7 @@ package ru.stogram.database
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.*
 
 
@@ -12,7 +13,7 @@ import kotlinx.coroutines.flow.*
 // however the below wrapper gives us more control and hides the complexity in the shared Kotlin code.
 open class CFlow<T>(protected val origin: Flow<T>) : Flow<T> by origin {
     fun watch(block: (T) -> Unit): Closeable {
-        val job = Job()
+        val job = SupervisorJob()
 
         onEach {
             block(it)

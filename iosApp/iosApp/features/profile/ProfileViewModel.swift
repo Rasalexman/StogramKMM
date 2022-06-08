@@ -14,13 +14,14 @@ final class ProfileViewModel : BaseViewModel {
     private let userRepository: IUserRepository = instance()
     private let postsRepository: IPostsRepository = instance()
     
-    
     @Published var selectedUser: IUser? = nil
     @Published var userPosts: [PostEntity] = []
-    @Published var profileState: ProfileState = ProfileState(user: nil)
     
     func fetchProfileData(currentUserId: String) {
+        print("Selected userId: \(currentUserId)")
+        checkUser(selectedUserId: currentUserId)
         addObserver(userRepository.findUserDetailsAsCommonFlow(userId: currentUserId).flatMapCFlow { currentUser in
+            //print("finded user: \(currentUser?.name ?? "NOT FOUND")")
             return self.postsRepository.findUserPostsAsCommonFlow(user: currentUser).mapCFlow { posts in
                 if let currentPosts = posts as? [PostEntity] {
                     return ProfileState(user: currentUser, posts: currentPosts)
@@ -32,7 +33,13 @@ final class ProfileViewModel : BaseViewModel {
                 self.selectedUser = currentState.user
                 self.userPosts = currentState.posts
             }
-            
         })
+    }
+    
+    private func checkUser(selectedUserId: String) {
+        if selectedUser?.id != selectedUserId {
+            selectedUser = nil
+            userPosts.removeAll()
+        }
     }
 }

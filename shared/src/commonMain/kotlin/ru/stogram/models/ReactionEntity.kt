@@ -9,19 +9,19 @@ import kotlin.random.Random
 
 class ReactionEntity : RealmObject {
     var id: String = ""
-    var type: String = photoLike
+    var type: String = ""
     var post: PostEntity? = null
     var from: UserEntity? = null
     var comment: String = ""
-    var liked: Boolean = randomBool
+    var liked: Boolean = false
     var date: String = ""
 
     fun takeUserFrom(): IUser {
-        return from.orEmpty()
+        return from!!
     }
 
     fun takeReactionPost(): PostEntity {
-        return post.orEmpty()
+        return post!!
     }
 
     fun createFullDescription(): String {
@@ -53,6 +53,7 @@ class ReactionEntity : RealmObject {
             repeat(randomInt) {
                 createData.add(createRandom().apply {
                     post = PostEntity.createRandom()
+                    from = UserEntity.createRandomDetailed(randomBool)
                 })
             }
             return createData
@@ -65,7 +66,6 @@ class ReactionEntity : RealmObject {
                 comment = getRandomString(300)
                 liked = randomBool
                 date = getRandomReactionDateText()
-                from = UserEntity.createRandomDetailed(randomBool)
             }
         }
     }

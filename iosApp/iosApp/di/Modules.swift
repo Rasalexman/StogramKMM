@@ -10,7 +10,7 @@ import Sodi
 import shared
 
 let databaseModule = sodiModule(moduleName: ModulesNames.DATABASE) { sodi in
-    sodi.bindProvider(to: RealmDataBase.self) { RealmDataBase() }
+    sodi.bindSingle(to: RealmDataBase.self) { RealmDataBase() }
 }
 
 let ldsModule = sodiModule(moduleName: ModulesNames.LDS) { sodi in
@@ -36,7 +36,7 @@ let viewModelModule = sodiModule(moduleName: ModulesNames.VIEWMODELS) { sodi in
     sodi.bindSingle { MainViewModel() }
     sodi.bindSingle { SearchViewModel() }
     sodi.bindSingle { ReactionsViewModel() }
-    sodi.bindProvider { PostDetailsViewModel() }
-    sodi.bindProvider { CommentsViewModel() }
+    sodi.bindSingle { PostDetailsViewModel() }
+    sodi.bindSingle { CommentsViewModel() }
     sodi.bindSingle { CreatePostViewModel() }
 }

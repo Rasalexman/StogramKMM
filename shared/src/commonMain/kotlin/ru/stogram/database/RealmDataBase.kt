@@ -9,16 +9,18 @@ import ru.stogram.models.ReactionEntity
 import ru.stogram.models.UserEntity
 
 class RealmDataBase {
+    private val configuration = RealmConfiguration.with(
+        schema = setOf(
+            UserEntity::class,
+            PostEntity::class,
+            ReactionEntity::class,
+            CommentEntity::class
+        ))
+
     val realm: Realm by lazy {
-        val configuration = RealmConfiguration.with(
-            schema = setOf(
-                PostEntity::class,
-                UserEntity::class,
-                ReactionEntity::class,
-                CommentEntity::class
-            ))
-            //.deleteRealmIfMigrationNeeded().schemaVersion(1).build()
+        println("--------> open real with config")
         Realm.open(configuration)
+            //.deleteRealmIfMigrationNeeded().schemaVersion(1).build()
     }
 
     private var localUser: UserEntity? = null

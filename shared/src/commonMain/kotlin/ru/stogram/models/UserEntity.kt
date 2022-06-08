@@ -31,7 +31,7 @@ class UserEntity : RealmObject, IUser {
 
         fun createRandom(hasUserStory: Boolean? = null): UserEntity {
             return UserEntity().apply {
-                id = getRandomString(1000)
+                id = getRandomString(100)
                 name = getRandomName()
                 photo = getRandomPhoto()
                 desc = randomLocation
@@ -51,6 +51,7 @@ class UserEntity : RealmObject, IUser {
         fun createDefaultUser(): UserEntity {
             return createRandomDetailed(true).apply {
                 id = DEFAULT_USER_ID
+                name = "Aleksandr Minkin"
             }
         }
     }

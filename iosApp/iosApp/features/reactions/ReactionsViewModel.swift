@@ -14,9 +14,12 @@ final class ReactionsViewModel : BaseViewModel {
     
     @Published var reactions: [ReactionEntity] = []
     
-    override init() {
-        super.init()
-        reactions = ReactionEntity.companion.createRandomList()
+    func start() {
+        addObserver(repository.getAllReactionsAsCommonFlow().watch(block: { result in
+            if let currentReactions = result as? [ReactionEntity] {
+                self.reactions = currentReactions
+            }
+        }))
     }
     
 }

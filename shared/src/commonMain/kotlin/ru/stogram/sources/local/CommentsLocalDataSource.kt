@@ -11,7 +11,7 @@ class CommentsLocalDataSource(
 ) : ICommentsLocalDataSource {
 
     override fun getAllCommentsAsFlow(postId: String): Flow<List<CommentEntity>> {
-        return database.realm.query<CommentEntity>("postId = $0", postId).find().asFlow().map { result ->
+        return database.realm.query<CommentEntity>("postId = $0", postId).asFlow().map { result ->
             result.list.ifEmpty {
                 createLocalData(postId)
             }
