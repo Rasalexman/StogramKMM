@@ -29,7 +29,7 @@ kotlin {
     }
 
     cocoapods {
-        version = "0.11.1"
+        version = "1.0.0"
         summary = "Realm Kotlin Stogram shared Library"
         homepage = "https://github.com/realm/realm-kotlin"
         ios.deploymentTarget = "15.4"

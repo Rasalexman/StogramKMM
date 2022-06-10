@@ -1,6 +1,6 @@
 package ru.stogram.models
 
-import io.realm.RealmObject
+import io.realm.kotlin.types.RealmObject
 import ru.stogram.utils.*
 import kotlin.random.Random
 

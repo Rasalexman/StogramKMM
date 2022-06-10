@@ -3,8 +3,9 @@ package ru.stogram.repository
 import kotlinx.coroutines.flow.Flow
 import ru.stogram.database.CFlow
 import ru.stogram.database.wrap
-import ru.stogram.models.PostEntity
 import ru.stogram.models.UserEntity
+import ru.stogram.result.SResult
+import ru.stogram.result.Success
 import ru.stogram.sources.local.IUserLocalDataSource
 
 class UserRepository(
@@ -18,9 +19,15 @@ class UserRepository(
     override fun findUserDetailsAsCommonFlow(userId: String): CFlow<UserEntity?> {
         return findUserDetailsAsFlow(userId).wrap()
     }
+
+    override fun takeUserResult(): SResult<UserEntity> {
+        return Success(UserEntity.createRandom())
+    }
 }
 
 interface IUserRepository {
     fun findUserDetailsAsFlow(userId: String): Flow<UserEntity?>
     fun findUserDetailsAsCommonFlow(userId: String): CFlow<UserEntity?>
+
+    fun takeUserResult(): SResult<UserEntity>
 }

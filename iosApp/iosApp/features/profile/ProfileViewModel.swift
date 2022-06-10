@@ -20,6 +20,23 @@ final class ProfileViewModel : BaseViewModel {
     func fetchProfileData(currentUserId: String) {
         print("Selected userId: \(currentUserId)")
         checkUser(selectedUserId: currentUserId)
+        
+        userRepository.takeUserResult().applyIfSuccess { data in
+            if let realUser = data as? UserEntity {
+                print("applyIfSuccess = \(realUser.name)")
+            }
+        }.flatMapIfSuccess { data in
+            if let realUser = data as? UserEntity {
+                print("flatMapIfSuccess = \(realUser.id)")
+            }
+            return SResultUtils.companion.empty()
+        }.applyIfEmpty {
+            print("applyIfEmpty called")
+        }.flatMapIfEmpty {
+            print("flatMapIfEmpty called")
+            return self.userRepository.takeUserResult()
+        }
+        
         addObserver(userRepository.findUserDetailsAsCommonFlow(userId: currentUserId).flatMapCFlow { currentUser in
             //print("finded user: \(currentUser?.name ?? "NOT FOUND")")
             return self.postsRepository.findUserPostsAsCommonFlow(user: currentUser).mapCFlow { posts in

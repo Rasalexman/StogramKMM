@@ -1,6 +1,6 @@
 Pod::Spec.new do |spec|
     spec.name                     = 'shared'
-    spec.version                  = '0.11.1'
+    spec.version                  = '1.0.0'
     spec.homepage                 = 'https://github.com/realm/realm-kotlin'
     spec.source                   = { :http=> ''}
     spec.authors                  = ''

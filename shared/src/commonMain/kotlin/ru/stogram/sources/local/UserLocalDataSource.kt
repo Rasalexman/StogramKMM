@@ -1,6 +1,6 @@
 package ru.stogram.sources.local
 
-import io.realm.query
+import io.realm.kotlin.ext.query
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map

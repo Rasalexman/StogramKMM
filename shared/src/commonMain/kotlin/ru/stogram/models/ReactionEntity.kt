@@ -1,6 +1,6 @@
 package ru.stogram.models
 
-import io.realm.RealmObject
+import io.realm.kotlin.types.RealmObject
 import ru.stogram.utils.getRandomReactionType
 import ru.stogram.utils.getRandomReactionDateText
 import ru.stogram.utils.getRandomString

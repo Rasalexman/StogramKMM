@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.fir.expressions.builder.buildArgumentList
+
 plugins {
     id("com.android.application")
     kotlin("android")
@@ -37,6 +39,10 @@ android {
         languageVersion = "1.6"
         apiVersion = "1.6"
         jvmTarget = "11"
+        freeCompilerArgs = listOf(
+            "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
+            "-opt-in=kotlin.RequiresOptIn"
+        )
     }
 
     composeOptions {

@@ -29,7 +29,6 @@ import ru.stogram.android.R
 import ru.stogram.android.components.PostItemView
 import ru.stogram.android.components.StoriesView
 import ru.stogram.android.components.TopCircleProgressView
-import ru.stogram.android.constants.StoriesResult
 import ru.stogram.models.PostEntity
 import ru.stogram.models.UserEntity
 
@@ -44,7 +43,7 @@ fun Home() {
 @Composable
 fun HomeView(viewModel: HomeViewModel) {
 
-    val homeState by viewModel.homeState.collectAsState(initial = StoriesResult.emptyResult())
+    val homeState by viewModel.homeState.collectAsState(initial = viewModel.emptyResult())
 
     HomeView(
         homeState = homeState,

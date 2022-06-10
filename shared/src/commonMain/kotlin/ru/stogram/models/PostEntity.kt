@@ -1,12 +1,10 @@
 package ru.stogram.models
 
-import io.realm.RealmList
-import io.realm.RealmObject
-import io.realm.realmListOf
+import io.realm.kotlin.ext.realmListOf
+import io.realm.kotlin.types.RealmList
+import io.realm.kotlin.types.RealmObject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import ru.stogram.database.CFlow
-import ru.stogram.database.wrap
 import ru.stogram.utils.*
 import kotlin.random.Random
 

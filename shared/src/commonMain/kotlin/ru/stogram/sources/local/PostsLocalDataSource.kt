@@ -1,6 +1,6 @@
 package ru.stogram.sources.local
 
-import io.realm.query
+import io.realm.kotlin.ext.query
 import kotlinx.coroutines.flow.*
 import ru.stogram.database.RealmDataBase
 import ru.stogram.models.PostEntity

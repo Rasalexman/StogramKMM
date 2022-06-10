@@ -1,15 +1,15 @@
 package ru.stogram.database
 
-import io.realm.Realm
-import io.realm.RealmConfiguration
-import io.realm.query
+import io.realm.kotlin.Realm
+import io.realm.kotlin.RealmConfiguration
+import io.realm.kotlin.ext.query
 import ru.stogram.models.CommentEntity
 import ru.stogram.models.PostEntity
 import ru.stogram.models.ReactionEntity
 import ru.stogram.models.UserEntity
 
 class RealmDataBase {
-    private val configuration = RealmConfiguration.with(
+    private val configuration = RealmConfiguration.create(
         schema = setOf(
             UserEntity::class,
             PostEntity::class,

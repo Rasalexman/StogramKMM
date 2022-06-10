@@ -29,27 +29,27 @@ class BaseViewModel : ViewModel, ObservableObject {
     @Published var errorText: String = ""
     @Published var navigationTag: String? = nil
     
-    func reduceResultState<T: Any>(resultState: ResultState, onSuccess: (T) -> Void) {
-        switch resultState {
-        case .Loading:
-            onLoadingState()
-            break
-        case.Failure(message: let errorMessage):
-            onFailureState(errorMessage: errorMessage)
-            break
-        case .Navigate(navTag: let tag):
-            onNavigateState(navTag: tag)
-            break
-        case .Success(data: let resultData):
-            if let typedData: T = resultData as? T {
-                onSuccess(typedData)
-            }
-            break
-        case .Empty:
-            onEmptyState()
-            break
-        }
-    }
+//    func reduceResultState<T: Any>(resultState: ResultState, onSuccess: (T) -> Void) {
+//        switch resultState {
+//        case .Loading:
+//            onLoadingState()
+//            break
+//        case.Failure(message: let errorMessage):
+//            onFailureState(errorMessage: errorMessage)
+//            break
+//        case .Navigate(navTag: let tag):
+//            onNavigateState(navTag: tag)
+//            break
+//        case .Success(data: let resultData):
+//            if let typedData: T = resultData as? T {
+//                onSuccess(typedData)
+//            }
+//            break
+//        case .Empty:
+//            onEmptyState()
+//            break
+//        }
+//    }
     
     func onLoadingState() {
         isLoading = !isLoading
