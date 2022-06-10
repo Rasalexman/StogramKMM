@@ -21,18 +21,18 @@ final class ProfileViewModel : BaseViewModel {
         print("Selected userId: \(currentUserId)")
         checkUser(selectedUserId: currentUserId)
         
-        userRepository.takeUserResult().applyIfSuccess { data in
+        userRepository.takeUserResult().applyOnSuccess { data in
             if let realUser = data as? UserEntity {
                 print("applyIfSuccess = \(realUser.name)")
             }
-        }.flatMapIfSuccess { data in
+        }.flatMapOnSuccess { data in
             if let realUser = data as? UserEntity {
                 print("flatMapIfSuccess = \(realUser.id)")
             }
             return SResultUtils.companion.empty()
-        }.applyIfEmpty {
+        }.applyOnEmpty {
             print("applyIfEmpty called")
-        }.flatMapIfEmpty {
+        }.flatMapOnEmpty {
             print("flatMapIfEmpty called")
             return self.userRepository.takeUserResult()
         }

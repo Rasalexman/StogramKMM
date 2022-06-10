@@ -12,6 +12,7 @@ import ru.stogram.models.UserEntity
 import ru.stogram.utils.randomBool
 import kotlin.random.Random
 
+@OptIn(kotlinx.coroutines.ExperimentalCoroutinesApi::class)
 class ReactionsLocalDataSource(
     private val database: RealmDataBase
 ) : IReactionsLocalDataSource {

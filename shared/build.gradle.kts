@@ -7,6 +7,20 @@ plugins {
     id("io.realm.kotlin")
 }
 
+val kotlinApiVersion: String by rootProject.extra
+val jvmVersion: String by rootProject.extra
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+    kotlinOptions {
+        this.apiVersion = kotlinApiVersion
+        this.languageVersion = kotlinApiVersion
+        this.jvmTarget = jvmVersion
+        freeCompilerArgs = listOf(
+            "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
+            "-opt-in=kotlin.RequiresOptIn"
+        )
+    }
+}
+
 kotlin {
     android()
     ios()

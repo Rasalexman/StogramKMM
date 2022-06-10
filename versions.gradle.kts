@@ -34,7 +34,7 @@ extra["composeVersion"] = composeVersion
 
 //------ CONFIG DATA
 extra["kotlinVersion"] = kotlin_version
-extra["apiVersion"] = "1.6"
+extra["kotlinApiVersion"] = "1.6"
 extra["jvmVersion"] = "11"
 extra["agpVersion"] = "7.2.1"
 extra["realmVersion"] = realmVersion

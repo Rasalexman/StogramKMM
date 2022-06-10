@@ -6,6 +6,9 @@ plugins {
     id("com.google.devtools.ksp") version "1.6.21-1.0.5"
 }
 
+val kotlinApiVersion: String by rootProject.extra
+val jvmVersion: String by rootProject.extra
+
 android {
     val composeVersion: String by rootProject.extra
     val appVersion: String by rootProject.extra
@@ -36,9 +39,9 @@ android {
     }
 
     kotlinOptions {
-        languageVersion = "1.6"
-        apiVersion = "1.6"
-        jvmTarget = "11"
+        languageVersion = kotlinApiVersion
+        apiVersion = kotlinApiVersion
+        jvmTarget = jvmVersion
         freeCompilerArgs = listOf(
             "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
             "-opt-in=kotlin.RequiresOptIn"

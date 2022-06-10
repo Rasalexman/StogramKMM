@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.*
 // Wrapper to consume Flow based API from Obj-C/Swift
 // Alternatively we can use the 'Kotlinx_coroutines_coreFlowCollector' protocol from Swift as demonstrated in https://stackoverflow.com/a/66030092
 // however the below wrapper gives us more control and hides the complexity in the shared Kotlin code.
+@OptIn(kotlinx.coroutines.ExperimentalCoroutinesApi::class)
 open class CFlow<T>(protected val origin: Flow<T>) : Flow<T> by origin {
     fun watch(block: (T) -> Unit): Closeable {
         val job = SupervisorJob()
