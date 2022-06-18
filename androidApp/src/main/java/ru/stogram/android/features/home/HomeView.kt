@@ -17,6 +17,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.google.accompanist.insets.ui.Scaffold
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.swiperefresh.SwipeRefresh
@@ -34,7 +35,7 @@ import ru.stogram.models.UserEntity
 
 @ExperimentalPagerApi
 @Composable
-fun Home() {
+fun Home(navController: NavController) {
     val vm: HomeViewModel by immutableInstance()
     HomeView(viewModel = vm)
 }
@@ -42,9 +43,7 @@ fun Home() {
 @ExperimentalPagerApi
 @Composable
 fun HomeView(viewModel: HomeViewModel) {
-
     val homeState by viewModel.homeState.collectAsState(initial = viewModel.emptyResult())
-
     HomeView(
         homeState = homeState,
         viewModel = viewModel,
@@ -98,7 +97,7 @@ internal fun HomeView(
                             items = state.posts,
                             key = { it.id }
                         ) { post ->
-                            PostItemView(post = post)
+                            PostItemView(post = post, viewModel = viewModel)
                             Divider(
                                 color = colorResource(id = R.color.color_light_gray),
                                 thickness = 1.dp,
@@ -110,9 +109,9 @@ internal fun HomeView(
                 }
             }
 
-            if (homeState.isLoading) {
-                TopCircleProgressView()
-            }
+//            if (homeState.isLoading) {
+//                TopCircleProgressView()
+//            }
         }
     }
 }

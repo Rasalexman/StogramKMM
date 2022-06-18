@@ -1,20 +1,14 @@
 package ru.stogram.android.features.profile
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.TabRowDefaults
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
-import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -22,51 +16,46 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.layout.onPlaced
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.insets.ui.Scaffold
-import com.google.accompanist.swiperefresh.SwipeRefresh
-import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
-import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.rasalexman.kodi.core.immutableInstance
 import com.rasalexman.sresult.common.extensions.applyIfSuccess
+import com.rasalexman.sresult.common.extensions.logg
 import com.rasalexman.sresult.common.extensions.toSuccessResult
 import com.rasalexman.sresult.data.dto.SResult
-import ru.stogram.android.R
-import ru.stogram.android.common.Layout
-import ru.stogram.android.common.bodyWidth
 import ru.stogram.android.common.rememberStateWithLifecycle
 import ru.stogram.android.components.PostImageView
 import ru.stogram.android.constants.PostsResult
 import ru.stogram.android.features.profile.top.ProfileTopView
-import ru.stogram.android.features.search.SearchPreviewParameterProvider
 import ru.stogram.models.IUser
 import ru.stogram.models.PostEntity
 import ru.stogram.models.UserEntity
 import kotlin.math.roundToInt
 
 @Composable
-fun Profile() {
+fun Profile(profileId: String?) {
+    profileId?.logg { "CURRENT_PROFILE_ID = ${profileId.orEmpty()}" }
+    val showTopBar = profileId != UserEntity.DEFAULT_USER_ID
     val vm: ProfileViewModel by immutableInstance()
-    ProfileView(viewModel = vm)
+    vm.fetchUserProfile(userId = profileId)
+    ProfileView(viewModel = vm, showTopBar = showTopBar)
 }
 
 @Composable
-fun ProfileView(viewModel: ProfileViewModel) {
+fun ProfileView(viewModel: ProfileViewModel, showTopBar: Boolean = false) {
     val postsState by rememberStateWithLifecycle(stateFlow = viewModel.postsState)
     val topState by rememberStateWithLifecycle(stateFlow = viewModel.userState)
-
 
     ProfileView(
         viewModel = viewModel,
         topState = topState,
-        postsState = postsState
+        postsState = postsState,
+        showTopBar = showTopBar
     )
 }
 
@@ -74,7 +63,8 @@ fun ProfileView(viewModel: ProfileViewModel) {
 internal fun ProfileView(
     viewModel: ProfileViewModel,
     topState: SResult<IUser>,
-    postsState: PostsResult
+    postsState: PostsResult,
+    showTopBar: Boolean = false
 ) {
     val scaffoldState = rememberScaffoldState()
 
@@ -99,11 +89,30 @@ internal fun ProfileView(
 
     Scaffold(
         scaffoldState = scaffoldState,
-        modifier = Modifier.fillMaxSize()
-    ) {
+        modifier = Modifier.fillMaxSize(),
+        topBar = {
+            if(showTopBar) {
+                TopAppBar(
+                    title = {
+                        Text(text = "Profile App Bar")
+                    },
+                    navigationIcon = {
+                        IconButton(onClick = viewModel::onBackClicked) {
+                            Icon(Icons.Filled.ArrowBack, "backIcon")
+                        }
+                    },
+                    backgroundColor = MaterialTheme.colors.primary,
+                    contentColor = Color.White,
+                    elevation = 10.dp
+                )
+            }
+
+        }
+    ) { paddings ->
         Box(
             modifier = Modifier
                 .fillMaxSize()
+                .padding(paddings)
                 .nestedScroll(nestedScrollConnection)
         ) {
 
@@ -114,7 +123,7 @@ internal fun ProfileView(
             ) {
                 postsState.applyIfSuccess { posts ->
                     items(items = posts, key = { it.id }) { post ->
-                        PostImageView(post = post)
+                        PostImageView(post = post, onClick = viewModel::onPostClicked)
                     }
                 }
             }

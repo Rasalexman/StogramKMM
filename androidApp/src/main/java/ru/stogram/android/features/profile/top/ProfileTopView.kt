@@ -4,27 +4,22 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.OutlinedButton
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import androidx.compose.ui.unit.Density
-import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.rasalexman.kodi.core.immutableInstance
 import com.rasalexman.sresult.common.extensions.applyIfSuccess
 import com.rasalexman.sresult.common.extensions.toSuccessResult
 import com.rasalexman.sresult.data.dto.SResult
-import ru.stogram.android.R
 import ru.stogram.android.common.orZero
 import ru.stogram.android.components.TextCountView
 import ru.stogram.android.components.UserAvatarView
@@ -61,24 +56,26 @@ fun ProfileTopView(
                             TextCountView(count = user.observCount.orZero(), desc = "Подписки")
                         }
 
-                        OutlinedButton(
-                            onClick = {},
-                            shape = RoundedCornerShape(48.dp),
-                            border = BorderStroke(2.dp, Color.DarkGray),
-                            colors = ButtonDefaults.buttonColors(contentColor = Color.Black, backgroundColor = Color.White)
-                        ) {
-                            Text(
-                                text = "Мои сообщения",
-                                fontSize = 12.sp,
-                                modifier = Modifier.padding(horizontal = 30.dp)
-                            )
+                        if(user.id == UserEntity.DEFAULT_USER_ID) {
+                            OutlinedButton(
+                                onClick = {},
+                                shape = RoundedCornerShape(48.dp),
+                                border = BorderStroke(2.dp, Color.DarkGray),
+                                colors = ButtonDefaults.buttonColors(contentColor = Color.Black, backgroundColor = Color.White)
+                            ) {
+                                Text(
+                                    text = "Мои сообщения",
+                                    fontSize = 12.sp,
+                                    modifier = Modifier.padding(horizontal = 30.dp)
+                                )
+                            }
                         }
                     }
 
                 }
 
                 Text(
-                    text = user.name.orEmpty(),
+                    text = user.name,
                     fontSize = 20.sp,
                     maxLines = 1,
                     fontWeight = FontWeight.Bold,
@@ -86,7 +83,7 @@ fun ProfileTopView(
                 )
 
                 Text(
-                    text = user.bio.orEmpty(),
+                    text = user.bio,
                     fontSize = 12.sp,
                     maxLines = 3,
                     fontWeight = FontWeight.Normal,

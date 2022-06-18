@@ -1,10 +1,11 @@
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 plugins {
-    kotlin("multiplatform") version "1.6.21"
-    kotlin("native.cocoapods") version "1.6.21"
+    kotlin("multiplatform")
+    kotlin("native.cocoapods")
     id("com.android.library")
     //kotlin("plugin.serialization")
     id("io.realm.kotlin")
+    id("com.google.devtools.ksp")
 }
 
 val kotlinApiVersion: String by rootProject.extra
@@ -125,6 +126,11 @@ kotlin {
             iosSimulatorArm64Test.dependsOn(this)
         }
     }
+}
+
+val kodiksp: String by rootProject.extra
+dependencies {
+    add("kspCommonMainMetadata", kodiksp)
 }
 
 android {

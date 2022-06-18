@@ -23,7 +23,6 @@ import com.rasalexman.kodi.core.immutableInstance
 import com.rasalexman.sresult.common.extensions.applyIfSuccess
 import com.rasalexman.sresult.common.extensions.isLoading
 import com.rasalexman.sresult.common.extensions.toSuccessResult
-import com.rasalexman.sresult.data.dto.SResult
 import ru.stogram.android.R
 import ru.stogram.android.common.bodyWidth
 import ru.stogram.android.common.rememberStateWithLifecycle
@@ -80,7 +79,10 @@ internal fun ReactionsView(
                 ) {
                     reactionsState.applyIfSuccess { items ->
                         items(items = items, key = { it.id }) { reaction ->
-                            ReactionItemView(reaction = reaction)
+                            ReactionItemView(
+                                reaction = reaction,
+                                onAvatarClicked = viewModel::onReactionAvatarClicked
+                            )
 
                             TabRowDefaults.Divider(
                                 color = colorResource(id = R.color.color_light_gray),
@@ -93,7 +95,7 @@ internal fun ReactionsView(
                 }
             }
 
-            if(reactionsState.isLoading) {
+            if (reactionsState.isLoading) {
                 TopCircleProgressView()
             }
         }

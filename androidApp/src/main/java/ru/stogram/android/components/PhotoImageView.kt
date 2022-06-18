@@ -14,9 +14,10 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import coil.size.Size
 import ru.stogram.android.R
+import ru.stogram.android.common.noRippleClickable
 
 @Composable
-fun PhotoImageView(url: String) {
+fun PhotoImageView(url: String, onClick: () -> Unit = {}) {
 
     val painter = if (LocalInspectionMode.current) {
         painterResource(id = R.drawable.default_avatar)
@@ -50,5 +51,6 @@ fun PhotoImageView(url: String) {
         modifier = Modifier
             .fillMaxWidth()
             .aspectRatio(1f)
+            .noRippleClickable(onClick = onClick)
     )
 }

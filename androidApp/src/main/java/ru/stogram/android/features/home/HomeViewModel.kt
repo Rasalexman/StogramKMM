@@ -2,19 +2,21 @@ package ru.stogram.android.features.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.rasalexman.kodi.annotations.BindSingle
+import com.rasalexman.kodi.core.IKodi
 import com.rasalexman.kodi.core.immutableInstance
-import com.rasalexman.sresult.common.extensions.asState
-import com.rasalexman.sresult.common.extensions.emptyResult
-import com.rasalexman.sresult.common.extensions.loadingResult
-import com.rasalexman.sresult.common.extensions.toSuccessResult
+import com.rasalexman.kodi.core.instance
+import com.rasalexman.sresult.common.extensions.*
 import com.rasalexman.sresult.data.dto.SResult
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.*
+import ru.stogram.android.constants.ArgsNames
+import ru.stogram.android.constants.ScreenNames
 import ru.stogram.android.di.ModuleNames
+import ru.stogram.android.navigation.toUserProfile
+import ru.stogram.models.PostEntity
 import ru.stogram.repository.IPostsRepository
 import ru.stogram.repository.IUserStoriesRepository
 
@@ -22,7 +24,7 @@ import ru.stogram.repository.IUserStoriesRepository
     toClass = HomeViewModel::class,
     toModule = ModuleNames.ViewModels
 )
-class HomeViewModel : ViewModel() {
+class HomeViewModel : ViewModel(), IKodi {
 
     private val postsRepository: IPostsRepository by immutableInstance()
     private val userStoriesRepository: IUserStoriesRepository by immutableInstance()
@@ -32,13 +34,19 @@ class HomeViewModel : ViewModel() {
         userStoriesRepository.getAllStoriesAsFlow()
     ) { posts, stories ->
         HomeState(posts, stories).toSuccessResult()
-    }.onStart {
+    }.flowOn(Dispatchers.IO).onStart {
         emit(loadingResult())
-    }.flowOn(Dispatchers.IO).asState(viewModelScope, emptyResult())
+    }.asState(viewModelScope, emptyResult())
 
     val refreshing: Boolean = false
 
     fun onSwipeRefresh() {
 
+    }
+
+    fun onPostAvatarClicked(post: PostEntity) {
+        val postUser = post.takePostUser()
+        logg { "Selected user name: ${postUser.name} | id: ${postUser.id}" }
+        instance<NavHostController>().toUserProfile(postUser.id)
     }
 }

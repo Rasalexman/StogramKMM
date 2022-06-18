@@ -11,6 +11,10 @@ class PostsRepository(
     private val localDataSource: IPostsLocalDataSource
 ) : IPostsRepository {
 
+    override fun findPostByIdAsFlow(postId: String): Flow<PostEntity?> {
+        return localDataSource.findPostByIdAsFlow(postId)
+    }
+
     override fun allPostsAsFlowable(): Flow<List<PostEntity>> {
         return localDataSource.getAllPostsAsFlow()
     }
@@ -37,6 +41,8 @@ class PostsRepository(
 }
 
 interface IPostsRepository {
+    fun findPostByIdAsFlow(postId: String): Flow<PostEntity?>
+
     fun allPostsAsFlowable(): Flow<List<PostEntity>>
     fun allPostsAsCommonFlowable(): CFlow<List<PostEntity>>
 

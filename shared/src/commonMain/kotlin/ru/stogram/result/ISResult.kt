@@ -45,6 +45,7 @@ abstract class SResult<T : Any?> : ISResult {
         return this is Empty
     }
 
+    @Suppress("UNCHECKED_CAST")
     override fun <R> flatMapOnSuccess(onSuccess: (R) -> ISResult): ISResult {
         if(this is Success) {
             (data as? R)?.let {

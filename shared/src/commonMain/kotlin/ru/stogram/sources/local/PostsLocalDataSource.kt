@@ -10,6 +10,12 @@ class PostsLocalDataSource(
     private val database: RealmDataBase
 ) : IPostsLocalDataSource {
 
+    override fun findPostByIdAsFlow(postId: String): Flow<PostEntity?> {
+        return database.realm.query<PostEntity>("postId = $0", postId).asFlow().map { result ->
+            result.list.firstOrNull()
+        }
+    }
+
     override fun getAllPostsAsFlow(): Flow<List<PostEntity>> {
         return database.realm.query<PostEntity>().asFlow().map { result ->
             result.list.ifEmpty {
@@ -54,4 +60,5 @@ interface IPostsLocalDataSource {
     fun getAllPostsAsFlow(): Flow<List<PostEntity>>
     fun findUserPostsFlow(user: UserEntity?): Flow<List<PostEntity>>
     fun addUserPostAsFlow(): Flow<PostEntity>
+    fun findPostByIdAsFlow(postId: String): Flow<PostEntity?>
 }

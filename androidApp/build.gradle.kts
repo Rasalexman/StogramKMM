@@ -1,9 +1,7 @@
-import org.jetbrains.kotlin.fir.expressions.builder.buildArgumentList
-
 plugins {
     id("com.android.application")
     kotlin("android")
-    id("com.google.devtools.ksp") version "1.6.21-1.0.5"
+    id("com.google.devtools.ksp")
 }
 
 val kotlinApiVersion: String by rootProject.extra

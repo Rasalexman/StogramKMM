@@ -21,48 +21,41 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavHostController
 import com.google.accompanist.insets.ui.BottomNavigation
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.google.accompanist.pager.ExperimentalPagerApi
+import com.rasalexman.kodi.core.*
 import com.rasalexman.sresult.common.extensions.logg
 import ru.stogram.android.navigation.AppNavigation
 import ru.stogram.android.navigation.Screen
 import ru.stogram.android.navigation.debugLabel
+import ru.stogram.android.navigation.navigateToBottomRouter
 import ru.stogram.android.theme.AppBarAlphas
 
 @OptIn(ExperimentalAnimationApi::class, ExperimentalMaterialApi::class, ExperimentalPagerApi::class)
 @Composable
 fun MainView() {
-    val navController = rememberAnimatedNavController()
 
-    // Launch an effect to track changes to the current back stack entry, and push them
-    // as a screen views to analytics
-    LaunchedEffect(navController) {
-        navController.currentBackStackEntryFlow.collect { entry ->
-            logg { "label: ${entry.debugLabel} | route: ${entry.destination.route}" }
+    val navController = rememberAnimatedNavController().also {
+        kodi {
+            unbind<NavController>()
+            bind<NavController>() with provider { it }
         }
     }
-
     val configuration = LocalConfiguration.current
     val useBottomNavigation by remember {
         derivedStateOf { configuration.smallestScreenWidthDp < 600 }
     }
 
-    com.google.accompanist.insets.ui.Scaffold(
+    Scaffold(
         bottomBar = {
             if (useBottomNavigation) {
                 val currentSelectedItem by navController.currentScreenAsState()
                 MainBottomNavigation(
                     selectedNavigation = currentSelectedItem,
                     onNavigationSelected = { selected ->
-                        navController.navigate(selected.route) {
-                            launchSingleTop = true
-                            restoreState = true
-
-                            popUpTo(navController.graph.findStartDestination().id) {
-                                saveState = true
-                            }
-                        }
+                        navController.navigateToBottomRouter(selected.route, true)
                     },
                     modifier = Modifier.fillMaxWidth()
                 )
@@ -76,29 +69,22 @@ fun MainView() {
         }
     ) { innerPadding ->
         Row(Modifier.fillMaxSize().statusBarsPadding().padding(innerPadding)) {
-            if (!useBottomNavigation) {
-                val currentSelectedItem by navController.currentScreenAsState()
-                MainNavigationRail(
-                    selectedNavigation = currentSelectedItem,
-                    onNavigationSelected = { selected ->
-                        navController.navigate(selected.route) {
-                            launchSingleTop = true
-                            restoreState = true
-
-                            popUpTo(navController.graph.findStartDestination().id) {
-                                saveState = true
-                            }
-                        }
-                    },
-                    modifier = Modifier.fillMaxHeight(),
-                )
-
-                Divider(
-                    Modifier
-                        .fillMaxHeight()
-                        .width(1.dp)
-                )
-            }
+//            if (!useBottomNavigation) {
+//                val currentSelectedItem by navController.currentScreenAsState()
+//                MainNavigationRail(
+//                    selectedNavigation = currentSelectedItem,
+//                    onNavigationSelected = { selected ->
+//                        navController.navigateToBottomRouter(selected.route, true)
+//                    },
+//                    modifier = Modifier.fillMaxHeight(),
+//                )
+//
+//                Divider(
+//                    Modifier
+//                        .fillMaxHeight()
+//                        .width(1.dp)
+//                )
+//            }
 
             AppNavigation(
                 navController = navController,

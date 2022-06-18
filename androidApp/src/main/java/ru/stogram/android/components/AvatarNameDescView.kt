@@ -9,6 +9,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ru.stogram.android.common.noRippleClickable
@@ -23,7 +24,7 @@ class UserPreviewParameterProvider : PreviewParameterProvider<IUser> {
 }
 
 @Composable
-fun AvatarNameDescView(user: IUser, onClick: () -> Unit = {}) {
+fun AvatarNameDescView(user: IUser, size: Dp = 48.dp, onClick: () -> Unit = {}) {
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -32,14 +33,14 @@ fun AvatarNameDescView(user: IUser, onClick: () -> Unit = {}) {
             .noRippleClickable(onClick = onClick)
     ) {
 
-        UserAvatarView(user = user)
+        UserAvatarView(user = user, size = size)
 
         Column(
             verticalArrangement = Arrangement.Center,
             modifier = Modifier.padding(start = 8.dp)
         ) {
             Text(text = user.name, fontSize = 16.sp, fontWeight = FontWeight.Bold)
-            if(!user.desc.isNullOrEmpty()) {
+            if(user.desc.isNotEmpty()) {
                 Text(user.desc, fontSize = 12.sp)
             }
         }

@@ -11,14 +11,16 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.pager.ExperimentalPagerApi
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.flowOn
 import ru.stogram.android.common.orZero
+import ru.stogram.android.features.home.HomeViewModel
 import ru.stogram.models.PostEntity
 
 @ExperimentalPagerApi
 @Composable
-fun PostItemView(post: PostEntity) {
+fun PostItemView(
+    post: PostEntity,
+    viewModel: HomeViewModel
+) {
 
     var isLikedState by remember { mutableStateOf(post.isLiked) }
     val postPhotos: List<String> by post.takeContentFlow().collectAsState(
@@ -29,7 +31,9 @@ fun PostItemView(post: PostEntity) {
         .fillMaxWidth()
         .padding(bottom = 8.dp)) {
         Box(modifier = Modifier.padding(all = 8.dp)) {
-            AvatarNameDescView(user = post.takePostUser())
+            AvatarNameDescView(user = post.takePostUser()) {
+                viewModel.onPostAvatarClicked(post = post)
+            }
         }
 
         PostContentView(postPhotos)
@@ -72,5 +76,5 @@ class PostPreviewParameterProvider : PreviewParameterProvider<PostEntity> {
 fun PostViewPreview(
     @PreviewParameter(PostPreviewParameterProvider::class, limit = 1) post: PostEntity
 ) {
-    PostItemView(post = post)
+    PostItemView(post = post, viewModel = HomeViewModel())
 }

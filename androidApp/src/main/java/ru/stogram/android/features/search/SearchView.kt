@@ -31,7 +31,6 @@ import com.rasalexman.sresult.common.extensions.applyIfSuccess
 import com.rasalexman.sresult.common.extensions.logg
 import com.rasalexman.sresult.common.extensions.toSuccessResult
 import ru.stogram.android.common.rememberStateWithLifecycle
-import ru.stogram.android.components.PhotoImageView
 import ru.stogram.android.components.PostImageView
 import ru.stogram.android.components.SearchBarView
 import ru.stogram.android.constants.PostsResult
@@ -115,7 +114,7 @@ internal fun SearchView(
                 ) {
                     postsState.applyIfSuccess { posts ->
                         items(items = posts, key = { it.id }) { post ->
-                            PostImageView(post = post)
+                            PostImageView(post = post, onClick = viewModel::onPostClicked)
                         }
                     }
                 }

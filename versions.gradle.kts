@@ -13,7 +13,7 @@ val coil = "2.1.0"
 val junit = "5.8.1"
 val runner = "1.1.0"
 val espresso = "3.1.0"
-val coroutines = "1.6.1"
+val coroutines = "1.6.2"
 
 val core = "1.8.0"
 val lifecycle = "2.5.0-rc01"

@@ -17,13 +17,18 @@ import ru.stogram.models.ReactionEntity
 
 
 @Composable
-fun ReactionItemView(reaction: ReactionEntity) {
+fun ReactionItemView(
+    reaction: ReactionEntity,
+    onAvatarClicked: (ReactionEntity) -> Unit
+) {
     Row(
         Modifier
             .fillMaxWidth()
             .wrapContentHeight()
             .padding(horizontal = 8.dp, vertical = 8.dp), verticalAlignment = Alignment.CenterVertically) {
-        UserAvatarView(user = reaction.takeUserFrom())
+        UserAvatarView(user = reaction.takeUserFrom()) {
+            onAvatarClicked.invoke(reaction)
+        }
 
 
         Text(
@@ -52,5 +57,7 @@ class ReactionItemPreviewParameterProvider : PreviewParameterProvider<ReactionEn
 fun ReactionItemViewPreview(
     @PreviewParameter(ReactionItemPreviewParameterProvider::class, limit = 1) post: ReactionEntity
 ) {
-    ReactionItemView(reaction = post)
+    ReactionItemView(reaction = post) {
+
+    }
 }
