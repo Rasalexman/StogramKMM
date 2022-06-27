@@ -16,13 +16,13 @@ val espresso = "3.1.0"
 val coroutines = "1.6.2"
 
 val core = "1.8.0"
-val lifecycle = "2.5.0-rc01"
+val lifecycle = "2.5.0-rc02"
 val swiperefreshlayout = "1.2.0-alpha01"
 
-val composeVersion = "1.2.0-beta03"
-val composeNavigation = "2.5.0-rc01"
+val composeVersion = "1.2.0-rc02"
+val composeNavigation = "2.5.0-rc02"
 val composeActivity = "1.5.0-rc01"
-val accompanist = "0.24.6-alpha"
+val accompanist = "0.24.12-rc"
 
 val ktorVersion = "2.0.0"
 val datetimeVersion = "0.3.2"

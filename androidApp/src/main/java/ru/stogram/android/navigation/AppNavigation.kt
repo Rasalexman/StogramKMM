@@ -28,6 +28,7 @@ internal sealed class Screen(val route: String) {
 
     object UserProfile : Screen(ScreenNames.USER_PROFILE)
     object PostDetails : Screen(ScreenNames.POST_DETAILS)
+    object PostComments : Screen(ScreenNames.POST_COMMENTS)
 }
 
 private sealed class LeafScreen(

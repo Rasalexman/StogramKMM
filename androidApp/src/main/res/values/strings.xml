@@ -5,4 +5,8 @@
     <string name="tab_create">Добавить</string>
     <string name="tab_reactions">Реакции</string>
     <string name="tab_profile">Профиль</string>
+
+    <string name="title_comments">Комментарии</string>
+    <string name="post_comments">Комментарии:</string>
+    <string name="no_user_post">Нет добавленных фотографий</string>
 </resources>

@@ -17,6 +17,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ru.stogram.android.common.noRippleClickable
@@ -27,6 +29,8 @@ import ru.stogram.utils.randomCount
 fun LikesView(
     count: String = "0",
     isSelected: Boolean = false,
+    iconSize: Dp = 36.dp,
+    textSize: TextUnit = 16.sp,
     onClick: () -> Unit
 ) {
     IconCountView(
@@ -34,6 +38,8 @@ fun LikesView(
         isSelected = isSelected,
         normalIcon = Icons.Default.FavoriteBorder,
         selectedIcon = Icons.Default.Favorite,
+        iconSize = iconSize,
+        textSize = textSize,
         onClick = onClick
     )
 }
@@ -58,6 +64,8 @@ fun IconCountView(
     isSelected: Boolean = false,
     normalIcon: ImageVector = Icons.Default.FavoriteBorder,
     selectedIcon: ImageVector? = null,
+    iconSize: Dp = 36.dp,
+    textSize: TextUnit = 16.sp,
     onClick: () -> Unit
 ) {
     val painter = if(isSelected && selectedIcon != null) {
@@ -74,12 +82,12 @@ fun IconCountView(
         Icon(
             painter = painter,
             contentDescription = "IconCountView",
-            modifier = Modifier.size(36.dp)
+            modifier = Modifier.size(iconSize)
         )
         Text(
             text = count,
             modifier = Modifier.padding(all = 4.dp),
-            fontSize = 16.sp,
+            fontSize = textSize
         )
     }
 }

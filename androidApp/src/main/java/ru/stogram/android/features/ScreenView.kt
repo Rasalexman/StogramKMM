@@ -19,6 +19,7 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.rasalexman.kodi.core.*
 import com.rasalexman.sresult.common.extensions.logg
 import ru.stogram.android.constants.ArgsNames
+import ru.stogram.android.features.comments.CommentsView
 import ru.stogram.android.features.postdetails.PostDetailsView
 import ru.stogram.android.features.profile.Profile
 import ru.stogram.android.navigation.Screen
@@ -69,6 +70,18 @@ fun ScreenView() {
                 ) { backStackEntry ->
                     val postId = backStackEntry.arguments?.getString(ArgsNames.POST_ID)
                     PostDetailsView(postId)
+                }
+
+                composable(
+                    route = Screen.PostComments.route,
+                    debugLabel = Screen.PostComments.route,
+                    arguments = listOf(navArgument(ArgsNames.POST_ID) {
+                        nullable = true
+                        type = NavType.StringType
+                    })
+                ) { backStackEntry ->
+                    val postId = backStackEntry.arguments?.getString(ArgsNames.POST_ID)
+                    CommentsView(postId)
                 }
 
                 composable(

@@ -48,7 +48,7 @@ fun PostItemView(
             Spacer(modifier = Modifier.padding(start = 16.dp))
 
             CommentsView(count = post.commentsCount.orZero()) {
-
+                viewModel.onPostCommentsClicked(post = post)
             }
         }
 

@@ -34,7 +34,7 @@ class CommentEntity : RealmObject {
             return CommentEntity().apply {
                 id = getRandomString(100)
                 postId = forPostId ?: getRandomString(100)
-                text = getRandomString(128)
+                text = getRandomString(356)
                 likesCount = randomCount
                 user = UserEntity.createRandomDetailed(randomBool)
             }

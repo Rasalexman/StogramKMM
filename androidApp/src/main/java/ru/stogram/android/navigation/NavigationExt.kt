@@ -13,6 +13,11 @@ fun NavController.toPostDetails(postId: String) {
     this.navigateToBottomRouter(navRouter)
 }
 
+fun NavController.toPostComments(postId: String) {
+    val navRouter = "post/comments/$postId"
+    this.navigateToBottomRouter(navRouter)
+}
+
 fun NavController.navigateToBottomRouter(navRouter: String, withPopUp: Boolean = false) {
     this.navigate(route = navRouter) {
         launchSingleTop = true

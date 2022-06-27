@@ -42,7 +42,6 @@ fun ReactionItemView(
         Box(modifier = Modifier.size(72.dp)) {
             PostImageView(post = reaction.takeReactionPost())
         }
-
     }
 }
 

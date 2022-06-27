@@ -125,7 +125,16 @@ internal fun ProfileView(
                     items(items = posts, key = { it.id }) { post ->
                         PostImageView(post = post, onClick = viewModel::onPostClicked)
                     }
-                }
+                }/*.applyOnEmpty {
+                    item {
+                        Text(
+                            text = stringResource(id = R.string.no_user_post),
+                            modifier = Modifier.fillMaxWidth(),
+                            textAlign = TextAlign.Center,
+                            fontSize = 16.sp
+                        )
+                    }
+                }*/
             }
 
             ProfileTopView(userState = topState, modifier = Modifier

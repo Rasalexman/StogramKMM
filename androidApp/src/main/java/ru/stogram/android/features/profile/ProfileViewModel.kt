@@ -50,7 +50,7 @@ class ProfileViewModel : ViewModel(), IKodi {
         }.flatMapConcat { user ->
             userFlow.tryEmit(user)
             postsRepository.findUserPostsAsFlow(user).map { posts ->
-                posts.toSuccessListResult(defaultPosts)
+                posts.toSuccessListResult()
             }
         }
     }.flowOn(Dispatchers.IO).asState(viewModelScope, emptyResult())

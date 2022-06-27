@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.*
 import ru.stogram.android.constants.ArgsNames
 import ru.stogram.android.constants.ScreenNames
 import ru.stogram.android.di.ModuleNames
+import ru.stogram.android.navigation.toPostComments
 import ru.stogram.android.navigation.toUserProfile
 import ru.stogram.models.PostEntity
 import ru.stogram.repository.IPostsRepository
@@ -48,5 +49,10 @@ class HomeViewModel : ViewModel(), IKodi {
         val postUser = post.takePostUser()
         logg { "Selected user name: ${postUser.name} | id: ${postUser.id}" }
         instance<NavHostController>().toUserProfile(postUser.id)
+    }
+
+    fun onPostCommentsClicked(post: PostEntity) {
+        logg { "Selected post id: ${post.postId}" }
+        instance<NavHostController>().toPostComments(post.postId)
     }
 }

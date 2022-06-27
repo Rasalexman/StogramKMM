@@ -24,7 +24,9 @@ class UserPreviewParameterProvider : PreviewParameterProvider<IUser> {
 }
 
 @Composable
-fun AvatarNameDescView(user: IUser, size: Dp = 48.dp, onClick: () -> Unit = {}) {
+fun AvatarNameDescView(user: IUser, desc: String = "", size: Dp = 48.dp, onClick: () -> Unit = {}) {
+
+    val realDesc = desc.ifEmpty { user.desc }
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -40,8 +42,8 @@ fun AvatarNameDescView(user: IUser, size: Dp = 48.dp, onClick: () -> Unit = {}) 
             modifier = Modifier.padding(start = 8.dp)
         ) {
             Text(text = user.name, fontSize = 16.sp, fontWeight = FontWeight.Bold)
-            if(user.desc.isNotEmpty()) {
-                Text(user.desc, fontSize = 12.sp)
+            if(realDesc.isNotEmpty()) {
+                Text(realDesc, fontSize = 12.sp)
             }
         }
     }

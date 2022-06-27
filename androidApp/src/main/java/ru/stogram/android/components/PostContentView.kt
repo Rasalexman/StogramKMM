@@ -1,6 +1,7 @@
 package ru.stogram.android.components
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -22,7 +23,7 @@ fun PostContentView(postContent: List<String>) {
     val postContentSize = postContent.size
     val pagerState = rememberPagerState()
 
-    Box(Modifier.fillMaxWidth()) {
+    Box(Modifier.fillMaxWidth().aspectRatio(1f)) {
 
         HorizontalPager(
             count = postContentSize,

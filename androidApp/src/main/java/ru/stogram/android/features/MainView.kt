@@ -20,20 +20,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
-import androidx.navigation.NavGraph.Companion.findStartDestination
-import androidx.navigation.NavHostController
 import com.google.accompanist.insets.ui.BottomNavigation
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.rasalexman.kodi.core.*
-import com.rasalexman.sresult.common.extensions.logg
 import ru.stogram.android.navigation.AppNavigation
 import ru.stogram.android.navigation.Screen
-import ru.stogram.android.navigation.debugLabel
 import ru.stogram.android.navigation.navigateToBottomRouter
 import ru.stogram.android.theme.AppBarAlphas
 
-@OptIn(ExperimentalAnimationApi::class, ExperimentalMaterialApi::class, ExperimentalPagerApi::class)
+@OptIn(ExperimentalAnimationApi::class, ExperimentalPagerApi::class)
 @Composable
 fun MainView() {
 

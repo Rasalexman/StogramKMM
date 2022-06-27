@@ -2,13 +2,15 @@ package ru.stogram.android.features.postdetails
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.insets.ui.Scaffold
@@ -16,35 +18,42 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.rasalexman.kodi.core.immutableInstance
 import com.rasalexman.sresult.common.extensions.applyIfSuccess
 import com.rasalexman.sresult.common.extensions.logg
+import ru.stogram.android.R
 import ru.stogram.android.common.orZero
 import ru.stogram.android.common.rememberStateWithLifecycle
 import ru.stogram.android.components.AvatarNameDescView
 import ru.stogram.android.components.CommentsView
 import ru.stogram.android.components.LikesView
 import ru.stogram.android.components.PostContentView
-import ru.stogram.android.features.profile.ProfileViewModel
-import ru.stogram.models.PostEntity
+import ru.stogram.android.constants.CommentsResult
+import ru.stogram.android.constants.PostDetailsResult
+import ru.stogram.android.features.comments.CommentItemView
+import ru.stogram.android.features.comments.CommentViewModel
 import ru.stogram.models.UserEntity
-import ru.stogram.utils.getRandomString
 
 @ExperimentalPagerApi
 @Composable
 fun PostDetailsView(postId: String?) {
 
     postId?.logg { "CURRENT_POST_ID = ${postId.orEmpty()}" }
-    val vm: PostDetailsViewModel by immutableInstance()
-    vm.fetchSelectedPost(postId)
+    val postDetailsViewModel: PostDetailsViewModel by immutableInstance()
+    postDetailsViewModel.fetchSelectedPost(postId)
 
-    PostDetailsView(vm)
+    val commentsViewModel: CommentViewModel by immutableInstance()
+    commentsViewModel.fetchComments(postId)
+
+    PostDetailsView(postDetailsViewModel, commentsViewModel)
 }
 
 @ExperimentalPagerApi
 @Composable
 fun PostDetailsView(
-    viewModel: PostDetailsViewModel
+    postDetailsViewModel: PostDetailsViewModel,
+    commentsViewModel: CommentViewModel
 ) {
     val scaffoldState = rememberScaffoldState()
-    val postState by rememberStateWithLifecycle(stateFlow = viewModel.postState)
+    val postDetailsState by rememberStateWithLifecycle(stateFlow = postDetailsViewModel.postState)
+    val commentsState by rememberStateWithLifecycle(stateFlow = commentsViewModel.commentsState)
 
     Scaffold(
         scaffoldState = scaffoldState,
@@ -52,14 +61,14 @@ fun PostDetailsView(
         topBar = {
             TopAppBar(
                 title = {
-                    postState.applyIfSuccess { post ->
+                    postDetailsState.applyIfSuccess { post ->
                         if(post.takePostUser().id != UserEntity.DEFAULT_USER_ID) {
                             AvatarNameDescView(user = post.takePostUser(), size = 32.dp)
                         }
                     }
                 },
                 navigationIcon = {
-                    IconButton(onClick = viewModel::onBackClicked) {
+                    IconButton(onClick = postDetailsViewModel::onBackClicked) {
                         Icon(Icons.Filled.ArrowBack, "backIcon")
                     }
                 },
@@ -70,53 +79,76 @@ fun PostDetailsView(
 
         }
     ) { paddings ->
-        postState.applyIfSuccess {
-            PostDetailsView(it, paddings)
-        }
+        PostDetailsView(postDetailsState, commentsState, paddings)
     }
 }
 
 @ExperimentalPagerApi
 @Composable
 fun PostDetailsView(
-    post: PostEntity,
+    postDetailsState: PostDetailsResult,
+    commentsState: CommentsResult,
     paddingValues: PaddingValues
 ) {
-    var isLikedState by remember { mutableStateOf(post.isLiked) }
-    val postPhotos: List<String> by post.takeContentFlow().collectAsState(
-        initial = emptyList()
-    )
 
-    LazyColumn(modifier = Modifier
-        .fillMaxWidth()
-        .padding(paddingValues)
-        .padding(bottom = 8.dp)) {
+    postDetailsState.applyIfSuccess { post ->
+        var isLikedState by remember { mutableStateOf(post.isLiked) }
+        val postPhotos: List<String> by post.takeContentFlow().collectAsState(
+            initial = emptyList()
+        )
+        val topPaddings = paddingValues.calculateTopPadding()
+        val bottomPaddings = topPaddings - 8.dp
 
-        item {
-            PostContentView(postPhotos)
-        }
+        LazyColumn(modifier = Modifier
+            .fillMaxSize()
+            .padding(top = topPaddings, bottom = bottomPaddings)) {
 
-        item {
-            Row(modifier = Modifier.padding(all = 8.dp)) {
-                LikesView(count = post.likesCount.orZero(), isSelected = isLikedState) {
-                    //post.isLiked = !post.isLiked
-                    isLikedState = post.isLiked
+            item {
+                PostContentView(postPhotos)
+            }
+
+            item {
+                Row(modifier = Modifier.padding(all = 8.dp)) {
+                    LikesView(count = post.likesCount.orZero(), isSelected = isLikedState) {
+                        //post.isLiked = !post.isLiked
+                        isLikedState = !isLikedState
+                    }
                 }
+            }
 
-                Spacer(modifier = Modifier.padding(start = 16.dp))
+            item {
+                Text(
+                    text = post.text,
+                    modifier = Modifier.padding(horizontal = 8.dp),
+                    fontSize = 14.sp
+                )
+            }
 
-                CommentsView(count = post.commentsCount.orZero()) {
+            item {
+                Text(
+                    text = stringResource(id = R.string.post_comments),
+                    modifier = Modifier.padding(all = 8.dp),
+                    fontSize = 18.sp
+                )
+            }
 
+            commentsState.applyIfSuccess { items ->
+                items(items = items, key = { it.id }) { comment ->
+                    CommentItemView(
+                        comment = comment,
+                        onAvatarClicked = {  }
+                    )
+
+                    TabRowDefaults.Divider(
+                        color = colorResource(id = R.color.color_light_gray),
+                        thickness = 1.dp,
+                        modifier = Modifier
+                            .padding(start = 8.dp)
+                    )
                 }
             }
         }
-
-        item {
-            Text(
-                text = getRandomString(3000),
-                modifier = Modifier.padding(horizontal = 8.dp),
-                fontSize = 14.sp
-            )
-        }
     }
+
+
 }
