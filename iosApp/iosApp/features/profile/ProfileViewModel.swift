@@ -29,7 +29,7 @@ final class ProfileViewModel : BaseViewModel {
             if let realUser = data as? UserEntity {
                 print("flatMapIfSuccess = \(realUser.id)")
             }
-            return SResultUtils.companion.empty()
+            return Utils.shared.empty()
         }.applyOnEmpty {
             print("applyIfEmpty called")
         }.flatMapOnEmpty {
