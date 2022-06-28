@@ -1,8 +1,6 @@
 package ru.stogram.android.features.comments
 
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
@@ -17,6 +15,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.insets.ui.Scaffold
 import com.rasalexman.kodi.core.immutableInstance
+import com.rasalexman.sresult.common.extensions.applyIfEmpty
+import com.rasalexman.sresult.common.extensions.applyIfLoading
 import com.rasalexman.sresult.common.extensions.applyIfSuccess
 import com.rasalexman.sresult.common.extensions.isLoading
 import ru.stogram.android.R
@@ -84,8 +84,9 @@ fun CommentsView(commentsState: CommentsResult, paddingValues: PaddingValues) {
                 )
             }
         }
-    }
-    if (commentsState.isLoading) {
-        TopCircleProgressView()
+    }.applyIfLoading {
+        Row(Modifier.fillMaxWidth().padding(), horizontalArrangement = Arrangement.Center) {
+            TopCircleProgressView()
+        }
     }
 }

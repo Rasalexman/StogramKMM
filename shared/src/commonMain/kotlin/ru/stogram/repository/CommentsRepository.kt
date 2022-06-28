@@ -17,7 +17,6 @@ class CommentsRepository(
     override fun getAllCommentsAsFlow(postId: String): Flow<List<CommentEntity>> {
         return localDataSource.getAllCommentsAsFlow(postId)
     }
-
 }
 
 interface ICommentsRepository {

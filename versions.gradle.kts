@@ -7,7 +7,7 @@ val gson = "2.9.0"
 val kodi = "1.6.4"
 val leakcanary = "2.9.1"
 val kotpref = "2.13.2"
-val sresult = "1.3.47"
+val sresult = "1.3.50"
 val coil = "2.1.0"
 
 val junit = "5.8.1"
@@ -87,6 +87,8 @@ extra["ktorCore"] = "io.ktor:ktor-client-core:$ktorVersion"
 extra["ktorCio"] = "io.ktor:ktor-client-cio:$ktorVersion"
 extra["ktorLogging"] = "io.ktor:ktor-client-logging:$ktorVersion"
 extra["realmBase"] = "io.realm.kotlin:library-base:$realmVersion"
+// from maven local with ios artifacts
+extra["sresultcore"] = "com.rasalexman.sresult:sresultcore:$sresult"
 extra["coroutinesNative"] = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesMt"
 extra["serializationCore"] = "org.jetbrains.kotlinx:kotlinx-serialization-core:$serializationVersion"
 

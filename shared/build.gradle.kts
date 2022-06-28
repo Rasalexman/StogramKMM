@@ -67,6 +67,7 @@ kotlin {
         //val serializationCore: String by rootProject.extra
         val datetime: String by rootProject.extra
         val kodi: String by rootProject.extra
+        val sresultcore: String by rootProject.extra
 
         val commonMain by getting {
             dependencies {
@@ -74,6 +75,7 @@ kotlin {
                 implementation(ktorCio)
                 implementation(ktorLogging)
                 implementation(coroutinesNative)
+                implementation(sresultcore)
                 //implementation(serializationCore)
                 implementation(datetime)
                 implementation(realmBase)
@@ -87,6 +89,7 @@ kotlin {
         }
 
         val ktorAndroid: String by rootProject.extra
+
         val sresult: String by rootProject.extra
         val androidMain by getting {
             dependencies {
@@ -139,6 +142,11 @@ android {
     defaultConfig {
         minSdk = 23
         targetSdk = 32
+    }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
 }
 
