@@ -19,6 +19,7 @@ class RealmDataBase {
 
     val realm: Realm by lazy {
         println("--------> open real with config")
+        Realm.deleteRealm(configuration)
         Realm.open(configuration)
             //.deleteRealmIfMigrationNeeded().schemaVersion(1).build()
     }

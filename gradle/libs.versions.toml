@@ -1,5 +1,5 @@
 [versions]
-kotlin = "1.6.21"
+kotlin = "1.7.20"
 
 [plugins]
-kmm = { id = "com.champeau.jmh", version = "1.6.21" }
+kmm = { id = "com.champeau.jmh", version = "1.7.20" }

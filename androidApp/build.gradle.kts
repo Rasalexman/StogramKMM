@@ -47,7 +47,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = composeVersion
+        kotlinCompilerExtensionVersion = "1.3.2"
     }
 
     kotlin {
@@ -80,6 +80,7 @@ dependencies {
     val lifecycleVM: String by rootProject.extra
     val coroutinesAndroid: String by rootProject.extra
     val realmBase: String by rootProject.extra
+    val sresult: String by rootProject.extra
 
     val leakCanary: String by rootProject.extra
     val kodiksp: String by rootProject.extra
@@ -87,12 +88,15 @@ dependencies {
     val coil: String by rootProject.extra
     val swiperefreshlayout: String by rootProject.extra
 
-    implementation(project(":shared"))
+    implementation(project(":shared")) {
+        exclude(group = "com.rasalexman.sresult")
+    }
     implementation(core)
     implementation(lifecycleVM)
     implementation(coroutinesAndroid)
     implementation(timber)
     implementation(coil)
+    implementation(sresult)
     compileOnly(realmBase)
 
     implementation(composeUI)
@@ -114,5 +118,5 @@ dependencies {
     ksp(kodiksp)
 
     debugImplementation(leakCanary)
-    debugImplementation("androidx.compose.ui:ui-tooling:1.1.1")
+    debugImplementation("androidx.compose.ui:ui-tooling:1.3.0")
 }

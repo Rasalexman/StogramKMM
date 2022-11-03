@@ -44,7 +44,7 @@ kotlin {
     }
 
     cocoapods {
-        version = "1.0.0"
+        version = "1.4.0"
         summary = "Realm Kotlin Stogram shared Library"
         homepage = "https://github.com/realm/realm-kotlin"
         ios.deploymentTarget = "15.4"
@@ -53,7 +53,7 @@ kotlin {
             baseName = "shared"
             // Optional properties
             // Dynamic framework support
-            //isStatic = false
+            isStatic = false
         }
         //podfile = project.file("../iosApp/Podfile")
     }
@@ -94,7 +94,7 @@ kotlin {
         val androidMain by getting {
             dependencies {
                 api(kodi)
-                api(sresult)
+                //api(sresult)
                 implementation(ktorAndroid)
             }
         }
@@ -137,11 +137,11 @@ dependencies {
 }
 
 android {
-    compileSdk = 32
+    compileSdk = 33
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
     defaultConfig {
         minSdk = 23
-        targetSdk = 32
+        targetSdk = 33
     }
 
     compileOptions {
