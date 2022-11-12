@@ -7,8 +7,8 @@ val gson = "2.9.1"
 val kodi = "1.6.6"
 val leakcanary = "2.9.1"
 val kotpref = "2.13.2"
-val sresult = "1.3.56"
-val sresultcore = "1.3.56"
+val sresult = "1.3.59"
+val sresultcore = "1.3.59"
 val coil = "2.1.0"
 
 val junit = "5.8.1"
@@ -26,9 +26,9 @@ val composeActivity = "1.6.1"
 val accompanist = "0.27.0"
 
 val ktorVersion = "2.0.0"
-val datetimeVersion = "0.3.2"
-val realmVersion = "1.4.0"
-val coroutinesMt = "1.6.1-native-mt"
+val datetimeVersion = "0.4.0"
+val realmVersion = "1.5.0"
+val coroutinesMt = "$coroutines-native-mt"
 val serializationVersion = "1.3.2"
 
 extra["composeVersion"] = composeVersion

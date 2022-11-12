@@ -10,6 +10,8 @@ plugins {
 
 val kotlinApiVersion: String by rootProject.extra
 val jvmVersion: String by rootProject.extra
+val realmVersion: String by rootProject.extra
+
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
     kotlinOptions {
         this.apiVersion = kotlinApiVersion
@@ -22,7 +24,9 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach 
     }
 }
 
+
 kotlin {
+
     android()
     ios()
 
@@ -40,22 +44,24 @@ kotlin {
     ).forEach {
         it.binaries.framework {
             baseName = "shared"
+            isStatic = false
         }
     }
 
     cocoapods {
-        version = "1.4.0"
+        version = realmVersion
         summary = "Realm Kotlin Stogram shared Library"
         homepage = "https://github.com/realm/realm-kotlin"
         ios.deploymentTarget = "15.4"
         osx.deploymentTarget = "11.0"
+        //podfile = project.file("../iosApp/Podfile")
         framework {
             baseName = "shared"
             // Optional properties
             // Dynamic framework support
             isStatic = false
         }
-        //podfile = project.file("../iosApp/Podfile")
+
     }
 
     sourceSets {
@@ -71,6 +77,7 @@ kotlin {
 
         val commonMain by getting {
             dependencies {
+                //implementation(fileTree(mapOf("include" to listOf("*.jar"), "dir" to "libsjvm")))
                 implementation(ktorCore)
                 implementation(ktorCio)
                 implementation(ktorLogging)
