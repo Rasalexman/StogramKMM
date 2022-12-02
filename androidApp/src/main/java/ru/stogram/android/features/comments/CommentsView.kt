@@ -13,22 +13,19 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.insets.ui.Scaffold
-import com.rasalexman.kodi.core.immutableInstance
-import com.rasalexman.sresult.common.extensions.applyIfEmpty
 import com.rasalexman.sresult.common.extensions.applyIfLoading
 import com.rasalexman.sresult.common.extensions.applyIfSuccess
-import com.rasalexman.sresult.common.extensions.isLoading
 import ru.stogram.android.R
 import ru.stogram.android.common.rememberStateWithLifecycle
 import ru.stogram.android.components.TopCircleProgressView
 import ru.stogram.android.constants.CommentsResult
+import ru.stogram.models.CommentEntity
 
 @Composable
-fun CommentsView(postId: String?) {
-    val vm: CommentViewModel by immutableInstance()
-    vm.fetchComments(postId)
-
+fun CommentsView() {
+    val vm: CommentViewModel = hiltViewModel()
     CommentsView(vm)
 }
 
@@ -56,12 +53,20 @@ fun CommentsView(viewModel: CommentViewModel) {
             )
         }
     ) { paddings ->
-        CommentsView(commentsState = commentsState, paddingValues = paddings)
+        CommentsView(
+            commentsState = commentsState,
+            paddingValues = paddings,
+            onAvatarClicked = viewModel::onAvatarClicked
+        )
     }
 }
 
 @Composable
-fun CommentsView(commentsState: CommentsResult, paddingValues: PaddingValues) {
+fun CommentsView(
+    commentsState: CommentsResult,
+    paddingValues: PaddingValues,
+    onAvatarClicked: (CommentEntity) -> Unit
+) {
     commentsState.applyIfSuccess { items ->
         val topPaddings = paddingValues.calculateTopPadding()
         val bottomPaddings = topPaddings - 8.dp
@@ -73,7 +78,7 @@ fun CommentsView(commentsState: CommentsResult, paddingValues: PaddingValues) {
             items(items = items, key = { it.id }) { comment ->
                 CommentItemView(
                     comment = comment,
-                    onAvatarClicked = {  }
+                    onAvatarClicked = { }
                 )
 
                 TabRowDefaults.Divider(
@@ -85,7 +90,11 @@ fun CommentsView(commentsState: CommentsResult, paddingValues: PaddingValues) {
             }
         }
     }.applyIfLoading {
-        Row(Modifier.fillMaxWidth().padding(), horizontalArrangement = Arrangement.Center) {
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .padding(), horizontalArrangement = Arrangement.Center
+        ) {
             TopCircleProgressView()
         }
     }

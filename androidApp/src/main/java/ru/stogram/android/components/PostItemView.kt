@@ -12,14 +12,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.pager.ExperimentalPagerApi
 import ru.stogram.android.common.orZero
-import ru.stogram.android.features.home.HomeViewModel
 import ru.stogram.models.PostEntity
 
 @ExperimentalPagerApi
 @Composable
 fun PostItemView(
     post: PostEntity,
-    viewModel: HomeViewModel
+    onPostAvatarClicked: (PostEntity) -> Unit,
+    onPostCommentsClicked: (PostEntity) -> Unit
 ) {
 
     var isLikedState by remember { mutableStateOf(post.isLiked) }
@@ -32,7 +32,7 @@ fun PostItemView(
         .padding(bottom = 8.dp)) {
         Box(modifier = Modifier.padding(all = 8.dp)) {
             AvatarNameDescView(user = post.takePostUser()) {
-                viewModel.onPostAvatarClicked(post = post)
+                onPostAvatarClicked(post)
             }
         }
 
@@ -48,7 +48,7 @@ fun PostItemView(
             Spacer(modifier = Modifier.padding(start = 16.dp))
 
             CommentsView(count = post.commentsCount.orZero()) {
-                viewModel.onPostCommentsClicked(post = post)
+                onPostCommentsClicked(post)
             }
         }
 
@@ -76,5 +76,5 @@ class PostPreviewParameterProvider : PreviewParameterProvider<PostEntity> {
 fun PostViewPreview(
     @PreviewParameter(PostPreviewParameterProvider::class, limit = 1) post: PostEntity
 ) {
-    PostItemView(post = post, viewModel = HomeViewModel())
+    PostItemView(post = post, onPostAvatarClicked = {}, onPostCommentsClicked = {})
 }

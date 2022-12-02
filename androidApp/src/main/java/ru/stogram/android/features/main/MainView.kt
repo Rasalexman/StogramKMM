@@ -1,4 +1,4 @@
-package ru.stogram.android.features
+package ru.stogram.android.features.main
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
@@ -18,26 +18,24 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import com.google.accompanist.insets.ui.BottomNavigation
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
-import com.google.accompanist.pager.ExperimentalPagerApi
-import com.rasalexman.kodi.core.*
 import ru.stogram.android.navigation.AppNavigation
 import ru.stogram.android.navigation.Screen
 import ru.stogram.android.navigation.navigateToBottomRouter
 import ru.stogram.android.theme.AppBarAlphas
 
-@OptIn(ExperimentalAnimationApi::class, ExperimentalPagerApi::class)
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun MainView() {
 
+    val viewModel: MainViewModel = hiltViewModel()
     val navController = rememberAnimatedNavController().also {
-        kodi {
-            unbind<NavController>()
-            bind<NavController>() with provider { it }
-        }
+        viewModel.setupMainNavController(it)
     }
     val configuration = LocalConfiguration.current
     val useBottomNavigation by remember {
@@ -64,7 +62,11 @@ fun MainView() {
             }
         }
     ) { innerPadding ->
-        Row(Modifier.fillMaxSize().statusBarsPadding().padding(innerPadding)) {
+        Row(
+            Modifier
+                .fillMaxSize()
+                .statusBarsPadding()
+                .padding(innerPadding)) {
 //            if (!useBottomNavigation) {
 //                val currentSelectedItem by navController.currentScreenAsState()
 //                MainNavigationRail(
@@ -104,21 +106,14 @@ private fun NavController.currentScreenAsState(): State<Screen> {
     DisposableEffect(this) {
         val listener = NavController.OnDestinationChangedListener { _, destination, _ ->
             when {
-                destination.hierarchy.any { it.route == Screen.Home.route } -> {
-                    selectedItem.value = Screen.Home
-                }
-                destination.hierarchy.any { it.route == Screen.Reactions.route } -> {
-                    selectedItem.value = Screen.Reactions
-                }
-                destination.hierarchy.any { it.route == Screen.Create.route } -> {
-                    selectedItem.value = Screen.Create
-                }
-                destination.hierarchy.any { it.route == Screen.Search.route } -> {
-                    selectedItem.value = Screen.Search
-                }
-                destination.hierarchy.any { it.route == Screen.Profile.route } -> {
-                    selectedItem.value = Screen.Profile
-                }
+                destination.hasRoute(Screen.Home) -> Screen.Home
+                destination.hasRoute(Screen.Reactions) -> Screen.Reactions
+                destination.hasRoute(Screen.Create) -> Screen.Create
+                destination.hasRoute(Screen.Search) -> Screen.Search
+                destination.hasRoute(Screen.Profile) -> Screen.Profile
+                else -> null
+            }?.let {
+                selectedItem.value = it
             }
         }
         addOnDestinationChangedListener(listener)
@@ -129,6 +124,10 @@ private fun NavController.currentScreenAsState(): State<Screen> {
     }
 
     return selectedItem
+}
+
+private fun NavDestination.hasRoute(screen: Screen): Boolean {
+    return hierarchy.any { it.route == screen.route }
 }
 
 @Composable
@@ -151,7 +150,7 @@ internal fun MainBottomNavigation(
                         selected = selectedNavigation == item.screen
                     )
                 },
-                label = { Text(text = stringResource(item.labelResId)) },
+                //label = { Text(text = stringResource(item.labelResId)) },
                 selected = selectedNavigation == item.screen,
                 onClick = { onNavigationSelected(item.screen) },
             )
@@ -191,7 +190,7 @@ internal fun MainNavigationRail(
                         )
                     },
                     alwaysShowLabel = false,
-                    label = { Text(text = stringResource(item.labelResId)) },
+                    //label = { Text(text = stringResource(item.labelResId)) },
                     selected = selectedNavigation == item.screen,
                     onClick = { onNavigationSelected(item.screen) },
                 )
@@ -228,58 +227,50 @@ private fun MainNavigationItemIcon(item: MainNavigationItem, selected: Boolean) 
 
 private sealed class MainNavigationItem(
     val screen: Screen,
-    @StringRes val labelResId: Int,
     @StringRes val contentDescriptionResId: Int,
 ) {
     class ResourceIcon(
         screen: Screen,
-        @StringRes labelResId: Int,
         @StringRes contentDescriptionResId: Int,
         @DrawableRes val iconResId: Int,
         @DrawableRes val selectedIconResId: Int? = null,
-    ) : MainNavigationItem(screen, labelResId, contentDescriptionResId)
+    ) : MainNavigationItem(screen, contentDescriptionResId)
 
     class ImageVectorIcon(
         screen: Screen,
-        @StringRes labelResId: Int,
         @StringRes contentDescriptionResId: Int,
         val iconImageVector: ImageVector,
         val selectedImageVector: ImageVector? = null,
-    ) : MainNavigationItem(screen, labelResId, contentDescriptionResId)
+    ) : MainNavigationItem(screen, contentDescriptionResId)
 }
 
 private val MainNavigationItems = listOf(
     MainNavigationItem.ImageVectorIcon(
         screen = Screen.Home,
-        labelResId = ru.stogram.android.R.string.tab_home,
         contentDescriptionResId = ru.stogram.android.R.string.tab_home,
         iconImageVector = Icons.Outlined.Home,
         selectedImageVector = Icons.Default.Home,
     ),
     MainNavigationItem.ImageVectorIcon(
         screen = Screen.Search,
-        labelResId = ru.stogram.android.R.string.tab_search,
         contentDescriptionResId = ru.stogram.android.R.string.tab_search,
         iconImageVector = Icons.Outlined.Search,
         selectedImageVector = Icons.Default.Search,
     ),
     MainNavigationItem.ImageVectorIcon(
         screen = Screen.Create,
-        labelResId = ru.stogram.android.R.string.tab_create,
         contentDescriptionResId = ru.stogram.android.R.string.tab_create,
         iconImageVector = Icons.Outlined.Add,
         selectedImageVector = Icons.Default.Add,
     ),
     MainNavigationItem.ImageVectorIcon(
         screen = Screen.Reactions,
-        labelResId = ru.stogram.android.R.string.tab_reactions,
         contentDescriptionResId = ru.stogram.android.R.string.tab_reactions,
         iconImageVector = Icons.Outlined.Favorite,
         selectedImageVector = Icons.Default.Favorite,
     ),
     MainNavigationItem.ImageVectorIcon(
         screen = Screen.Profile,
-        labelResId = ru.stogram.android.R.string.tab_profile,
         contentDescriptionResId = ru.stogram.android.R.string.tab_profile,
         iconImageVector = Icons.Outlined.Person,
         selectedImageVector = Icons.Default.Person

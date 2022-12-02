@@ -7,13 +7,14 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.core.view.WindowCompat
 import com.google.accompanist.pager.ExperimentalPagerApi
-import ru.stogram.android.features.MainView
-import ru.stogram.android.features.ScreenView
+import dagger.hilt.android.AndroidEntryPoint
+import ru.stogram.android.features.screen.ScreenView
 import ru.stogram.android.theme.StogramTheme
 
 @ExperimentalAnimationApi
 @ExperimentalTextApi
 @ExperimentalPagerApi
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {

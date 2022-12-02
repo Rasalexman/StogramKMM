@@ -1,6 +1,9 @@
 package ru.stogram.android.features.postdetails
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
@@ -13,35 +16,28 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.insets.ui.Scaffold
 import com.google.accompanist.pager.ExperimentalPagerApi
-import com.rasalexman.kodi.core.immutableInstance
 import com.rasalexman.sresult.common.extensions.applyIfSuccess
-import com.rasalexman.sresult.common.extensions.logg
 import ru.stogram.android.R
 import ru.stogram.android.common.orZero
 import ru.stogram.android.common.rememberStateWithLifecycle
 import ru.stogram.android.components.AvatarNameDescView
-import ru.stogram.android.components.CommentsView
 import ru.stogram.android.components.LikesView
 import ru.stogram.android.components.PostContentView
 import ru.stogram.android.constants.CommentsResult
 import ru.stogram.android.constants.PostDetailsResult
 import ru.stogram.android.features.comments.CommentItemView
 import ru.stogram.android.features.comments.CommentViewModel
+import ru.stogram.models.CommentEntity
 import ru.stogram.models.UserEntity
 
 @ExperimentalPagerApi
 @Composable
-fun PostDetailsView(postId: String?) {
-
-    postId?.logg { "CURRENT_POST_ID = ${postId.orEmpty()}" }
-    val postDetailsViewModel: PostDetailsViewModel by immutableInstance()
-    postDetailsViewModel.fetchSelectedPost(postId)
-
-    val commentsViewModel: CommentViewModel by immutableInstance()
-    commentsViewModel.fetchComments(postId)
-
+fun PostDetailsView() {
+    val postDetailsViewModel: PostDetailsViewModel = hiltViewModel()
+    val commentsViewModel: CommentViewModel = hiltViewModel()
     PostDetailsView(postDetailsViewModel, commentsViewModel)
 }
 
@@ -79,7 +75,12 @@ fun PostDetailsView(
 
         }
     ) { paddings ->
-        PostDetailsView(postDetailsState, commentsState, paddings)
+        PostDetailsView(
+            postDetailsState = postDetailsState,
+            commentsState = commentsState,
+            paddingValues = paddings,
+            onAvatarClicked = postDetailsViewModel::onAvatarClicked
+        )
     }
 }
 
@@ -88,7 +89,8 @@ fun PostDetailsView(
 fun PostDetailsView(
     postDetailsState: PostDetailsResult,
     commentsState: CommentsResult,
-    paddingValues: PaddingValues
+    paddingValues: PaddingValues,
+    onAvatarClicked: (CommentEntity) -> Unit
 ) {
 
     postDetailsState.applyIfSuccess { post ->
@@ -136,7 +138,7 @@ fun PostDetailsView(
                 items(items = items, key = { it.id }) { comment ->
                     CommentItemView(
                         comment = comment,
-                        onAvatarClicked = {  }
+                        onAvatarClicked = onAvatarClicked
                     )
 
                     TabRowDefaults.Divider(
@@ -149,6 +151,4 @@ fun PostDetailsView(
             }
         }
     }
-
-
 }

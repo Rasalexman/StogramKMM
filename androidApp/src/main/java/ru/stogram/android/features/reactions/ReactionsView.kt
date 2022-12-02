@@ -5,7 +5,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.TabRowDefaults
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -15,11 +18,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.insets.ui.Scaffold
-import com.google.accompanist.swiperefresh.SwipeRefresh
-import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
-import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
-import com.rasalexman.kodi.core.immutableInstance
 import com.rasalexman.sresult.common.extensions.applyIfSuccess
 import com.rasalexman.sresult.common.extensions.isLoading
 import com.rasalexman.sresult.common.extensions.toSuccessResult
@@ -30,50 +30,43 @@ import ru.stogram.android.components.TopCircleProgressView
 import ru.stogram.android.constants.ReactionsResult
 import ru.stogram.models.ReactionEntity
 
+@ExperimentalMaterialApi
 @Composable
 fun Reactions() {
-    val vm: ReactionsViewModel by immutableInstance()
+    val vm: ReactionsViewModel = hiltViewModel()
     ReactionsView(viewModel = vm)
 }
 
+@ExperimentalMaterialApi
 @Composable
 fun ReactionsView(viewModel: ReactionsViewModel) {
 
     val reactionsState by rememberStateWithLifecycle(stateFlow = viewModel.reactionsState)
 
     ReactionsView(
-        viewModel = viewModel,
         reactionsState = reactionsState,
-        refresh = viewModel::onSwipeRefresh
+        isRefreshing = viewModel.refreshing,
+        onReactionAvatarClicked = viewModel::onReactionAvatarClicked,
+        onSwipeRefresh = viewModel::onSwipeRefresh
     )
 }
 
+@ExperimentalMaterialApi
 @Composable
 internal fun ReactionsView(
-    viewModel: ReactionsViewModel,
     reactionsState: ReactionsResult,
-    refresh: () -> Unit
+    isRefreshing: Boolean = false,
+    onReactionAvatarClicked: (ReactionEntity) -> Unit,
+    onSwipeRefresh: () -> Unit
 ) {
     val scaffoldState = rememberScaffoldState()
+    val pullRefreshState = rememberPullRefreshState(isRefreshing, { onSwipeRefresh() })
 
     Scaffold(
         scaffoldState = scaffoldState,
         modifier = Modifier.fillMaxSize(),
-    ) { paddingValues ->
-        Box(modifier = Modifier.fillMaxSize()) {
-
-            SwipeRefresh(
-                state = rememberSwipeRefreshState(viewModel.refreshing),
-                onRefresh = refresh,
-                indicatorPadding = paddingValues,
-                indicator = { state, trigger ->
-                    SwipeRefreshIndicator(
-                        state = state,
-                        refreshTriggerDistance = trigger,
-                        scale = true
-                    )
-                }
-            ) {
+    ) {
+        Box(modifier = Modifier.fillMaxSize().pullRefresh(pullRefreshState)) {
                 LazyColumn(
                     modifier = Modifier.bodyWidth(),
                 ) {
@@ -81,7 +74,7 @@ internal fun ReactionsView(
                         items(items = items, key = { it.id }) { reaction ->
                             ReactionItemView(
                                 reaction = reaction,
-                                onAvatarClicked = viewModel::onReactionAvatarClicked
+                                onAvatarClicked = onReactionAvatarClicked
                             )
 
                             TabRowDefaults.Divider(
@@ -93,7 +86,7 @@ internal fun ReactionsView(
                         }
                     }
                 }
-            }
+
 
             if (reactionsState.isLoading) {
                 TopCircleProgressView()
@@ -108,12 +101,16 @@ class ReactionsPreviewParameterProvider : PreviewParameterProvider<ReactionsResu
     )
 }
 
+@ExperimentalMaterialApi
 @Preview
 @Composable
 fun ReactionsPreview(
     @PreviewParameter(ReactionsPreviewParameterProvider::class, limit = 1) result: ReactionsResult
 ) {
-    ReactionsView(viewModel = ReactionsViewModel(), reactionsState = result) {
-
-    }
+    ReactionsView(
+        reactionsState = result,
+        isRefreshing = false,
+        onReactionAvatarClicked = {},
+        onSwipeRefresh = {}
+    )
 }

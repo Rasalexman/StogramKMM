@@ -1,10 +1,10 @@
 package ru.stogram.android.navigation
 
 import androidx.compose.animation.*
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.*
-import androidx.navigation.NavDestination.Companion.hierarchy
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.navigation
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -38,14 +38,12 @@ private sealed class LeafScreen(
     object MenuProfile : LeafScreen(ScreenNames.USER_PROFILE)
 }
 
-@ExperimentalPagerApi
-@ExperimentalAnimationApi
+@OptIn(ExperimentalAnimationApi::class, ExperimentalPagerApi::class, ExperimentalMaterialApi::class)
 @Composable
 internal fun AppNavigation(
     navController: NavHostController,
     modifier: Modifier = Modifier,
 ) {
-
     AnimatedNavHost(
         navController = navController,
         startDestination = Screen.Home.route,
@@ -55,32 +53,28 @@ internal fun AppNavigation(
 //        popExitTransition = { defaultStogramPopExitTransition() },
         modifier = modifier,
     ) {
-        addHomeTopLevel(navController)
-        addSearchTopLevel(navController)
-        addCreateTopLevel(navController)
-        addReactionsTopLevel(navController)
-        addProfileTopLevel(navController)
+        addHomeTopLevel()
+        addSearchTopLevel()
+        addCreateTopLevel()
+        addReactionsTopLevel()
+        addProfileTopLevel()
     }
 }
 
+@ExperimentalMaterialApi
 @ExperimentalPagerApi
 @ExperimentalAnimationApi
-private fun NavGraphBuilder.addHomeTopLevel(
-    navController: NavController
-) {
+private fun NavGraphBuilder.addHomeTopLevel() {
     addBottomNavigationView(
         route = Screen.Home.route,
         label = ScreenNames.HOME
     ) {
-        Home(navController)
+        Home()
     }
 }
 
-@ExperimentalPagerApi
-@ExperimentalAnimationApi
-private fun NavGraphBuilder.addSearchTopLevel(
-    navController: NavController
-) {
+@OptIn(ExperimentalAnimationApi::class, ExperimentalPagerApi::class, ExperimentalMaterialApi::class)
+private fun NavGraphBuilder.addSearchTopLevel() {
     addBottomNavigationView(
         route = Screen.Search.route,
         label = ScreenNames.SEARCH
@@ -90,9 +84,7 @@ private fun NavGraphBuilder.addSearchTopLevel(
 }
 
 @ExperimentalAnimationApi
-private fun NavGraphBuilder.addCreateTopLevel(
-    navController: NavController
-) {
+private fun NavGraphBuilder.addCreateTopLevel() {
     addBottomNavigationView(
         route = Screen.Create.route,
         label = ScreenNames.CREATE
@@ -101,11 +93,8 @@ private fun NavGraphBuilder.addCreateTopLevel(
     }
 }
 
-@ExperimentalPagerApi
-@ExperimentalAnimationApi
-private fun NavGraphBuilder.addReactionsTopLevel(
-    navController: NavController
-) {
+@OptIn(ExperimentalAnimationApi::class, ExperimentalMaterialApi::class)
+private fun NavGraphBuilder.addReactionsTopLevel() {
     addBottomNavigationView(
         route = Screen.Reactions.route,
         label = ScreenNames.REACTIONS
@@ -114,11 +103,8 @@ private fun NavGraphBuilder.addReactionsTopLevel(
     }
 }
 
-@ExperimentalPagerApi
-@ExperimentalAnimationApi
-private fun NavGraphBuilder.addProfileTopLevel(
-    navController: NavController
-) {
+@OptIn(ExperimentalAnimationApi::class)
+private fun NavGraphBuilder.addProfileTopLevel() {
     val route = LeafScreen.MenuProfile.createRoute(Screen.Profile)
     navigation(
         route = Screen.Profile.route,
@@ -132,9 +118,8 @@ private fun NavGraphBuilder.addProfileTopLevel(
                 nullable = true
                 type = NavType.StringType
             })
-        ) { backStackEntry ->
-            val userProfileId = backStackEntry.arguments?.getString(ArgsNames.USER_ID)
-            Profile(userProfileId)
+        ) {
+            Profile()
         }
     }
 }
@@ -155,46 +140,45 @@ private fun NavGraphBuilder.addBottomNavigationView(
     )
 }
 
+//private val NavDestination.hostNavGraph: NavGraph
+//    get() = hierarchy.first { it is NavGraph } as NavGraph
 
-@ExperimentalAnimationApi
-private fun AnimatedContentScope<*>.defaultStogramEnterTransition(
-    initial: NavBackStackEntry,
-    target: NavBackStackEntry,
-): EnterTransition {
-    val initialNavGraph = initial.destination.hostNavGraph
-    val targetNavGraph = target.destination.hostNavGraph
-    // If we're crossing nav graphs (bottom navigation graphs), we crossfade
-    if (initialNavGraph.id != targetNavGraph.id) {
-        return fadeIn()
-    }
-    // Otherwise we're in the same nav graph, we can imply a direction
-    return fadeIn() + slideIntoContainer(AnimatedContentScope.SlideDirection.Start)
-}
+//@ExperimentalAnimationApi
+//private fun AnimatedContentScope<*>.defaultStogramEnterTransition(
+//    initial: NavBackStackEntry,
+//    target: NavBackStackEntry,
+//): EnterTransition {
+//    val initialNavGraph = initial.destination.hostNavGraph
+//    val targetNavGraph = target.destination.hostNavGraph
+//    // If we're crossing nav graphs (bottom navigation graphs), we crossfade
+//    if (initialNavGraph.id != targetNavGraph.id) {
+//        return fadeIn()
+//    }
+//    // Otherwise we're in the same nav graph, we can imply a direction
+//    return fadeIn() + slideIntoContainer(AnimatedContentScope.SlideDirection.Start)
+//}
+//
+//@ExperimentalAnimationApi
+//private fun AnimatedContentScope<*>.defaultStogramExitTransition(
+//    initial: NavBackStackEntry,
+//    target: NavBackStackEntry,
+//): ExitTransition {
+//    val initialNavGraph = initial.destination.hostNavGraph
+//    val targetNavGraph = target.destination.hostNavGraph
+//    // If we're crossing nav graphs (bottom navigation graphs), we crossfade
+//    if (initialNavGraph.id != targetNavGraph.id) {
+//        return fadeOut()
+//    }
+//    // Otherwise we're in the same nav graph, we can imply a direction
+//    return fadeOut() + slideOutOfContainer(AnimatedContentScope.SlideDirection.Start)
+//}
 
-@ExperimentalAnimationApi
-private fun AnimatedContentScope<*>.defaultStogramExitTransition(
-    initial: NavBackStackEntry,
-    target: NavBackStackEntry,
-): ExitTransition {
-    val initialNavGraph = initial.destination.hostNavGraph
-    val targetNavGraph = target.destination.hostNavGraph
-    // If we're crossing nav graphs (bottom navigation graphs), we crossfade
-    if (initialNavGraph.id != targetNavGraph.id) {
-        return fadeOut()
-    }
-    // Otherwise we're in the same nav graph, we can imply a direction
-    return fadeOut() + slideOutOfContainer(AnimatedContentScope.SlideDirection.Start)
-}
-
-private val NavDestination.hostNavGraph: NavGraph
-    get() = hierarchy.first { it is NavGraph } as NavGraph
-
-@ExperimentalAnimationApi
-private fun AnimatedContentScope<*>.defaultStogramPopEnterTransition(): EnterTransition {
-    return fadeIn() + slideIntoContainer(AnimatedContentScope.SlideDirection.End)
-}
-
-@ExperimentalAnimationApi
-private fun AnimatedContentScope<*>.defaultStogramPopExitTransition(): ExitTransition {
-    return fadeOut() + slideOutOfContainer(AnimatedContentScope.SlideDirection.End)
-}
+//@ExperimentalAnimationApi
+//private fun AnimatedContentScope<*>.defaultStogramPopEnterTransition(): EnterTransition {
+//    return fadeIn() + slideIntoContainer(AnimatedContentScope.SlideDirection.End)
+//}
+//
+//@ExperimentalAnimationApi
+//private fun AnimatedContentScope<*>.defaultStogramPopExitTransition(): ExitTransition {
+//    return fadeOut() + slideOutOfContainer(AnimatedContentScope.SlideDirection.End)
+//}

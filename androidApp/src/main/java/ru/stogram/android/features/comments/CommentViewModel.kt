@@ -1,48 +1,40 @@
 package ru.stogram.android.features.comments
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavHostController
-import com.rasalexman.kodi.annotations.BindSingle
-import com.rasalexman.kodi.core.IKodi
-import com.rasalexman.kodi.core.immutableInstance
-import com.rasalexman.kodi.core.instance
 import com.rasalexman.sresult.common.extensions.asState
 import com.rasalexman.sresult.common.extensions.emptyResult
-import com.rasalexman.sresult.common.extensions.logg
 import com.rasalexman.sresult.common.extensions.toSuccessResult
-import com.rasalexman.sresult.data.dto.SResult
-import kotlinx.coroutines.flow.MutableStateFlow
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.mapNotNull
+import ru.stogram.android.constants.ArgsNames
 import ru.stogram.android.constants.CommentsResult
-import ru.stogram.android.di.ModuleNames
-import ru.stogram.models.PostEntity
+import ru.stogram.android.navigation.IHostRouter
+import ru.stogram.models.CommentEntity
 import ru.stogram.repository.ICommentsRepository
+import javax.inject.Inject
 
-@BindSingle(
-    toClass = CommentViewModel::class,
-    toModule = ModuleNames.ViewModels
-)
-class CommentViewModel : ViewModel(), IKodi {
+@HiltViewModel
+class CommentViewModel @Inject constructor(
+    private val router: IHostRouter,
+    commentsRepository: ICommentsRepository,
+    savedStateHandle: SavedStateHandle
+) : ViewModel() {
 
-    private val commentsRepository: ICommentsRepository by immutableInstance()
+    private val lastSelectedPostId: String = checkNotNull(savedStateHandle[ArgsNames.POST_ID])
 
-    private val lastSelectedPostId: MutableStateFlow<String?> = MutableStateFlow(null)
-
-    val commentsState: StateFlow<CommentsResult> = lastSelectedPostId.mapNotNull { it }.flatMapLatest { postId ->
-        commentsRepository.getAllCommentsAsFlow(postId).mapNotNull { currentComments ->
-            currentComments.toSuccessResult()
-        }
+    val commentsState: StateFlow<CommentsResult> = commentsRepository.getAllCommentsAsFlow(lastSelectedPostId)
+        .mapNotNull { currentComments ->
+        currentComments.toSuccessResult()
     }.asState(viewModelScope, emptyResult())
 
-    fun fetchComments(selectedPostId: String?) {
-        logg { "fetchSelectedPost id: ${selectedPostId.orEmpty()}" }
-        selectedPostId?.let(lastSelectedPostId::tryEmit)
+    fun onAvatarClicked(comment: CommentEntity) {
+        router.showHostUserProfile(comment.takeCommentUser().id)
     }
 
     fun onBackClicked() {
-        instance<NavHostController>().popBackStack()
+        router.popBackToHost()
     }
 }
