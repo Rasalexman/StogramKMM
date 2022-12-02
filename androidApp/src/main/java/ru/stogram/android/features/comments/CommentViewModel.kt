@@ -3,23 +3,33 @@ package ru.stogram.android.features.comments
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.rasalexman.sresult.common.extensions.asState
-import com.rasalexman.sresult.common.extensions.emptyResult
+import com.rasalexman.sresult.common.extensions.loadingResult
+import com.rasalexman.sresult.common.extensions.logg
+import com.rasalexman.sresult.common.extensions.orFalse
 import com.rasalexman.sresult.common.extensions.toSuccessResult
+import com.rasalexman.sresult.common.utils.convertList
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.mapNotNull
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import ru.stogram.android.constants.ArgsNames
 import ru.stogram.android.constants.CommentsResult
+import ru.stogram.android.mappers.ICommentItemUIMapper
+import ru.stogram.android.models.CommentItemUI
 import ru.stogram.android.navigation.IHostRouter
-import ru.stogram.models.CommentEntity
+import ru.stogram.models.IUser
 import ru.stogram.repository.ICommentsRepository
 import javax.inject.Inject
 
 @HiltViewModel
 class CommentViewModel @Inject constructor(
     private val router: IHostRouter,
-    commentsRepository: ICommentsRepository,
+    private val commentItemUIMapper: ICommentItemUIMapper,
+    private val commentsRepository: ICommentsRepository,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -27,11 +37,20 @@ class CommentViewModel @Inject constructor(
 
     val commentsState: StateFlow<CommentsResult> = commentsRepository.getAllCommentsAsFlow(lastSelectedPostId)
         .mapNotNull { currentComments ->
-        currentComments.toSuccessResult()
-    }.asState(viewModelScope, emptyResult())
+            commentItemUIMapper.convertList(currentComments).toSuccessResult()
+    }.stateIn(viewModelScope, SharingStarted.Eagerly, loadingResult())
 
-    fun onAvatarClicked(comment: CommentEntity) {
-        router.showHostUserProfile(comment.takeCommentUser().id)
+    fun onAvatarClicked(commentUser: IUser) {
+        router.showHostUserProfile(commentUser.id)
+    }
+
+    fun onLikeClicked(comment: CommentItemUI) {
+        viewModelScope.launch {
+            val updateResult = withContext(Dispatchers.IO) {
+                commentsRepository.updateCommentLike(comment.id)
+            }
+            logg { "onPostLikeClicked result ${updateResult.data.orFalse()}" }
+        }
     }
 
     fun onBackClicked() {

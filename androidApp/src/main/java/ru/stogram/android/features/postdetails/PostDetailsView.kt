@@ -22,7 +22,6 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.rasalexman.sresult.common.extensions.applyIfSuccess
 import ru.stogram.android.R
 import ru.stogram.android.common.orZero
-import ru.stogram.android.common.rememberStateWithLifecycle
 import ru.stogram.android.components.AvatarNameDescView
 import ru.stogram.android.components.LikesView
 import ru.stogram.android.components.PostContentView
@@ -30,7 +29,9 @@ import ru.stogram.android.constants.CommentsResult
 import ru.stogram.android.constants.PostDetailsResult
 import ru.stogram.android.features.comments.CommentItemView
 import ru.stogram.android.features.comments.CommentViewModel
-import ru.stogram.models.CommentEntity
+import ru.stogram.android.models.CommentItemUI
+import ru.stogram.android.models.PostItemUI
+import ru.stogram.models.IUser
 import ru.stogram.models.UserEntity
 
 @ExperimentalPagerApi
@@ -45,21 +46,21 @@ fun PostDetailsView() {
 @Composable
 fun PostDetailsView(
     postDetailsViewModel: PostDetailsViewModel,
-    commentsViewModel: CommentViewModel
+    commentsViewModel: CommentViewModel,
+    scaffoldState: ScaffoldState = rememberScaffoldState()
 ) {
-    val scaffoldState = rememberScaffoldState()
-    val postDetailsState by rememberStateWithLifecycle(stateFlow = postDetailsViewModel.postState)
-    val commentsState by rememberStateWithLifecycle(stateFlow = commentsViewModel.commentsState)
+    val postDetailsState by postDetailsViewModel.postState.collectAsState()
 
     Scaffold(
         scaffoldState = scaffoldState,
         modifier = Modifier.fillMaxSize(),
         topBar = {
+
             TopAppBar(
                 title = {
                     postDetailsState.applyIfSuccess { post ->
-                        if(post.takePostUser().id != UserEntity.DEFAULT_USER_ID) {
-                            AvatarNameDescView(user = post.takePostUser(), size = 32.dp)
+                        if(post.user.id != UserEntity.DEFAULT_USER_ID) {
+                            AvatarNameDescView(user = post.user, size = 32.dp)
                         }
                     }
                 },
@@ -75,11 +76,14 @@ fun PostDetailsView(
 
         }
     ) { paddings ->
+        val commentsState by commentsViewModel.commentsState.collectAsState()
         PostDetailsView(
             postDetailsState = postDetailsState,
             commentsState = commentsState,
             paddingValues = paddings,
-            onAvatarClicked = postDetailsViewModel::onAvatarClicked
+            onAvatarClicked = postDetailsViewModel::onAvatarClicked,
+            onPostLikeClicked = postDetailsViewModel::onPostLikeClicked,
+            onCommentLikeClicked = commentsViewModel::onLikeClicked
         )
     }
 }
@@ -90,14 +94,13 @@ fun PostDetailsView(
     postDetailsState: PostDetailsResult,
     commentsState: CommentsResult,
     paddingValues: PaddingValues,
-    onAvatarClicked: (CommentEntity) -> Unit
+    onAvatarClicked: (IUser) -> Unit,
+    onPostLikeClicked: (PostItemUI) -> Unit,
+    onCommentLikeClicked: (CommentItemUI) -> Unit = {}
 ) {
 
     postDetailsState.applyIfSuccess { post ->
-        var isLikedState by remember { mutableStateOf(post.isLiked) }
-        val postPhotos: List<String> by post.takeContentFlow().collectAsState(
-            initial = emptyList()
-        )
+        val postPhotos: List<String> = post.postContent
         val topPaddings = paddingValues.calculateTopPadding()
         val bottomPaddings = topPaddings - 8.dp
 
@@ -111,9 +114,8 @@ fun PostDetailsView(
 
             item {
                 Row(modifier = Modifier.padding(all = 8.dp)) {
-                    LikesView(count = post.likesCount.orZero(), isSelected = isLikedState) {
-                        //post.isLiked = !post.isLiked
-                        isLikedState = !isLikedState
+                    LikesView(count = post.likesCount.orZero(), isSelected = post.isLiked) {
+                        onPostLikeClicked.invoke(post)
                     }
                 }
             }
@@ -138,7 +140,8 @@ fun PostDetailsView(
                 items(items = items, key = { it.id }) { comment ->
                     CommentItemView(
                         comment = comment,
-                        onAvatarClicked = onAvatarClicked
+                        onAvatarClicked = onAvatarClicked,
+                        onLikeClicked = onCommentLikeClicked
                     )
 
                     TabRowDefaults.Divider(

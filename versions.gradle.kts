@@ -60,7 +60,7 @@ extra["coroutinesAndroid"] = "org.jetbrains.kotlinx:kotlinx-coroutines-android:$
 
 //------- Android libs
 extra["core"] = "androidx.core:core-ktx:$core"
-extra["lifecycleVM"] = "androidx.lifecycle:lifecycle-viewmodel:$lifecycle"
+extra["lifecycleVM"] = "androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle"
 extra["ktorAndroid"] = "io.ktor:ktor-client-android:$ktorVersion"
 extra["sresult"] = "com.github.Rasalexman.SResult:sresult:$sresult"
 extra["timber"] = "com.jakewharton.timber:timber:5.0.1"

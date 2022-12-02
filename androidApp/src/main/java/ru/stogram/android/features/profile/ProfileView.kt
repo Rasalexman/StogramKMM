@@ -36,6 +36,9 @@ import ru.stogram.android.common.rememberStateWithLifecycle
 import ru.stogram.android.components.PostImageView
 import ru.stogram.android.constants.PostsResult
 import ru.stogram.android.features.profile.top.ProfileTopView
+import ru.stogram.android.mappers.IPostItemUIMapper
+import ru.stogram.android.mappers.PostItemUIMapper
+import ru.stogram.android.models.PostItemUI
 import ru.stogram.models.IUser
 import ru.stogram.models.PostEntity
 import ru.stogram.models.UserEntity
@@ -69,7 +72,7 @@ internal fun ProfileView(
     postsState: PostsResult,
     topBarOffset: Float,
     showTopBar: Boolean = false,
-    onPostClicked: (PostEntity) -> Unit,
+    onPostClicked: (PostItemUI) -> Unit,
     onBackClicked: () -> Unit
 ) {
     val scaffoldState = rememberScaffoldState()
@@ -155,8 +158,11 @@ internal fun ProfileView(
 }
 
 class ProfilePreviewParameterProvider : PreviewParameterProvider<Pair<PostsResult, SResult<IUser>>> {
+    private val postItemUIMapper: IPostItemUIMapper = PostItemUIMapper()
     override val values = sequenceOf(
-        PostEntity.createRandomList().toSuccessResult() to UserEntity.createRandomDetailed(true).toSuccessResult()
+        PostEntity.createRandomList().map {
+            postItemUIMapper.convertSingle(it)
+        }.toSuccessResult() to UserEntity.createRandomDetailed(true).toSuccessResult()
     )
 }
 

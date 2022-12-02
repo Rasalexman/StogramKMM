@@ -41,6 +41,20 @@ class PostEntity : RealmObject {
         return content.size > 1
     }
 
+    fun updateLike(): Boolean {
+        val likeState = !isLiked
+        val lastLikesCount = likesCount.toIntOrNull() ?: 0
+        val currentLikes = if(likeState) {
+            lastLikesCount + 1
+        } else {
+            lastLikesCount - 1
+        }
+
+        likesCount = currentLikes.toString()
+        isLiked = likeState
+        return likeState
+    }
+
     companion object {
         fun createRandomList(): List<PostEntity> {
             val createData = mutableListOf<PostEntity>()

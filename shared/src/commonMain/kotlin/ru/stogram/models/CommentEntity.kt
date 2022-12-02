@@ -20,6 +20,20 @@ class CommentEntity : RealmObject {
         return user ?: UserEntity.createRandom(randomBool)
     }
 
+    fun updateLike(): Boolean {
+        val likeState = !isLiked
+        val lastLikesCount = likesCount.toIntOrNull() ?: 0
+        val currentLikes = if(likeState) {
+            lastLikesCount + 1
+        } else {
+            lastLikesCount - 1
+        }
+
+        likesCount = currentLikes.toString()
+        isLiked = likeState
+        return likeState
+    }
+
     companion object {
         fun createRandomList(postId: String): List<CommentEntity> {
             val createData = mutableListOf<CommentEntity>()

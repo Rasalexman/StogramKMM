@@ -7,6 +7,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -18,22 +19,21 @@ import com.google.accompanist.insets.ui.Scaffold
 import com.rasalexman.sresult.common.extensions.applyIfLoading
 import com.rasalexman.sresult.common.extensions.applyIfSuccess
 import ru.stogram.android.R
-import ru.stogram.android.common.rememberStateWithLifecycle
 import ru.stogram.android.components.TopCircleProgressView
 import ru.stogram.android.constants.CommentsResult
-import ru.stogram.models.CommentEntity
+import ru.stogram.android.models.CommentItemUI
+import ru.stogram.models.IUser
 
 @Composable
 fun CommentsView() {
-    val vm: CommentViewModel = hiltViewModel()
-    CommentsView(vm)
+    CommentsView(viewModel = hiltViewModel())
 }
 
 @Composable
-fun CommentsView(viewModel: CommentViewModel) {
-    val scaffoldState = rememberScaffoldState()
-    val commentsState by rememberStateWithLifecycle(stateFlow = viewModel.commentsState)
-
+fun CommentsView(
+    viewModel: CommentViewModel,
+    scaffoldState: ScaffoldState = rememberScaffoldState()
+) {
     Scaffold(
         scaffoldState = scaffoldState,
         modifier = Modifier.fillMaxSize(),
@@ -53,10 +53,13 @@ fun CommentsView(viewModel: CommentViewModel) {
             )
         }
     ) { paddings ->
+
+        val commentsState by viewModel.commentsState.collectAsState()
         CommentsView(
             commentsState = commentsState,
             paddingValues = paddings,
-            onAvatarClicked = viewModel::onAvatarClicked
+            onAvatarClicked = viewModel::onAvatarClicked,
+            onLikeClicked = viewModel::onLikeClicked
         )
     }
 }
@@ -65,7 +68,8 @@ fun CommentsView(viewModel: CommentViewModel) {
 fun CommentsView(
     commentsState: CommentsResult,
     paddingValues: PaddingValues,
-    onAvatarClicked: (CommentEntity) -> Unit
+    onAvatarClicked: (IUser) -> Unit,
+    onLikeClicked: (CommentItemUI) -> Unit
 ) {
     commentsState.applyIfSuccess { items ->
         val topPaddings = paddingValues.calculateTopPadding()
@@ -78,7 +82,8 @@ fun CommentsView(
             items(items = items, key = { it.id }) { comment ->
                 CommentItemView(
                     comment = comment,
-                    onAvatarClicked = { }
+                    onAvatarClicked = onAvatarClicked,
+                    onLikeClicked = onLikeClicked
                 )
 
                 TabRowDefaults.Divider(
