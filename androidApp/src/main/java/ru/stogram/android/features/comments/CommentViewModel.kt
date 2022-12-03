@@ -1,5 +1,6 @@
 package ru.stogram.android.features.comments
 
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.rasalexman.sresult.common.extensions.*

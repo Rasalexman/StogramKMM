@@ -3,15 +3,21 @@ package ru.stogram.android.features.comments
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -130,12 +136,27 @@ fun CommentsItemsView(
     val focusState = remember { mutableStateOf(false) }
     var bottomColumnPadding by remember { mutableStateOf(56.dp) }
     val density = LocalDensity.current
+    val focusManager = LocalFocusManager.current
+    val listState = rememberLazyListState()
+
+    val nestedScrollConnection = remember {
+        object : NestedScrollConnection {
+            override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
+                if (focusState.value) {
+                    focusManager.clearFocus()
+                }
+                return Offset.Zero
+            }
+        }
+    }
 
     Box(modifier = Modifier
         .fillMaxSize()
+        .nestedScroll(nestedScrollConnection)
         .padding(top = topPaddings, bottom = bottomPaddings)
     ) {
         LazyColumn(
+            state = listState,
             modifier = Modifier
                 .fillMaxSize()
                 .padding(bottom = bottomColumnPadding)
@@ -170,7 +191,7 @@ fun CommentsItemsView(
                 },
             imeAction = ImeAction.Done,
             onDoneHandler = {
-                focusState.value = false
+                focusManager.clearFocus()
                 onDoneCommentHandler()
             }
         )

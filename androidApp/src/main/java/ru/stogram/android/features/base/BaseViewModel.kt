@@ -16,11 +16,28 @@ abstract class BaseViewModel : ViewModel() {
         viewModelScope.launch(Dispatchers.Main, CoroutineStart.DEFAULT, block)
     }
 
+    inline fun <reified T : Any> Flow<T?>.flowIoState(
+        sharingStarted: SharingStarted =  SharingStarted.Eagerly,
+        defaultValue: T?
+    ): StateFlow<T?> {
+        return this.flowOn(Dispatchers.IO).stateIn(viewModelScope, sharingStarted, defaultValue)
+    }
+
     inline fun<reified T : Any, reified R: Any> Flow<T>.mapIoState(
+        defaultValue: SResult<R> = loadingResult(),
         sharingStarted: SharingStarted =  SharingStarted.Eagerly,
         crossinline mapBlock: suspend (T) -> SResult<R>
     ): StateFlow<SResult<R>> {
         return this.map(mapBlock).flowOn(Dispatchers.IO)
-            .stateIn(viewModelScope, sharingStarted, loadingResult())
+            .stateIn(viewModelScope, sharingStarted, defaultValue)
+    }
+
+    inline fun<reified T : Any, reified R: Any> Flow<T>.flatMapIoState(
+        defaultValue: SResult<R> = loadingResult(),
+        sharingStarted: SharingStarted =  SharingStarted.Eagerly,
+        crossinline mapBlock: suspend (T) -> Flow<SResult<R>>
+    ): StateFlow<SResult<R>> {
+        return this.flatMapLatest(mapBlock).flowOn(Dispatchers.IO)
+            .stateIn(viewModelScope, sharingStarted, defaultValue)
     }
 }
