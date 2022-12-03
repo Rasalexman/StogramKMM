@@ -1,6 +1,9 @@
 package ru.stogram.android.constants
 
 object ScreenNames {
+    const val Login = "login"
+    const val Register = "register"
+
     const val Main = "main"
     const val HOME = "home"
     const val SEARCH = "search"

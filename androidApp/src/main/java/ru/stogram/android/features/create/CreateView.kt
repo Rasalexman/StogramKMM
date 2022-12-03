@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Button
+import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Text
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
@@ -16,22 +17,21 @@ import com.google.accompanist.insets.ui.Scaffold
 @Composable
 fun Create() {
     val vm: CreateViewModel = hiltViewModel()
-    CreateView(viewModel = vm)
+    CreateView(onCreateClicked = vm::onCreateClicked)
 }
 
 @Composable
 internal fun CreateView(
-    viewModel: CreateViewModel
+    onCreateClicked: () -> Unit,
+    scaffoldState: ScaffoldState = rememberScaffoldState()
 ) {
-    val scaffoldState = rememberScaffoldState()
-
     Scaffold(
         scaffoldState = scaffoldState,
         modifier = Modifier.fillMaxSize(),
     ) {
         Row(modifier = Modifier.fillMaxSize(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
             Button(onClick = {
-                viewModel.onCreateClicked()
+                onCreateClicked()
             }) {
                 Text(text = "Click to add new Post")
             }
@@ -41,6 +41,6 @@ internal fun CreateView(
 
 @Preview
 @Composable
-fun SearchPreview() {
-    CreateView(viewModel = hiltViewModel())
+fun CreatePreview() {
+    CreateView(onCreateClicked = {})
 }

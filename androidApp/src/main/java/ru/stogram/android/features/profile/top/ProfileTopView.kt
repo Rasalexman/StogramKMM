@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -20,6 +21,7 @@ import androidx.compose.ui.unit.sp
 import com.rasalexman.sresult.common.extensions.applyIfSuccess
 import com.rasalexman.sresult.common.extensions.toSuccessResult
 import com.rasalexman.sresult.data.dto.SResult
+import ru.stogram.android.R
 import ru.stogram.android.common.orZero
 import ru.stogram.android.components.TextCountView
 import ru.stogram.android.components.UserAvatarView
@@ -29,7 +31,8 @@ import ru.stogram.models.UserEntity
 @Composable
 fun ProfileTopView(
     userState: SResult<IUser>,
-    modifier: Modifier
+    modifier: Modifier,
+    onMessageClick: () -> Unit
 ) {
     Box(modifier = modifier) {
         Column(modifier = Modifier
@@ -56,15 +59,15 @@ fun ProfileTopView(
                             TextCountView(count = user.observCount.orZero(), desc = "Подписки")
                         }
 
-                        if(user.id == UserEntity.DEFAULT_USER_ID) {
+                        if(user.isCurrentUser) {
                             OutlinedButton(
-                                onClick = {},
+                                onClick = onMessageClick,
                                 shape = RoundedCornerShape(48.dp),
                                 border = BorderStroke(2.dp, Color.DarkGray),
                                 colors = ButtonDefaults.buttonColors(contentColor = Color.Black, backgroundColor = Color.White)
                             ) {
                                 Text(
-                                    text = "Мои сообщения",
+                                    text = stringResource(id = R.string.title_my_messages),
                                     fontSize = 12.sp,
                                     modifier = Modifier.padding(horizontal = 30.dp)
                                 )
@@ -107,5 +110,5 @@ fun ProfileTopViewPreview(
     @PreviewParameter(ProfileTopPreviewParameterProvider::class, limit = 1) result: SResult<IUser>
 ) {
     ProfileTopView(result, modifier = Modifier
-        .fillMaxWidth())
+        .fillMaxWidth(), onMessageClick = {})
 }

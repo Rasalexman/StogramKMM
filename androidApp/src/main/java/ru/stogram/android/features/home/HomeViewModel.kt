@@ -1,6 +1,5 @@
 package ru.stogram.android.features.home
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rasalexman.sresult.common.extensions.loadingResult
 import com.rasalexman.sresult.common.extensions.logg
@@ -11,8 +10,8 @@ import com.rasalexman.sresult.data.dto.SResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import ru.stogram.android.features.base.BaseViewModel
 import ru.stogram.android.mappers.IPostItemUIMapper
 import ru.stogram.android.models.PostItemUI
 import ru.stogram.android.navigation.IHostRouter
@@ -26,7 +25,7 @@ class HomeViewModel @Inject constructor(
     private val postsRepository: IPostsRepository,
     private val postItemUIMapper: IPostItemUIMapper,
     userStoriesRepository: IUserStoriesRepository
-) : ViewModel() {
+) : BaseViewModel() {
 
 
     val homeState: StateFlow<SResult<HomeState>> = combine(
@@ -45,23 +44,21 @@ class HomeViewModel @Inject constructor(
 
     }
 
-    fun onPostAvatarClicked(post: PostItemUI) {
+    fun onPostAvatarClicked(post: PostItemUI) = launchOnMain {
         val postUser = post.user
         logg { "Selected user name: ${postUser.name} | id: ${postUser.id}" }
         router.showHostUserProfile(postUser.id)
     }
 
-    fun onPostCommentsClicked(post: PostItemUI) {
+    fun onPostCommentsClicked(post: PostItemUI) = launchOnMain{
         logg { "Selected post id: ${post.postId}" }
         router.showHostPostComments(post.postId)
     }
 
-    fun onPostLikeClicked(post: PostItemUI) {
-        viewModelScope.launch {
-            val postResult = withContext(Dispatchers.IO) {
-                postsRepository.updatePostLike(post.postId)
-            }
-            logg { "onPostLikeClicked result ${postResult.data.orFalse()}" }
+    fun onPostLikeClicked(post: PostItemUI) = launchOnMain {
+        val postResult = withContext(Dispatchers.IO) {
+            postsRepository.updatePostLike(post.postId)
         }
+        logg { "onPostLikeClicked result ${postResult.data.orFalse()}" }
     }
 }

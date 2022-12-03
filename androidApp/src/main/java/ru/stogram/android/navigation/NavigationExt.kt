@@ -5,26 +5,58 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 
 fun NavController.toUserProfile(profileId: String) {
     val navRouter = "user/$profileId"
-    this.navigateToBottomRouter(navRouter)
+    this.navigateToRouter(navRouter)
 }
 
 fun NavController.toPostDetails(postId: String) {
     val navRouter = "post/$postId"
-    this.navigateToBottomRouter(navRouter)
+    this.navigateToRouter(navRouter)
 }
 
 fun NavController.toPostComments(postId: String) {
     val navRouter = "post/comments/$postId"
-    this.navigateToBottomRouter(navRouter)
+    this.navigateToRouter(navRouter)
 }
 
-fun NavController.navigateToBottomRouter(navRouter: String, withPopUp: Boolean = false) {
+fun NavController.toMainScreen() {
+    val navRouter = Screen.Main.route
+    this.navigate(route = navRouter) {
+        launchSingleTop = true
+        restoreState = true
+        popUpTo(Screen.Login.route) {
+            inclusive = true
+        }
+    }
+}
+
+fun NavController.toRegisterScreen() {
+    val navRouter = Screen.Register.route
+    this.navigateToRouter(navRouter)
+}
+
+fun NavController.toLoginScreen() {
+    val navRouter = Screen.Login.route
+    this.navigate(route = navRouter) {
+        launchSingleTop = true
+        restoreState = true
+        popUpTo(Screen.Main.route) {
+            inclusive = true
+        }
+    }
+}
+
+fun NavController.navigateToRouter(
+    navRouter: String,
+    withPopUp: Boolean = false
+) {
     this.navigate(route = navRouter) {
         launchSingleTop = true
         restoreState = true
 
         if(withPopUp) {
-            popUpTo(this@navigateToBottomRouter.graph.findStartDestination().id) {
+            val startDestination = this@navigateToRouter.graph.findStartDestination()
+            val destinationId = startDestination.id
+            popUpTo(destinationId) {
                 saveState = true
             }
         }

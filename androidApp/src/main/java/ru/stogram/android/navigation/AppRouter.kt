@@ -46,6 +46,18 @@ abstract class HostRouter : IHostRouter {
         navHostControllerInstance.popBackStack()
     }
 
+    override fun showHostMainScreen() {
+        navHostControllerInstance.toMainScreen()
+    }
+
+    override fun showHostRegisterScreen() {
+        navHostControllerInstance.toRegisterScreen()
+    }
+
+    override fun showHostLoginScreen() {
+        navHostControllerInstance.toLoginScreen()
+    }
+
 }
 
 interface IAppRouter : IHostRouter, IMainRouter
@@ -60,6 +72,10 @@ interface IHostRouter : IBackToHostRouter {
     fun showHostUserProfile(profileId: String)
     fun showHostPostComments(postId: String)
     fun showHostPostDetails(postId: String)
+
+    fun showHostMainScreen()
+    fun showHostRegisterScreen()
+    fun showHostLoginScreen()
 }
 
 interface IBackToHostRouter {

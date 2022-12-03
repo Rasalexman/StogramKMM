@@ -4,7 +4,6 @@ import androidx.compose.animation.*
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.*
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.navigation
@@ -16,9 +15,11 @@ import ru.stogram.android.features.home.Home
 import ru.stogram.android.features.profile.Profile
 import ru.stogram.android.features.reactions.Reactions
 import ru.stogram.android.features.search.Search
-import ru.stogram.models.UserEntity
 
 internal sealed class Screen(val route: String) {
+    object Login : Screen(ScreenNames.Login)
+    object Register : Screen(ScreenNames.Register)
+
     object Main : Screen(ScreenNames.Main)
 
     object Home : Screen(ScreenNames.HOME)
@@ -115,7 +116,7 @@ private fun NavGraphBuilder.addProfileTopLevel() {
             route = route,
             label = ScreenNames.PROFILE,
             argNames = listOf(navArgument(ArgsNames.USER_ID) {
-                defaultValue = UserEntity.DEFAULT_USER_ID
+                defaultValue = ""
                 nullable = true
                 type = NavType.StringType
             })

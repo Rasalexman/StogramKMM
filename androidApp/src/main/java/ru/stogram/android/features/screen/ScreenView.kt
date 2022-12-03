@@ -18,9 +18,11 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.rasalexman.sresult.common.extensions.logg
 import ru.stogram.android.constants.ArgsNames
 import ru.stogram.android.features.comments.CommentsView
+import ru.stogram.android.features.login.Login
 import ru.stogram.android.features.main.MainView
 import ru.stogram.android.features.postdetails.PostDetailsView
 import ru.stogram.android.features.profile.Profile
+import ru.stogram.android.features.register.Register
 import ru.stogram.android.navigation.Screen
 import ru.stogram.android.navigation.composable
 import ru.stogram.android.navigation.debugLabel
@@ -51,8 +53,17 @@ fun ScreenView() {
 
             AnimatedNavHost(
                 navController = navController,
-                startDestination = Screen.Main.route
+                startDestination = Screen.Login.route
             ) {
+
+                composable(route = Screen.Login.route) {
+                    Login()
+                }
+
+                composable(route = Screen.Register.route) {
+                    Register()
+                }
+
                 composable(route = Screen.Main.route) {
                     MainView()
                 }

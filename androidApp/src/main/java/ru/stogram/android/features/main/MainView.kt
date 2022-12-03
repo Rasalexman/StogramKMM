@@ -26,7 +26,7 @@ import com.google.accompanist.insets.ui.BottomNavigation
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import ru.stogram.android.navigation.AppNavigation
 import ru.stogram.android.navigation.Screen
-import ru.stogram.android.navigation.navigateToBottomRouter
+import ru.stogram.android.navigation.navigateToRouter
 import ru.stogram.android.theme.AppBarAlphas
 
 @OptIn(ExperimentalAnimationApi::class)
@@ -49,7 +49,7 @@ fun MainView() {
                 MainBottomNavigation(
                     selectedNavigation = currentSelectedItem,
                     onNavigationSelected = { selected ->
-                        navController.navigateToBottomRouter(selected.route, true)
+                        navController.navigateToRouter(selected.route, true)
                     },
                     modifier = Modifier.fillMaxWidth()
                 )

@@ -15,8 +15,8 @@ class PostsLocalDataSource(
 ) : IPostsLocalDataSource {
 
     override fun findPostByIdAsFlow(postId: String): Flow<PostEntity?> {
-        return database.realm.query<PostEntity>("postId = $0", postId).asFlow().map { result ->
-            result.list.firstOrNull()
+        return database.realm.query<PostEntity>("postId = $0", postId).first().asFlow().map {
+            it.obj
         }
     }
 

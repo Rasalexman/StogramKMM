@@ -79,6 +79,15 @@ fun getRandomName(): String {
     return "$firstName $secondName"
 }
 
+fun String.getLogin(): String {
+    val splitterName = this.split(" ")
+    return if(splitterName.size > 1) {
+        "${splitterName.first().lowercase()}.${splitterName.last().lowercase()}"
+    } else {
+        this.trim().lowercase()
+    }
+}
+
 fun getRandomPhoto(): String {
     val randomCount: Int = Random.nextInt(0, randomImages.size-1)
     return randomImages[randomCount]

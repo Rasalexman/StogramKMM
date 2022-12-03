@@ -9,7 +9,9 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
@@ -32,7 +34,6 @@ import ru.stogram.android.features.comments.CommentViewModel
 import ru.stogram.android.models.CommentItemUI
 import ru.stogram.android.models.PostItemUI
 import ru.stogram.models.IUser
-import ru.stogram.models.UserEntity
 
 @ExperimentalPagerApi
 @Composable
@@ -59,7 +60,7 @@ fun PostDetailsView(
             TopAppBar(
                 title = {
                     postDetailsState.applyIfSuccess { post ->
-                        if(post.user.id != UserEntity.DEFAULT_USER_ID) {
+                        if(!post.user.isCurrentUser) {
                             AvatarNameDescView(user = post.user, size = 32.dp)
                         }
                     }

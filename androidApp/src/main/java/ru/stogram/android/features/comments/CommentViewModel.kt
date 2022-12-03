@@ -1,7 +1,6 @@
 package ru.stogram.android.features.comments
 
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rasalexman.sresult.common.extensions.loadingResult
 import com.rasalexman.sresult.common.extensions.logg
@@ -14,10 +13,10 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ru.stogram.android.constants.ArgsNames
 import ru.stogram.android.constants.CommentsResult
+import ru.stogram.android.features.base.BaseViewModel
 import ru.stogram.android.mappers.ICommentItemUIMapper
 import ru.stogram.android.models.CommentItemUI
 import ru.stogram.android.navigation.IHostRouter
@@ -31,7 +30,7 @@ class CommentViewModel @Inject constructor(
     private val commentItemUIMapper: ICommentItemUIMapper,
     private val commentsRepository: ICommentsRepository,
     savedStateHandle: SavedStateHandle
-) : ViewModel() {
+) : BaseViewModel() {
 
     private val lastSelectedPostId: String = checkNotNull(savedStateHandle[ArgsNames.POST_ID])
 
@@ -40,20 +39,18 @@ class CommentViewModel @Inject constructor(
             commentItemUIMapper.convertList(currentComments).toSuccessResult()
     }.stateIn(viewModelScope, SharingStarted.Eagerly, loadingResult())
 
-    fun onAvatarClicked(commentUser: IUser) {
+    fun onAvatarClicked(commentUser: IUser) = launchOnMain {
         router.showHostUserProfile(commentUser.id)
     }
 
-    fun onLikeClicked(comment: CommentItemUI) {
-        viewModelScope.launch {
-            val updateResult = withContext(Dispatchers.IO) {
-                commentsRepository.updateCommentLike(comment.id)
-            }
-            logg { "onPostLikeClicked result ${updateResult.data.orFalse()}" }
+    fun onLikeClicked(comment: CommentItemUI) = launchOnMain {
+        val updateResult = withContext(Dispatchers.IO) {
+            commentsRepository.updateCommentLike(comment.id)
         }
+        logg { "onPostLikeClicked result ${updateResult.data.orFalse()}" }
     }
 
-    fun onBackClicked() {
+    fun onBackClicked() = launchOnMain {
         router.popBackToHost()
     }
 }

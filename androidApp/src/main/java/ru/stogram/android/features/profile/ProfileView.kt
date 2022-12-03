@@ -7,10 +7,7 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
@@ -32,7 +29,6 @@ import com.rasalexman.sresult.common.extensions.applyIfSuccess
 import com.rasalexman.sresult.common.extensions.toSuccessResult
 import com.rasalexman.sresult.data.dto.SResult
 import ru.stogram.android.R
-import ru.stogram.android.common.rememberStateWithLifecycle
 import ru.stogram.android.components.PostImageView
 import ru.stogram.android.constants.PostsResult
 import ru.stogram.android.features.profile.top.ProfileTopView
@@ -52,17 +48,19 @@ fun Profile() {
 
 @Composable
 fun ProfileView(viewModel: ProfileViewModel) {
-    val postsState by rememberStateWithLifecycle(stateFlow = viewModel.postsState)
-    val topState by rememberStateWithLifecycle(stateFlow = viewModel.userState)
+    val postsState by viewModel.postsState.collectAsState()
+    val topState by viewModel.userState.collectAsState()
     val toolbarOffsetHeightPx = remember { viewModel.topBarOffset }
+    val showTopBar by viewModel.showTopBar.collectAsState()
 
     ProfileView(
         topState = topState,
         postsState = postsState,
         topBarOffset = toolbarOffsetHeightPx,
-        showTopBar = viewModel.showTopBar,
+        showTopBar = showTopBar,
         onPostClicked = viewModel::onPostClicked,
-        onBackClicked = viewModel::onBackClicked
+        onBackClicked = viewModel::onBackClicked,
+        onMessagesClick = viewModel::onMessagesClicked
     )
 }
 
@@ -73,7 +71,8 @@ internal fun ProfileView(
     topBarOffset: Float,
     showTopBar: Boolean = false,
     onPostClicked: (PostItemUI) -> Unit,
-    onBackClicked: () -> Unit
+    onBackClicked: () -> Unit,
+    onMessagesClick: () -> Unit
 ) {
     val scaffoldState = rememberScaffoldState()
 
@@ -152,7 +151,9 @@ internal fun ProfileView(
 
             ProfileTopView(userState = topState, modifier = Modifier
                 .height(toolbarHeight)
-                .offset { IntOffset(x = 0, y = toolbarOffsetHeightPx.value.roundToInt()) })
+                .offset { IntOffset(x = 0, y = toolbarOffsetHeightPx.value.roundToInt()) },
+                onMessageClick = onMessagesClick
+            )
         }
     }
 }
@@ -177,6 +178,7 @@ fun ProfileViewPreview(
         topBarOffset = 0f,
         showTopBar = true,
         onPostClicked = {  },
-        onBackClicked = {  }
+        onBackClicked = {  },
+        onMessagesClick = {}
     )
 }
