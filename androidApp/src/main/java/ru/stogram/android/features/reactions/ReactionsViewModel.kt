@@ -1,12 +1,11 @@
 package ru.stogram.android.features.reactions
 
-import androidx.lifecycle.viewModelScope
-import com.rasalexman.sresult.common.extensions.loadingResult
+import com.rasalexman.sresult.common.extensions.logg
 import com.rasalexman.sresult.common.extensions.toSuccessListResult
 import com.rasalexman.sresult.common.utils.convertList
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import ru.stogram.android.constants.ReactionsResult
 import ru.stogram.android.features.base.BaseViewModel
 import ru.stogram.android.mappers.IReactionItemUIMapper
@@ -24,20 +23,20 @@ class ReactionsViewModel @Inject constructor(
     private val reactionItemUIMapper: IReactionItemUIMapper
 ) : BaseViewModel() {
 
-    val refreshing: Boolean = false
+    val isRefreshing: MutableStateFlow<Boolean> = MutableStateFlow(false)
 
-    val reactionsState: StateFlow<ReactionsResult> by lazy {
-        reactionsRepository.getAllReactionsAsFlow().map { result ->
+    val reactionsState: StateFlow<ReactionsResult> = reactionsRepository.getAllReactionsAsFlow()
+        .mapIoState { result ->
             reactionItemUIMapper.convertList(result).toSuccessListResult()
-        }.flowOn(Dispatchers.IO).stateIn(viewModelScope, SharingStarted.Eagerly, loadingResult())
-    }
+        }
 
-    fun onSwipeRefresh() {
-
+    fun onSwipeRefresh() = launchOnMain {
+        logg { "onSwipeRefresh ${isRefreshing.value}" }
+        reactionsRepository.update()
     }
 
     fun onPostClicked(post: PostItemUI) = launchOnMain {
-        router.showHostPostDetails(post.postId)
+        router.showHostPostDetails(post.postId, false)
     }
 
     fun onAvatarClicked(reactionUser: IUser) = launchOnMain {

@@ -40,6 +40,6 @@ class SearchViewModel @Inject constructor(
     }
 
     fun onPostClicked(post: PostItemUI) = launchOnMain {
-        router.showHostPostDetails(post.postId)
+        router.showHostPostDetails(post.postId, false)
     }
 }

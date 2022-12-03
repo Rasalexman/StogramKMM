@@ -56,7 +56,7 @@ class ProfileViewModel @Inject constructor(
         }.flowOn(Dispatchers.IO).stateIn(viewModelScope, SharingStarted.Eagerly, loadingResult())
 
     fun onPostClicked(post: PostItemUI) = launchOnMain {
-        router.showHostPostDetails(post.postId)
+        router.showHostPostDetails(post.postId, true)
     }
 
     fun onMessagesClicked() = launchOnMain {

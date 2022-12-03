@@ -46,15 +46,6 @@ class RealmDataBase {
         return realUser
     }
 
-    private fun createDefaultUser(): UserEntity {
-        clearLastSession()
-        val defaultUser = UserEntity.createDefaultUser()
-        createNewSession(defaultUser)
-        return realm.writeBlocking {
-            copyToRealm(defaultUser)
-        }
-    }
-
     fun createNewSession(user: UserEntity) {
         clearLastSession()
         val lastUser = LastUserEntity().apply {
@@ -71,6 +62,15 @@ class RealmDataBase {
         realm.writeBlocking {
             val lastSessions = this.query<LastUserEntity>().find()
             delete(lastSessions)
+        }
+    }
+
+    private fun createDefaultUser(): UserEntity {
+        clearLastSession()
+        val defaultUser = UserEntity.createDefaultUser()
+        createNewSession(defaultUser)
+        return realm.writeBlocking {
+            copyToRealm(defaultUser)
         }
     }
 }

@@ -67,7 +67,7 @@ fun ProfileTopView(
                                 colors = ButtonDefaults.buttonColors(contentColor = Color.Black, backgroundColor = Color.White)
                             ) {
                                 Text(
-                                    text = stringResource(id = R.string.title_my_messages),
+                                    text = stringResource(id = R.string.button_exit),
                                     fontSize = 12.sp,
                                     modifier = Modifier.padding(horizontal = 30.dp)
                                 )

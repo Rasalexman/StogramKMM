@@ -22,10 +22,15 @@ class CommentsRepository(
     override fun updateCommentLike(commentId: String): SResult<Boolean> {
         return localDataSource.updateCommentLike(commentId)
     }
+
+    override fun addCommentToPost(postId: String, commentText: String): SResult<Boolean> {
+        return localDataSource.addCommentToPost(postId, commentText)
+    }
 }
 
 interface ICommentsRepository {
     fun getAllCommentsAsCommonFlow(postId: String): CFlow<List<CommentEntity>>
     fun getAllCommentsAsFlow(postId: String): Flow<List<CommentEntity>>
     fun updateCommentLike(commentId: String): SResult<Boolean>
+    fun addCommentToPost(postId: String, commentText: String): SResult<Boolean>
 }

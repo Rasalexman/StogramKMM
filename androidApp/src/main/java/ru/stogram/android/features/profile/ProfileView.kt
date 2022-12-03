@@ -104,7 +104,7 @@ internal fun ProfileView(
             if(showTopBar) {
                 TopAppBar(
                     title = {
-                        Text(text = "Profile App Bar")
+                        Text(text = stringResource(id = R.string.title_profile))
                     },
                     navigationIcon = {
                         IconButton(onClick = onBackClicked) {

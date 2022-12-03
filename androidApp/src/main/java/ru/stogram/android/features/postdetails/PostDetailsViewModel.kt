@@ -1,15 +1,14 @@
 package ru.stogram.android.features.postdetails
 
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.viewModelScope
-import com.rasalexman.sresult.common.extensions.loadingResult
 import com.rasalexman.sresult.common.extensions.logg
 import com.rasalexman.sresult.common.extensions.orFalse
 import com.rasalexman.sresult.common.extensions.toSuccessResult
 import com.rasalexman.sresult.data.dto.SResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.withContext
 import ru.stogram.android.constants.ArgsNames
 import ru.stogram.android.features.base.BaseViewModel
@@ -30,13 +29,14 @@ class PostDetailsViewModel @Inject constructor(
 ) : BaseViewModel() {
 
     private val postId: String = checkNotNull(savedStateHandle[ArgsNames.POST_ID])
+    private val fromProfile: Boolean = checkNotNull(savedStateHandle[ArgsNames.FROM_PROFILE])
 
     val postState: StateFlow<SResult<PostItemUI>> =
         postsRepository.findPostByIdAsFlow(postId).mapNotNull { currentPost ->
             currentPost
-        }.map {
+        }.mapIoState {
             postItemUIMapper.convertSingle(it).toSuccessResult()
-        }.flowOn(Dispatchers.IO).stateIn(viewModelScope, SharingStarted.Eagerly, loadingResult())
+        }
 
     fun onAvatarClicked(commentUser: IUser) = launchOnMain {
         router.showHostUserProfile(commentUser.id)
@@ -47,6 +47,14 @@ class PostDetailsViewModel @Inject constructor(
             postsRepository.updatePostLike(post.postId)
         }
         logg { "onPostLikeClicked result ${postResult.data.orFalse()}" }
+    }
+
+    fun onToolBarAvatarClicked(user: IUser) = launchOnMain {
+        if(fromProfile) {
+            onBackClicked()
+        } else {
+            router.showHostUserProfile(user.id)
+        }
     }
 
     fun onBackClicked() = launchOnMain {

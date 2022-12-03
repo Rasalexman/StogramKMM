@@ -71,7 +71,8 @@ fun LoginViewContent(
             textFlow = login,
             focusState = focusLoginState,
             hintResId = R.string.hint_login,
-            paddingValues = PaddingValues(start = 16.dp, end = 16.dp),
+            modifier = Modifier
+                .fillMaxWidth().padding(start = 16.dp, end = 16.dp),
             imeAction = ImeAction.Next
         )
 
@@ -79,7 +80,8 @@ fun LoginViewContent(
             textFlow = password,
             focusState = focusPasswordState,
             hintResId = R.string.hint_password,
-            paddingValues = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
+            modifier = Modifier
+                .fillMaxWidth().padding(horizontal = 16.dp, vertical = 16.dp),
             imeAction = ImeAction.Done
         ) {
             onSignInClicked()

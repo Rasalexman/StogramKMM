@@ -27,7 +27,7 @@ fun InputTextView(
     textFlow: MutableStateFlow<String>,
     focusState: MutableState<Boolean>,
     hintResId: Int,
-    paddingValues: PaddingValues,
+    modifier: Modifier,
     imeAction: ImeAction? = null,
     onNextClicked: (() -> Unit)? = null,
     onDoneHandler: (() -> Unit)? = null
@@ -39,9 +39,7 @@ fun InputTextView(
             textFlow.value = value
         },
         placeholder = { Text(stringResource(id = hintResId), color = Color.White.copy(alpha = 0.5f)) },
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(paddingValues)
+        modifier = modifier
             .onFocusChanged { fState -> focusState.value = fState.hasFocus },
         textStyle = TextStyle(color = Color.White, fontSize = 18.sp),
         keyboardOptions = imeAction?.let {
@@ -78,7 +76,7 @@ fun InputTextView(
 fun InputViewPreview() {
     val textState = remember { MutableStateFlow("") }
     val focusState = remember { mutableStateOf(false) }
-    InputTextView(textState, focusState, R.string.hint_login, PaddingValues(6.dp)) {
-
+    InputTextView(textState, focusState, R.string.hint_login, Modifier
+        .fillMaxWidth().padding(PaddingValues(6.dp))) {
     }
 }

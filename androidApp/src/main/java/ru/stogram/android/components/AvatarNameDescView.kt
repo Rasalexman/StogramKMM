@@ -35,7 +35,9 @@ fun AvatarNameDescView(user: IUser, desc: String = "", size: Dp = 48.dp, onClick
             .noRippleClickable(onClick = onClick)
     ) {
 
-        UserAvatarView(user = user, size = size)
+        UserAvatarView(user = user, size = size) {
+            onClick()
+        }
 
         Column(
             verticalArrangement = Arrangement.Center,

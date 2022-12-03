@@ -17,8 +17,8 @@ abstract class HostRouter : IHostRouter {
         navHostControllerInstance.navigateToBottomRouter(navRouter)
     }
 
-    override fun showHostPostDetails(postId: String) {
-        val navRouter = "post/$postId"
+    override fun showHostPostDetails(postId: String, fromProfile: Boolean) {
+        val navRouter = "post/$postId/$fromProfile"
         navHostControllerInstance.navigateToBottomRouter(navRouter)
     }
 
@@ -64,7 +64,7 @@ interface IHostRouter : IBackToHostRouter {
 
     fun showHostUserProfile(profileId: String)
     fun showHostPostComments(postId: String)
-    fun showHostPostDetails(postId: String)
+    fun showHostPostDetails(postId: String, fromProfile: Boolean = false)
 
     fun showHostMainScreen()
     fun showHostRegisterScreen()

@@ -1,34 +1,30 @@
 package ru.stogram.android.features.postdetails
 
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.insets.ui.Scaffold
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.rasalexman.sresult.common.extensions.applyIfSuccess
-import com.rasalexman.sresult.common.extensions.isLoading
+import kotlinx.coroutines.flow.MutableStateFlow
 import ru.stogram.android.R
 import ru.stogram.android.common.orZero
-import ru.stogram.android.components.AvatarNameDescView
-import ru.stogram.android.components.LikesView
-import ru.stogram.android.components.PostContentView
-import ru.stogram.android.components.TopCircleProgressView
+import ru.stogram.android.components.*
 import ru.stogram.android.constants.CommentsResult
 import ru.stogram.android.constants.PostDetailsResult
 import ru.stogram.android.features.comments.CommentItemView
@@ -65,7 +61,9 @@ fun PostDetailsView(
                             AvatarNameDescView(
                                 user = post.user,
                                 size = 32.dp,
-                                onClick = postDetailsViewModel::onBackClicked
+                                onClick = {
+                                    postDetailsViewModel.onToolBarAvatarClicked(post.user)
+                                }
                             )
                         }
                     }
@@ -83,85 +81,125 @@ fun PostDetailsView(
         }
     ) { paddings ->
         val commentsState by commentsViewModel.commentsState.collectAsState()
+
         PostDetailsView(
+            inputComment = commentsViewModel.inputComment,
             postDetailsState = postDetailsState,
             commentsState = commentsState,
             paddingValues = paddings,
             onAvatarClicked = postDetailsViewModel::onAvatarClicked,
             onPostLikeClicked = postDetailsViewModel::onPostLikeClicked,
-            onCommentLikeClicked = commentsViewModel::onLikeClicked
+            onCommentLikeClicked = commentsViewModel::onLikeClicked,
+            onDoneCommentHandler = commentsViewModel::onDoneCommentHandler
         )
-
-        if (commentsState.isLoading) {
-            TopCircleProgressView()
-        }
     }
 }
 
 @ExperimentalPagerApi
 @Composable
 fun PostDetailsView(
+    inputComment: MutableStateFlow<String>,
     postDetailsState: PostDetailsResult,
     commentsState: CommentsResult,
     paddingValues: PaddingValues,
     onAvatarClicked: (IUser) -> Unit,
     onPostLikeClicked: (PostItemUI) -> Unit,
-    onCommentLikeClicked: (CommentItemUI) -> Unit = {}
+    onCommentLikeClicked: (CommentItemUI) -> Unit,
+    onDoneCommentHandler: () -> Unit
 ) {
+
+    val topPaddings = paddingValues.calculateTopPadding()
+    if(commentsState.isLoading() || postDetailsState.isLoading()) {
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .padding(top = topPaddings)
+        ) {
+            SimpleLinearProgressIndicator()
+        }
+    }
 
     postDetailsState.applyIfSuccess { post ->
         val postPhotos: List<String> = post.postContent
-        val topPaddings = paddingValues.calculateTopPadding()
         val bottomPaddings = topPaddings - 8.dp
 
-        LazyColumn(modifier = Modifier
+        val comment = remember { inputComment }
+        val focusState = remember { mutableStateOf(false) }
+        var bottomColumnPadding by remember { mutableStateOf(56.dp) }
+        val density = LocalDensity.current
+
+        Box(modifier = Modifier
             .fillMaxSize()
-            .padding(top = topPaddings, bottom = bottomPaddings)) {
+            .padding(top = topPaddings, bottom = bottomPaddings)
+        ) {
 
-            item {
-                PostContentView(postPhotos)
-            }
+            LazyColumn(modifier = Modifier
+                .fillMaxSize()
+                .padding(bottom = bottomColumnPadding)) {
 
-            item {
-                Row(modifier = Modifier.padding(all = 8.dp)) {
-                    LikesView(count = post.likesCount.orZero(), isSelected = post.isLiked) {
-                        onPostLikeClicked.invoke(post)
+                item { PostContentView(postPhotos) }
+
+                item {
+                    Row(modifier = Modifier.padding(all = 8.dp)) {
+                        LikesView(count = post.likesCount.orZero(), isSelected = post.isLiked) {
+                            onPostLikeClicked.invoke(post)
+                        }
+                    }
+                }
+
+                item {
+                    Text(
+                        text = post.text,
+                        modifier = Modifier.padding(horizontal = 8.dp),
+                        fontSize = 14.sp
+                    )
+                }
+
+                item {
+                    Text(
+                        text = stringResource(id = R.string.post_comments),
+                        modifier = Modifier.padding(all = 8.dp),
+                        fontSize = 18.sp
+                    )
+                }
+
+                commentsState.applyIfSuccess { items ->
+                    items(items = items, key = { it.id }) { comment ->
+                        CommentItemView(
+                            comment = comment,
+                            onAvatarClicked = onAvatarClicked,
+                            onLikeClicked = onCommentLikeClicked
+                        )
+
+                        TabRowDefaults.Divider(
+                            color = colorResource(id = R.color.color_light_gray),
+                            thickness = 1.dp,
+                            modifier = Modifier
+                                .padding(start = 8.dp)
+                        )
                     }
                 }
             }
 
-            item {
-                Text(
-                    text = post.text,
-                    modifier = Modifier.padding(horizontal = 8.dp),
-                    fontSize = 14.sp
-                )
-            }
-
-            item {
-                Text(
-                    text = stringResource(id = R.string.post_comments),
-                    modifier = Modifier.padding(all = 8.dp),
-                    fontSize = 18.sp
-                )
-            }
-
-            commentsState.applyIfSuccess { items ->
-                items(items = items, key = { it.id }) { comment ->
-                    CommentItemView(
-                        comment = comment,
-                        onAvatarClicked = onAvatarClicked,
-                        onLikeClicked = onCommentLikeClicked
-                    )
-
-                    TabRowDefaults.Divider(
-                        color = colorResource(id = R.color.color_light_gray),
-                        thickness = 1.dp,
-                        modifier = Modifier
-                            .padding(start = 8.dp)
-                    )
+            InputTextView(
+                textFlow = comment,
+                focusState = focusState,
+                hintResId = R.string.hint_enter_comment,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.BottomCenter)
+                    .onSizeChanged {
+                        bottomColumnPadding = density.run {
+                            it.height.toDp()
+                        }
+                    },
+                imeAction = ImeAction.Done,
+                onDoneHandler = {
+                    focusState.value = false
+                    onDoneCommentHandler()
                 }
-            }
+            )
         }
+
     }
 }

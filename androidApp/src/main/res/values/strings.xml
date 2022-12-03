@@ -18,5 +18,8 @@
     <string name="no_user_post">Нет добавленных фотографий</string>
     <string name="button_register">Зарегистрироваться</string>
     <string name="button_sign_in">Войти</string>
+    <string name="button_exit">Выйти</string>
     <string name="button_open_register">Регистрация</string>
+    <string name="hint_enter_comment">Введите комментарий</string>
+    <string name="title_profile">Профиль пользователя</string>
 </resources>

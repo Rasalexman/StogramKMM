@@ -101,7 +101,8 @@ fun RegisterContentView(
             textFlow = name,
             focusState = focusNameState,
             hintResId = R.string.hint_name,
-            paddingValues = PaddingValues(start = 16.dp, end = 16.dp, bottom = 16.dp),
+            modifier = Modifier
+                .fillMaxWidth().padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
             imeAction = ImeAction.Next
         )
 
@@ -109,7 +110,8 @@ fun RegisterContentView(
             textFlow = login,
             focusState = focusLoginState,
             hintResId = R.string.hint_login,
-            paddingValues = PaddingValues(start = 16.dp, end = 16.dp, bottom = 16.dp),
+            modifier = Modifier
+                .fillMaxWidth().padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
             imeAction = ImeAction.Next
         )
 
@@ -117,7 +119,8 @@ fun RegisterContentView(
             textFlow = password,
             focusState = focusPasswordState,
             hintResId = R.string.hint_password,
-            paddingValues = PaddingValues(start = 16.dp, end = 16.dp, bottom = 16.dp),
+            modifier = Modifier
+                .fillMaxWidth().padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
             imeAction = ImeAction.Next
         )
 
@@ -125,7 +128,8 @@ fun RegisterContentView(
             textFlow = passwordRepeat,
             focusState = focusPasswordRepeatState,
             hintResId = R.string.hint_password_repet,
-            paddingValues = PaddingValues(start = 16.dp, end = 16.dp, bottom = 32.dp),
+            modifier = Modifier
+                .fillMaxWidth().padding(start = 16.dp, end = 16.dp, bottom = 32.dp),
             imeAction = ImeAction.Done
         ) {
             onConfirmClicked()

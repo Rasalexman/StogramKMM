@@ -74,6 +74,10 @@ fun ScreenView() {
                     arguments = listOf(navArgument(ArgsNames.POST_ID) {
                         nullable = true
                         type = NavType.StringType
+                    }, navArgument(ArgsNames.FROM_PROFILE) {
+                        defaultValue = false
+                        nullable = false
+                        type = NavType.BoolType
                     })
                 ) {
                     PostDetailsView()

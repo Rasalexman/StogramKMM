@@ -1,13 +1,12 @@
 package ru.stogram.android.features.reactions
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.TabRowDefaults
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material.rememberScaffoldState
@@ -23,11 +22,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.insets.ui.Scaffold
 import com.rasalexman.sresult.common.extensions.applyIfSuccess
-import com.rasalexman.sresult.common.extensions.isLoading
 import com.rasalexman.sresult.common.extensions.toSuccessResult
 import ru.stogram.android.R
-import ru.stogram.android.common.bodyWidth
-import ru.stogram.android.components.TopCircleProgressView
 import ru.stogram.android.constants.ReactionsResult
 import ru.stogram.android.mappers.IPostItemUIMapper
 import ru.stogram.android.mappers.IReactionItemUIMapper
@@ -49,15 +45,14 @@ internal fun ReactionsView(
     viewModel: ReactionsViewModel,
     scaffoldState: ScaffoldState = rememberScaffoldState()
 ) {
-    val pullRefreshState = rememberPullRefreshState(viewModel.refreshing, { viewModel.onSwipeRefresh() })
+    val refreshing by viewModel.isRefreshing.collectAsState()
+    val pullRefreshState = rememberPullRefreshState(refreshing, { viewModel.onSwipeRefresh() })
 
     Scaffold(
         scaffoldState = scaffoldState,
         modifier = Modifier.fillMaxSize(),
     ) {
-        Box(modifier = Modifier
-            .fillMaxSize()
-            .pullRefresh(pullRefreshState)) {
+        Box(modifier = Modifier.pullRefresh(pullRefreshState)) {
 
             val reactionsState by viewModel.reactionsState.collectAsState()
 
@@ -67,8 +62,11 @@ internal fun ReactionsView(
                 onPostClicked = viewModel::onPostClicked
             )
 
-            if (reactionsState.isLoading) {
-                TopCircleProgressView()
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+                PullRefreshIndicator(
+                    refreshing = refreshing,
+                    state = pullRefreshState
+                )
             }
         }
     }
@@ -82,7 +80,7 @@ fun ReactionResultView(
     onPostClicked: (PostItemUI) -> Unit
 ) {
     LazyColumn(
-        modifier = Modifier.bodyWidth(),
+        modifier = Modifier.fillMaxSize(),
     ) {
         reactionsState.applyIfSuccess { items ->
             items(items = items, key = { it.id }) { reaction ->

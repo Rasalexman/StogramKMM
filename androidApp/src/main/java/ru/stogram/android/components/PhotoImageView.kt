@@ -30,7 +30,7 @@ fun PhotoImageView(url: String, onClick: () -> Unit = {}) {
             model = ImageRequest.Builder(LocalContext.current)
                 .data(url)
                 .size(Size.ORIGINAL) // Set the target size to load the image at.
-                .crossfade(true)
+                .crossfade(false)
                 .placeholder(circularProgressDrawable)
                 .listener(onStart = {
                     circularProgressDrawable.start()
