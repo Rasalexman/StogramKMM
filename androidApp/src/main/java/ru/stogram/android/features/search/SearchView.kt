@@ -25,10 +25,12 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.insets.ui.Scaffold
 import com.google.accompanist.pager.ExperimentalPagerApi
+import com.rasalexman.sresult.common.extensions.applyIfLoading
 import com.rasalexman.sresult.common.extensions.applyIfSuccess
 import com.rasalexman.sresult.common.extensions.logg
 import ru.stogram.android.components.PostImageView
 import ru.stogram.android.components.SearchBarView
+import ru.stogram.android.components.SimpleLinearProgressIndicator
 import ru.stogram.android.mappers.IPostItemUIMapper
 import ru.stogram.android.mappers.PostItemUIMapper
 import ru.stogram.android.models.PostItemUI
@@ -83,6 +85,10 @@ internal fun SearchView(
             }
 
             val postsState by viewModel.postsState.collectAsState()
+            postsState.applyIfLoading {
+                SimpleLinearProgressIndicator()
+            }
+
             postsState.applyIfSuccess { posts ->
                 SearchResultView(posts, viewModel::onPostClicked)
             }

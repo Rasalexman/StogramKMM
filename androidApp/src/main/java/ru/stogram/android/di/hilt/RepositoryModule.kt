@@ -34,7 +34,8 @@ object RepositoryModule {
 
     @Singleton
     @Provides
-    fun provideISearchRepository(): ISearchRepository = SearchRepository()
+    fun provideISearchRepository(localDataSource: ISearchLocalDataSource): ISearchRepository =
+        SearchRepository(localDataSource)
 
     @Singleton
     @Provides

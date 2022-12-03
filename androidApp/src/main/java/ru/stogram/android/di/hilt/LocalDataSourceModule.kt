@@ -42,4 +42,10 @@ object LocalDataSourceModule {
         return CommentsLocalDataSource(realmDataBase)
     }
 
+    @Singleton
+    @Provides
+    fun provideISearchLocalDataSource(realmDataBase: RealmDataBase): ISearchLocalDataSource {
+        return SearchLocalDataSource(realmDataBase)
+    }
+
 }

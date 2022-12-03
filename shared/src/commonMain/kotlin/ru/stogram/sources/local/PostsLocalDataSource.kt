@@ -16,7 +16,8 @@ class PostsLocalDataSource(
 
     override fun findPostByIdAsFlow(postId: String): Flow<PostEntity?> {
         return database.realm.query<PostEntity>("postId = $0", postId).first().asFlow().map {
-            it.obj
+            val singlePost: PostEntity? = it.obj
+            singlePost
         }
     }
 

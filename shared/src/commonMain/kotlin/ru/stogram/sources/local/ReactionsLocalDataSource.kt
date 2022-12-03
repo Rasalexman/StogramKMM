@@ -1,10 +1,7 @@
 package ru.stogram.sources.local
 
 import io.realm.kotlin.ext.query
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.*
 import ru.stogram.database.RealmDataBase
 import ru.stogram.models.PostEntity
 import ru.stogram.models.ReactionEntity
@@ -30,25 +27,25 @@ class ReactionsLocalDataSource(
     }
 
     private fun createLocalData(): Flow<List<ReactionEntity>> {
-        val currentUser = database.getCurrentUser()
-        return database.realm.query<PostEntity>("user.id = $0", currentUser.id).asFlow().map {
-            val allPosts = it.list.shuffled()
-            println("-----> create real collections allPosts count: ${allPosts.size}")
-            allPosts.mapNotNull { localPost ->
-                val randomReaction = database.realm.writeBlocking {
-                    copyToRealm(ReactionEntity.createRandom())
-                }
-                val randomUser = database.realm.writeBlocking {
-                    copyToRealm(UserEntity.createRandomDetailed(randomBool))
-                }
-                database.realm.writeBlocking {
-                    findLatest(randomReaction)?.apply {
-                        this.post = findLatest(localPost)
-                        this.from = findLatest(randomUser)
+        return flow {
+            emit(database.getCurrentUser())
+        }.flatMapLatest { currentUser ->
+            database.realm.query<PostEntity>("user.id = $0", currentUser.id).asFlow().map {
+                val allPosts: List<PostEntity> = it.list.shuffled()
+                println("-----> create real collections allPosts count: ${allPosts.size}")
+                allPosts.mapNotNull { localPost ->
+                    database.realm.writeBlocking {
+                        val randomReaction = copyToRealm(ReactionEntity.createRandom())
+                        val randomUser = copyToRealm(UserEntity.createRandomDetailed(randomBool))
+                        findLatest(randomReaction)?.apply {
+                            this.post = findLatest(localPost)
+                            this.from = findLatest(randomUser)
+                        }
                     }
                 }
             }
         }
+
     }
 }
 

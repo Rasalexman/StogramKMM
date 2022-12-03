@@ -22,11 +22,13 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.insets.ui.Scaffold
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.rasalexman.sresult.common.extensions.applyIfSuccess
+import com.rasalexman.sresult.common.extensions.isLoading
 import ru.stogram.android.R
 import ru.stogram.android.common.orZero
 import ru.stogram.android.components.AvatarNameDescView
 import ru.stogram.android.components.LikesView
 import ru.stogram.android.components.PostContentView
+import ru.stogram.android.components.TopCircleProgressView
 import ru.stogram.android.constants.CommentsResult
 import ru.stogram.android.constants.PostDetailsResult
 import ru.stogram.android.features.comments.CommentItemView
@@ -56,12 +58,15 @@ fun PostDetailsView(
         scaffoldState = scaffoldState,
         modifier = Modifier.fillMaxSize(),
         topBar = {
-
             TopAppBar(
                 title = {
                     postDetailsState.applyIfSuccess { post ->
                         if(!post.user.isCurrentUser) {
-                            AvatarNameDescView(user = post.user, size = 32.dp)
+                            AvatarNameDescView(
+                                user = post.user,
+                                size = 32.dp,
+                                onClick = postDetailsViewModel::onBackClicked
+                            )
                         }
                     }
                 },
@@ -86,6 +91,10 @@ fun PostDetailsView(
             onPostLikeClicked = postDetailsViewModel::onPostLikeClicked,
             onCommentLikeClicked = commentsViewModel::onLikeClicked
         )
+
+        if (commentsState.isLoading) {
+            TopCircleProgressView()
+        }
     }
 }
 

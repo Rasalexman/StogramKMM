@@ -53,7 +53,7 @@ fun ScreenView() {
 
             AnimatedNavHost(
                 navController = navController,
-                startDestination = Screen.Login.route
+                startDestination = Screen.Main.route
             ) {
 
                 composable(route = Screen.Login.route) {

@@ -6,7 +6,6 @@ import io.realm.kotlin.ext.query
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import ru.stogram.models.*
-import ru.stogram.utils.getRandomString
 
 class RealmDataBase {
     private val configuration = RealmConfiguration.create(
