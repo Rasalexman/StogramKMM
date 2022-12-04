@@ -13,11 +13,12 @@ Android:
 
 Swift:
 - SwiftUI
-- MVVM
+- MVVM + ViewModels
+- Custom DI Framework called SODI
 - Kotlin Flow as CFlow wrapper
 
 Common KMM:
-- SResult
+- SResult framework as StateResult based classes
 - Kotlin Datetime
 - Realm Database KMM
 - Ktor client
