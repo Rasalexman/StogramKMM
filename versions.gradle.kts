@@ -4,7 +4,6 @@ extra["appVersion"] = "1.0.1"
 //------- LIBS VERSIONS
 val kotlin_version = "1.7.20"
 val gson = "2.9.1"
-val kodi = "1.6.6"
 val leakcanary = "2.10"
 val kotpref = "2.13.2"
 val sresult = "1.3.59"
@@ -53,8 +52,6 @@ extra["jitpackPath"] = "https://jitpack.io"
 //------- Libs path
 extra["gson"] = "com.google.code.gson:gson:$gson"
 extra["leakCanary"] = "com.squareup.leakcanary:leakcanary-android:$leakcanary"
-extra["kodi"] = "com.github.Rasalexman.KODI:kodi:$kodi"
-extra["kodiksp"] = "com.github.Rasalexman.KODI:kodiksp:$kodi"
 extra["kotPref"] = "com.chibatching.kotpref:kotpref:$kotpref"
 extra["coroutinesAndroid"] = "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines"
 
