@@ -19,7 +19,7 @@
 		118B7980284B7E98003F48CF /* ModulesNames.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118B797F284B7E98003F48CF /* ModulesNames.swift */; };
 		118B7982284B85F6003F48CF /* HomeState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118B7981284B85F6003F48CF /* HomeState.swift */; };
 		118B7984284B919D003F48CF /* ProfileState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118B7983284B919D003F48CF /* ProfileState.swift */; };
-		11CF055E28277B30004EC94C /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		11CF055E28277B30004EC94C /* (null) in Resources */ = {isa = PBXBuildFile; };
 		11DBC21828273CFD009E28DB /* Sodi in Frameworks */ = {isa = PBXBuildFile; productRef = 11DBC21728273CFD009E28DB /* Sodi */; };
 		11DBC23D282742EE009E28DB /* BaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11DBC239282742EE009E28DB /* BaseView.swift */; };
 		11DBC23E282742EE009E28DB /* Consts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11DBC23A282742EE009E28DB /* Consts.swift */; };
@@ -401,7 +401,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				11CF055E28277B30004EC94C /* BuildFile in Resources */,
+				11CF055E28277B30004EC94C /* (null) in Resources */,
 				058557D9273AAEEB004C7B11 /* Preview Assets.xcassets in Resources */,
 				058557BB273AAA24004C7B11 /* Assets.xcassets in Resources */,
 			);
@@ -538,11 +538,12 @@
 				INFOPLIST_KEY_UIRequiresFullScreen = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.4;
+				LD_MAP_FILE_PATH = "";
 				MARKETING_VERSION = 1.0.1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-framework",
-					"\"shared\"",
+					shared,
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = ru.stogram.ios;
 				PRODUCT_NAME = iosApp;
@@ -563,11 +564,12 @@
 				INFOPLIST_KEY_UIRequiresFullScreen = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.4;
+				LD_MAP_FILE_PATH = "";
 				MARKETING_VERSION = 1.0.1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-framework",
-					"\"shared\"",
+					shared,
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = ru.stogram.ios;
 				PRODUCT_NAME = iosApp;

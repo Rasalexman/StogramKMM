@@ -12,7 +12,19 @@ private val namesCombs = listOf(
     "Product", "Overview", "Public",
     "Session", "Disconnect", "Respond",
     "Request", "Dapp", "Kotlin",
-    "Parabéns", "Really", "Belissimo", "Beautiful"
+    "Parabéns", "Really", "Belissimo",
+    "Beautiful", "Dollar", "Cisco",
+    "Night", "City", "Cyper",
+    "Punk", "Octo", "Lime",
+    "Life", "Deniel", "Sanchez",
+    "Realm", "Java", "Sun",
+    "Comment", "Item", "Story",
+    "Count", "Jack", "Alex",
+    "Mortal", "Samsung", "Jane",
+    "July", "Peter", "Mike",
+    "Kolin", "John", "Fork",
+    "Ken", "Broke", "Final",
+    "Cool", "House", "Josh",
 )
 
 private val randomImages = listOf(
@@ -46,7 +58,9 @@ private val reactionsTypeDates = listOf(
     "3 часа назад",
     "в 21:34",
     "сегодня в 10:30",
-    "5 дней назад"
+    "5 дней назад",
+    "1 мин назад",
+    "17 мин назад",
 )
 
 private val allowedChars = ('A'..'Z') + ('a'..'z') + ('0'..'9')
@@ -77,6 +91,15 @@ fun getRandomName(): String {
     val randomCount2: Int = Random.nextInt(0, distinctNames.size-1)
     val secondName = distinctNames[randomCount2]
     return "$firstName $secondName"
+}
+
+fun String.getLogin(): String {
+    val splitterName = this.split(" ")
+    return if(splitterName.size > 1) {
+        "${splitterName.first().lowercase()}.${splitterName.last().lowercase()}"
+    } else {
+        this.trim().lowercase()
+    }
 }
 
 fun getRandomPhoto(): String {

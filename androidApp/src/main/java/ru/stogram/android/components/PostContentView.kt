@@ -18,12 +18,17 @@ import ru.stogram.utils.getRandomPhotoList
 
 @ExperimentalPagerApi
 @Composable
-fun PostContentView(postContent: List<String>) {
-
+fun PostContentView(
+    postContent: List<String>
+) {
     val postContentSize = postContent.size
     val pagerState = rememberPagerState()
 
-    Box(Modifier.fillMaxWidth().aspectRatio(1f)) {
+    Box(
+        Modifier
+            .fillMaxWidth()
+            .aspectRatio(1f)
+    ) {
 
         HorizontalPager(
             count = postContentSize,
@@ -33,7 +38,7 @@ fun PostContentView(postContent: List<String>) {
             PhotoImageView(url = postContent.getOrNull(page).orEmpty())
         }
 
-        if(postContentSize > 1) {
+        if (postContentSize > 1) {
             HorizontalPagerIndicator(
                 pagerState = pagerState,
                 activeColor = Color.White,

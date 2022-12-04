@@ -4,13 +4,10 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
@@ -26,56 +23,64 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.insets.ui.Scaffold
-import com.rasalexman.kodi.core.immutableInstance
 import com.rasalexman.sresult.common.extensions.applyIfSuccess
-import com.rasalexman.sresult.common.extensions.logg
 import com.rasalexman.sresult.common.extensions.toSuccessResult
 import com.rasalexman.sresult.data.dto.SResult
 import ru.stogram.android.R
-import ru.stogram.android.common.rememberStateWithLifecycle
 import ru.stogram.android.components.PostImageView
 import ru.stogram.android.constants.PostsResult
 import ru.stogram.android.features.profile.top.ProfileTopView
+import ru.stogram.android.mappers.IPostItemUIMapper
+import ru.stogram.android.mappers.PostItemUIMapper
+import ru.stogram.android.models.PostItemUI
 import ru.stogram.models.IUser
 import ru.stogram.models.PostEntity
 import ru.stogram.models.UserEntity
 import kotlin.math.roundToInt
 
 @Composable
-fun Profile(profileId: String?) {
-    profileId?.logg { "CURRENT_PROFILE_ID = ${profileId.orEmpty()}" }
-    val showTopBar = profileId != UserEntity.DEFAULT_USER_ID
-    val vm: ProfileViewModel by immutableInstance()
-    vm.fetchUserProfile(userId = profileId)
-    ProfileView(viewModel = vm, showTopBar = showTopBar)
+fun Profile() {
+    val vm: ProfileViewModel = hiltViewModel()
+    ProfileView(viewModel = vm)
 }
 
 @Composable
-fun ProfileView(viewModel: ProfileViewModel, showTopBar: Boolean = false) {
-    val postsState by rememberStateWithLifecycle(stateFlow = viewModel.postsState)
-    val topState by rememberStateWithLifecycle(stateFlow = viewModel.userState)
+fun ProfileView(viewModel: ProfileViewModel) {
+    val postsState by viewModel.postsState.collectAsState()
+    val topState by viewModel.userState.collectAsState()
+    val toolbarOffsetHeightPx = remember { viewModel.topBarOffset }
+    val showTopBar by viewModel.showTopBar.collectAsState()
 
     ProfileView(
-        viewModel = viewModel,
         topState = topState,
         postsState = postsState,
-        showTopBar = showTopBar
+        topBarOffset = toolbarOffsetHeightPx,
+        showTopBar = showTopBar,
+        onPostClicked = viewModel::onPostClicked,
+        onBackClicked = viewModel::onBackClicked,
+        onMessagesClick = viewModel::onMessagesClicked
     )
 }
 
 @Composable
 internal fun ProfileView(
-    viewModel: ProfileViewModel,
     topState: SResult<IUser>,
     postsState: PostsResult,
-    showTopBar: Boolean = false
+    topBarOffset: Float,
+    showTopBar: Boolean = false,
+    onPostClicked: (PostItemUI) -> Unit,
+    onBackClicked: () -> Unit,
+    onMessagesClick: () -> Unit
 ) {
     val scaffoldState = rememberScaffoldState()
 
     val toolbarHeight = 184.dp
     val toolbarHeightPx = with(LocalDensity.current) { toolbarHeight.roundToPx().toFloat() }
-    val toolbarOffsetHeightPx = remember { viewModel.topBarOffset }
+    val toolbarOffsetHeightPx = remember {
+        mutableStateOf(topBarOffset)
+    }
 
     val nestedScrollConnection = remember {
         object : NestedScrollConnection {
@@ -99,10 +104,10 @@ internal fun ProfileView(
             if(showTopBar) {
                 TopAppBar(
                     title = {
-                        Text(text = "Profile App Bar")
+                        Text(text = stringResource(id = R.string.title_profile))
                     },
                     navigationIcon = {
-                        IconButton(onClick = viewModel::onBackClicked) {
+                        IconButton(onClick = onBackClicked) {
                             Icon(Icons.Filled.ArrowBack, "backIcon")
                         }
                     },
@@ -128,7 +133,7 @@ internal fun ProfileView(
                     modifier = Modifier.fillMaxSize()
                 ) {
                     items(items = posts, key = { it.id }) { post ->
-                        PostImageView(post = post, onClick = viewModel::onPostClicked)
+                        PostImageView(post = post, onClick = onPostClicked)
                     }
                 }
             }
@@ -136,7 +141,9 @@ internal fun ProfileView(
             if(postsState.isEmpty()) {
                 Text(
                     text = stringResource(id = R.string.no_user_post),
-                    modifier = Modifier.fillMaxWidth().padding(top = toolbarHeight),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = toolbarHeight),
                     textAlign = TextAlign.Center,
                     fontSize = 16.sp
                 )
@@ -144,14 +151,19 @@ internal fun ProfileView(
 
             ProfileTopView(userState = topState, modifier = Modifier
                 .height(toolbarHeight)
-                .offset { IntOffset(x = 0, y = toolbarOffsetHeightPx.value.roundToInt()) })
+                .offset { IntOffset(x = 0, y = toolbarOffsetHeightPx.value.roundToInt()) },
+                onMessageClick = onMessagesClick
+            )
         }
     }
 }
 
 class ProfilePreviewParameterProvider : PreviewParameterProvider<Pair<PostsResult, SResult<IUser>>> {
+    private val postItemUIMapper: IPostItemUIMapper = PostItemUIMapper()
     override val values = sequenceOf(
-        PostEntity.createRandomList().toSuccessResult() to UserEntity.createRandomDetailed(true).toSuccessResult()
+        PostEntity.createRandomList().map {
+            postItemUIMapper.convertSingle(it)
+        }.toSuccessResult() to UserEntity.createRandomDetailed(true).toSuccessResult()
     )
 }
 
@@ -160,5 +172,13 @@ class ProfilePreviewParameterProvider : PreviewParameterProvider<Pair<PostsResul
 fun ProfileViewPreview(
     @PreviewParameter(ProfilePreviewParameterProvider::class, limit = 1) result: Pair<PostsResult, SResult<IUser>>
 ) {
-    ProfileView(viewModel = ProfileViewModel(), topState = result.second, postsState = result.first)
+    ProfileView(
+        topState = result.second,
+        postsState = result.first,
+        topBarOffset = 0f,
+        showTopBar = true,
+        onPostClicked = {  },
+        onBackClicked = {  },
+        onMessagesClick = {}
+    )
 }

@@ -1,73 +1,67 @@
 package ru.stogram.android.features.profile
 
-import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavController
-import androidx.navigation.NavHostController
-import com.rasalexman.kodi.annotations.BindSingle
-import com.rasalexman.kodi.core.IKodi
-import com.rasalexman.kodi.core.immutableInstance
-import com.rasalexman.kodi.core.instance
-import com.rasalexman.sresult.common.extensions.*
+import com.rasalexman.sresult.common.extensions.emptyResult
+import com.rasalexman.sresult.common.extensions.toSuccessListResult
+import com.rasalexman.sresult.common.extensions.toSuccessResult
+import com.rasalexman.sresult.common.utils.convertList
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
+import ru.stogram.android.constants.ArgsNames
 import ru.stogram.android.constants.PostsResult
 import ru.stogram.android.constants.UserResult
-import ru.stogram.android.di.ModuleNames
-import ru.stogram.android.navigation.toPostDetails
-import ru.stogram.models.IUser
-import ru.stogram.models.PostEntity
+import ru.stogram.android.features.base.BaseViewModel
+import ru.stogram.android.mappers.IPostItemUIMapper
+import ru.stogram.android.models.PostItemUI
+import ru.stogram.android.navigation.IHostRouter
+import ru.stogram.models.UserEntity
 import ru.stogram.repository.IPostsRepository
 import ru.stogram.repository.IUserRepository
+import javax.inject.Inject
 
-@BindSingle(
-    toClass = ProfileViewModel::class,
-    toModule = ModuleNames.ViewModels
-)
-class ProfileViewModel : ViewModel(), IKodi {
 
-    private val userRepository: IUserRepository by immutableInstance()
-    private val postsRepository: IPostsRepository by immutableInstance()
+@HiltViewModel
+class ProfileViewModel @Inject constructor(
+    private val router: IHostRouter,
+    private val postsRepository: IPostsRepository,
+    private val postItemUIMapper: IPostItemUIMapper,
+    userRepository: IUserRepository,
+    savedStateHandle: SavedStateHandle
+) : BaseViewModel() {
 
-    private val defaultPosts by lazy {
-        PostEntity.createRandomList().toSuccessResult()
-    }
+    private val profileId: String = checkNotNull(savedStateHandle[ArgsNames.USER_ID])
 
-    private val lastProfileId: MutableStateFlow<String> = MutableStateFlow("")
-    val topBarOffset = mutableStateOf(0f)
+    var topBarOffset = 0f
 
-    private val userFlow: MutableStateFlow<IUser?> = MutableStateFlow(null)
+    private val userFlow: StateFlow<UserEntity?> =
+        userRepository.findUserDetailsAsFlow(profileId)
+            .flowIoState(defaultValue = null)
+
+    val showTopBar: StateFlow<Boolean> = userFlow.map {
+        it?.isCurrentUser == false
+    }.stateIn(viewModelScope, SharingStarted.Eagerly, false)
 
     val userState: StateFlow<UserResult> = userFlow.mapNotNull {
         it.toSuccessResult()
-    }.flowOn(Dispatchers.IO).asState(viewModelScope, emptyResult())
+    }.flowOn(Dispatchers.IO).stateIn(viewModelScope, SharingStarted.Eagerly, emptyResult())
 
-    val postsState: StateFlow<PostsResult> = lastProfileId.flatMapLatest { userId ->
-        logg { "lastProfileId = $userId" }
-        userRepository.findUserDetailsAsFlow(userId).mapNotNull {
-            it
-        }.flatMapConcat { user ->
-            userFlow.tryEmit(user)
-            postsRepository.findUserPostsAsFlow(user).map { posts ->
-                posts.toSuccessListResult()
-            }
+    val postsState: StateFlow<PostsResult> = userFlow.mapNotNull { it }.flatMapIoState { user ->
+        postsRepository.findUserPostsAsFlow(user).map { posts ->
+            postItemUIMapper.convertList(posts).toSuccessListResult()
         }
-    }.flowOn(Dispatchers.IO).asState(viewModelScope, emptyResult())
-
-    fun fetchUserProfile(userId: String?) {
-        logg { "fetchUserProfile = $userId" }
-        userId?.let(lastProfileId::tryEmit)
     }
 
-    fun onPostClicked(post: PostEntity) {
-        instance<NavHostController>().toPostDetails(post.postId)
+    fun onPostClicked(post: PostItemUI) = launchOnMain {
+        router.showHostPostDetails(post.postId, true)
     }
 
-    fun onBackClicked() {
-        instance<NavHostController>().popBackStack()
+    fun onMessagesClicked() = launchOnMain {
+        router.showHostLoginScreen()
     }
 
-
-
+    fun onBackClicked() = launchOnMain {
+        router.popBackToHost()
+    }
 }

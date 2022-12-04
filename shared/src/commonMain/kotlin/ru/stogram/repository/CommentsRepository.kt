@@ -1,5 +1,6 @@
 package ru.stogram.repository
 
+import com.rasalexman.sresult.data.dto.SResult
 import kotlinx.coroutines.flow.Flow
 import ru.stogram.database.CFlow
 import ru.stogram.database.wrap
@@ -17,9 +18,19 @@ class CommentsRepository(
     override fun getAllCommentsAsFlow(postId: String): Flow<List<CommentEntity>> {
         return localDataSource.getAllCommentsAsFlow(postId)
     }
+
+    override fun updateCommentLike(commentId: String): SResult<Boolean> {
+        return localDataSource.updateCommentLike(commentId)
+    }
+
+    override fun addCommentToPost(postId: String, commentText: String): SResult<Boolean> {
+        return localDataSource.addCommentToPost(postId, commentText)
+    }
 }
 
 interface ICommentsRepository {
     fun getAllCommentsAsCommonFlow(postId: String): CFlow<List<CommentEntity>>
     fun getAllCommentsAsFlow(postId: String): Flow<List<CommentEntity>>
+    fun updateCommentLike(commentId: String): SResult<Boolean>
+    fun addCommentToPost(postId: String, commentText: String): SResult<Boolean>
 }

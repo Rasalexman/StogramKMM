@@ -2,7 +2,7 @@ package ru.stogram.android.features.comments
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -12,13 +12,18 @@ import androidx.compose.ui.unit.sp
 import ru.stogram.android.common.orZero
 import ru.stogram.android.components.AvatarNameDescView
 import ru.stogram.android.components.LikesView
+import ru.stogram.android.mappers.CommentItemUIMapper
+import ru.stogram.android.mappers.ICommentItemUIMapper
+import ru.stogram.android.models.CommentItemUI
 import ru.stogram.models.CommentEntity
+import ru.stogram.models.IUser
 
 @Composable
-fun CommentItemView(comment: CommentEntity, onAvatarClicked: (CommentEntity) -> Unit) {
-
-    var isLikedState by remember { mutableStateOf(comment.isLiked) }
-
+fun CommentItemView(
+    comment: CommentItemUI,
+    onAvatarClicked: (IUser) -> Unit,
+    onLikeClicked: (CommentItemUI) -> Unit
+) {
     Column(
         Modifier
             .fillMaxWidth()
@@ -26,8 +31,8 @@ fun CommentItemView(comment: CommentEntity, onAvatarClicked: (CommentEntity) -> 
             .padding(horizontal = 8.dp, vertical = 8.dp)
     ) {
 
-        AvatarNameDescView(user = comment.takeCommentUser(), desc = comment.date) {
-            onAvatarClicked.invoke(comment)
+        AvatarNameDescView(user = comment.user, desc = comment.date) {
+            onAvatarClicked.invoke(comment.user)
         }
 
         Text(
@@ -41,29 +46,30 @@ fun CommentItemView(comment: CommentEntity, onAvatarClicked: (CommentEntity) -> 
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
             LikesView(
                 count = comment.likesCount.orZero(),
-                isSelected = isLikedState,
+                isSelected = comment.isLiked,
                 textSize = 12.sp,
                 iconSize = 24.dp
             ) {
-                isLikedState = !isLikedState
+                onLikeClicked.invoke(comment)
             }
         }
     }
 
 }
 
-class CommentItemPreviewParameterProvider : PreviewParameterProvider<CommentEntity> {
+class CommentItemPreviewParameterProvider : PreviewParameterProvider<CommentItemUI> {
+    private val commentItemUIMapper: ICommentItemUIMapper = CommentItemUIMapper()
     override val values = sequenceOf(
-        CommentEntity.createRandom()
+        commentItemUIMapper.convertSingle(CommentEntity.createRandom())
     )
 }
 
 @Preview(name = "CommentItemView", showBackground = true)
 @Composable
 fun CommentItemViewPreview(
-    @PreviewParameter(CommentItemPreviewParameterProvider::class, limit = 1) comment: CommentEntity
+    @PreviewParameter(CommentItemPreviewParameterProvider::class, limit = 1) comment: CommentItemUI
 ) {
-    CommentItemView(comment = comment) {
+    CommentItemView(comment = comment, onAvatarClicked = {}) {
 
     }
 }

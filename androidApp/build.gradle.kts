@@ -1,14 +1,15 @@
 plugins {
     id("com.android.application")
     kotlin("android")
-    id("com.google.devtools.ksp")
+//    id("com.google.devtools.ksp")
+    id("com.google.dagger.hilt.android")
+    kotlin("kapt")
 }
 
 val kotlinApiVersion: String by rootProject.extra
 val jvmVersion: String by rootProject.extra
 
 android {
-    val composeVersion: String by rootProject.extra
     val appVersion: String by rootProject.extra
     val minSdkVersion: Int by rootProject.extra
     val buildSdkVersion: Int by rootProject.extra
@@ -42,7 +43,8 @@ android {
         jvmTarget = jvmVersion
         freeCompilerArgs = listOf(
             "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
-            "-opt-in=kotlin.RequiresOptIn"
+            "-opt-in=kotlin.RequiresOptIn",
+            "-opt-in=kotlin.Experimental"
         )
     }
 
@@ -50,13 +52,8 @@ android {
         kotlinCompilerExtensionVersion = "1.3.2"
     }
 
-    kotlin {
-        sourceSets.release {
-            kotlin.srcDirs("build/generated/ksp/release/kotlin")
-        }
-        sourceSets.debug {
-            kotlin.srcDirs("build/generated/ksp/debug/kotlin")
-        }
+    packagingOptions {
+        resources.excludes.addAll(listOf("META-INF/AL2.0", "META-INF/LGPL2.1"))
     }
 }
 
@@ -68,6 +65,7 @@ dependencies {
     val composeNavigation: String by rootProject.extra
     val composeFonts: String by rootProject.extra
     val composeIcons: String by rootProject.extra
+    val composeTooling: String by rootProject.extra
 
     val companistFlowLayout: String by rootProject.extra
     val companistInsetsUI: String by rootProject.extra
@@ -76,6 +74,10 @@ dependencies {
     val companistPager: String by rootProject.extra
     val companistPagerIndicators: String by rootProject.extra
 
+    val hiltAndroid: String by rootProject.extra
+    val hiltNavigation: String by rootProject.extra
+    val hiltCompiler: String by rootProject.extra
+
     val core: String by rootProject.extra
     val lifecycleVM: String by rootProject.extra
     val coroutinesAndroid: String by rootProject.extra
@@ -83,7 +85,6 @@ dependencies {
     val sresult: String by rootProject.extra
 
     val leakCanary: String by rootProject.extra
-    val kodiksp: String by rootProject.extra
     val timber: String by rootProject.extra
     val coil: String by rootProject.extra
     val swiperefreshlayout: String by rootProject.extra
@@ -115,8 +116,11 @@ dependencies {
     implementation(companistPager)
     implementation(companistPagerIndicators)
 
-    ksp(kodiksp)
+    // Hilt
+    implementation(hiltAndroid)
+    implementation(hiltNavigation)
+    kapt(hiltCompiler)
 
     debugImplementation(leakCanary)
-    debugImplementation("androidx.compose.ui:ui-tooling:1.3.0")
+    debugImplementation(composeTooling)
 }

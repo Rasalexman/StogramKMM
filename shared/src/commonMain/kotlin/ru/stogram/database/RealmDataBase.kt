@@ -3,10 +3,9 @@ package ru.stogram.database
 import io.realm.kotlin.Realm
 import io.realm.kotlin.RealmConfiguration
 import io.realm.kotlin.ext.query
-import ru.stogram.models.CommentEntity
-import ru.stogram.models.PostEntity
-import ru.stogram.models.ReactionEntity
-import ru.stogram.models.UserEntity
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import ru.stogram.models.*
 
 class RealmDataBase {
     private val configuration = RealmConfiguration.create(
@@ -14,7 +13,8 @@ class RealmDataBase {
             UserEntity::class,
             PostEntity::class,
             ReactionEntity::class,
-            CommentEntity::class
+            CommentEntity::class,
+            LastUserEntity::class
         ))
 
     val realm: Realm by lazy {
@@ -29,16 +29,48 @@ class RealmDataBase {
         return localUser ?: fetchRealUser()
     }
 
+    fun getCurrentUserFlow(): Flow<UserEntity> {
+        return flow {
+            emit(getCurrentUser())
+        }
+    }
+
     private fun fetchRealUser(): UserEntity {
-        val dbUser: UserEntity? = realm.query<UserEntity>("id = $0", UserEntity.DEFAULT_USER_ID).first().find()
+        val lastSessionUser: LastUserEntity? = realm.query<LastUserEntity>().first().find()
+        val lastSessionIdOrDefault = lastSessionUser?.userId ?: UserEntity.DEFAULT_USER_ID
+        val dbUser: UserEntity? = realm.query<UserEntity>("id = $0", lastSessionIdOrDefault).first().find()
         val realUser = dbUser ?: createDefaultUser()
-        localUser = realUser
+        localUser = realUser.apply {
+            isCurrentUser = true
+        }
         return realUser
     }
 
+    fun createNewSession(user: UserEntity) {
+        clearLastSession()
+        val lastUser = LastUserEntity().apply {
+            userId = user.id
+            sessionLogin = user.login
+        }
+        realm.writeBlocking {
+            copyToRealm(lastUser)
+        }
+    }
+
+    private fun clearLastSession() {
+        localUser = null
+        realm.writeBlocking {
+            val lastSessions = this.query<LastUserEntity>().find()
+            delete(lastSessions)
+        }
+    }
+
     private fun createDefaultUser(): UserEntity {
+        clearLastSession()
+        val defaultUser = UserEntity.createDefaultUser()
+        createNewSession(defaultUser)
         return realm.writeBlocking {
-            copyToRealm(UserEntity.createDefaultUser())
+            copyToRealm(defaultUser)
         }
     }
 }

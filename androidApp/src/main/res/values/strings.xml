@@ -6,7 +6,20 @@
     <string name="tab_reactions">Реакции</string>
     <string name="tab_profile">Профиль</string>
 
+    <string name="title_login">Авторизация</string>
+    <string name="title_my_messages">Мои сообщения</string>
+    <string name="title_registration">Регистрация</string>
     <string name="title_comments">Комментарии</string>
     <string name="post_comments">Комментарии:</string>
+    <string name="hint_name">Имя</string>
+    <string name="hint_login">Логин</string>
+    <string name="hint_password">Пароль</string>
+    <string name="hint_password_repet">Повторите пароль</string>
     <string name="no_user_post">Нет добавленных фотографий</string>
+    <string name="button_register">Зарегистрироваться</string>
+    <string name="button_sign_in">Войти</string>
+    <string name="button_exit">Выйти</string>
+    <string name="button_open_register">Регистрация</string>
+    <string name="hint_enter_comment">Введите комментарий</string>
+    <string name="title_profile">Профиль пользователя</string>
 </resources>

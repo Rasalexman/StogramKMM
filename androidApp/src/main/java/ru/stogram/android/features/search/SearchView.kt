@@ -7,11 +7,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.ScaffoldState
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material.rememberScaffoldState
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
@@ -21,56 +22,44 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.insets.ui.Scaffold
 import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.swiperefresh.SwipeRefresh
-import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
-import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
-import com.rasalexman.kodi.core.immutableInstance
+import com.rasalexman.sresult.common.extensions.applyIfLoading
 import com.rasalexman.sresult.common.extensions.applyIfSuccess
 import com.rasalexman.sresult.common.extensions.logg
-import com.rasalexman.sresult.common.extensions.toSuccessResult
-import ru.stogram.android.common.rememberStateWithLifecycle
 import ru.stogram.android.components.PostImageView
 import ru.stogram.android.components.SearchBarView
-import ru.stogram.android.constants.PostsResult
+import ru.stogram.android.components.SimpleLinearProgressIndicator
+import ru.stogram.android.mappers.IPostItemUIMapper
+import ru.stogram.android.mappers.PostItemUIMapper
+import ru.stogram.android.models.PostItemUI
 import ru.stogram.models.PostEntity
 
+@ExperimentalMaterialApi
 @ExperimentalPagerApi
 @Composable
 fun Search() {
-    val vm: SearchViewModel by immutableInstance()
-    SearchView(viewModel = vm)
+    SearchView(viewModel = hiltViewModel())
 }
 
-@ExperimentalPagerApi
-@Composable
-fun SearchView(viewModel: SearchViewModel) {
-    val postsState by rememberStateWithLifecycle(stateFlow = viewModel.postsState)
-    SearchView(
-        viewModel = viewModel,
-        postsState = postsState,
-        refresh = viewModel::onSwipeRefresh
-    )
-}
-
+@ExperimentalMaterialApi
 @ExperimentalPagerApi
 @Composable
 internal fun SearchView(
     viewModel: SearchViewModel,
-    postsState: PostsResult,
-    refresh: () -> Unit
+    scaffoldState: ScaffoldState = rememberScaffoldState()
 ) {
-    val scaffoldState = rememberScaffoldState()
     val textState = remember { viewModel.searchQuery }
     val focusManager = LocalFocusManager.current
     val focusState = remember { mutableStateOf(false) }
+    val isRefreshing = viewModel.refreshing
+    val pullRefreshState = rememberPullRefreshState(isRefreshing, { viewModel.onSwipeRefresh() })
 
     val nestedScrollConnection = remember {
         object : NestedScrollConnection {
-
             override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
-                if(focusState.value) {
+                if (focusState.value) {
                     logg { "----> onPreScroll hide keyboard" }
                     focusManager.clearFocus()
                 }
@@ -82,60 +71,63 @@ internal fun SearchView(
     Scaffold(
         scaffoldState = scaffoldState,
         modifier = Modifier.fillMaxSize(),
-    ) { paddingValues ->
-
+    ) {
         Column(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
                 // attach as a parent to the nested scroll system
                 .nestedScroll(nestedScrollConnection)
-
+                .pullRefresh(pullRefreshState)
         ) {
             SearchBarView(textState, focusState) {
                 focusManager.clearFocus()
                 viewModel.onSearchButtonPressed()
             }
-            SwipeRefresh(
-                state = rememberSwipeRefreshState(viewModel.refreshing),
-                onRefresh = refresh,
-                indicatorPadding = paddingValues,
-                indicator = { state, trigger ->
-                    SwipeRefreshIndicator(
-                        state = state,
-                        refreshTriggerDistance = trigger,
-                        scale = true
-                    )
-                }
-            ) {
-                LazyVerticalGrid(
-                    columns = GridCells.Fixed(3),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .fillMaxHeight()
-                ) {
-                    postsState.applyIfSuccess { posts ->
-                        items(items = posts, key = { it.id }) { post ->
-                            PostImageView(post = post, onClick = viewModel::onPostClicked)
-                        }
-                    }
-                }
+
+            val postsState by viewModel.postsState.collectAsState()
+            postsState.applyIfLoading {
+                SimpleLinearProgressIndicator()
+            }
+
+            postsState.applyIfSuccess { posts ->
+                SearchResultView(posts, viewModel::onPostClicked)
             }
         }
     }
 }
 
-class SearchPreviewParameterProvider : PreviewParameterProvider<PostsResult> {
+@ExperimentalMaterialApi
+@ExperimentalPagerApi
+@Composable
+fun SearchResultView(
+    posts: List<PostItemUI>,
+    onPostClicked: (PostItemUI) -> Unit
+) {
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(3),
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight()
+    ) {
+        items(items = posts, key = { it.id }) { post ->
+            PostImageView(post = post, onClick = onPostClicked)
+        }
+    }
+}
+
+class SearchPreviewParameterProvider : PreviewParameterProvider<List<PostItemUI>> {
+    private val postItemUIMapper: IPostItemUIMapper = PostItemUIMapper()
     override val values = sequenceOf(
-        PostEntity.createRandomList().toSuccessResult()
+        PostEntity.createRandomList().map { postItemUIMapper.convertSingle(it) }
     )
 }
 
+@ExperimentalMaterialApi
 @ExperimentalPagerApi
 @Preview
 @Composable
 fun SearchPreview(
-    @PreviewParameter(SearchPreviewParameterProvider::class, limit = 1) result: PostsResult
+    @PreviewParameter(SearchPreviewParameterProvider::class, limit = 1) result: List<PostItemUI>
 ) {
-    SearchView(viewModel = SearchViewModel(), postsState = result) {
-
-    }
+    SearchResultView(posts = result) {}
 }

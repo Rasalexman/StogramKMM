@@ -1,43 +1,42 @@
 package ru.stogram.android.features.home
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavController
-import androidx.navigation.NavHostController
-import com.rasalexman.kodi.annotations.BindSingle
-import com.rasalexman.kodi.core.IKodi
-import com.rasalexman.kodi.core.immutableInstance
-import com.rasalexman.kodi.core.instance
 import com.rasalexman.sresult.common.extensions.*
+import com.rasalexman.sresult.common.utils.convertList
 import com.rasalexman.sresult.data.dto.SResult
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
-import ru.stogram.android.constants.ArgsNames
-import ru.stogram.android.constants.ScreenNames
-import ru.stogram.android.di.ModuleNames
-import ru.stogram.android.navigation.toPostComments
-import ru.stogram.android.navigation.toUserProfile
-import ru.stogram.models.PostEntity
+import kotlinx.coroutines.withContext
+import ru.stogram.android.features.base.BaseViewModel
+import ru.stogram.android.mappers.IPostItemUIMapper
+import ru.stogram.android.models.PostItemUI
+import ru.stogram.android.navigation.IHostRouter
+import ru.stogram.models.ReactionEntity
 import ru.stogram.repository.IPostsRepository
+import ru.stogram.repository.IReactionsRepository
 import ru.stogram.repository.IUserStoriesRepository
+import javax.inject.Inject
 
-@BindSingle(
-    toClass = HomeViewModel::class,
-    toModule = ModuleNames.ViewModels
-)
-class HomeViewModel : ViewModel(), IKodi {
+@HiltViewModel
+class HomeViewModel @Inject constructor(
+    private val router: IHostRouter,
+    private val postsRepository: IPostsRepository,
+    private val reactionRepository: IReactionsRepository,
+    private val postItemUIMapper: IPostItemUIMapper,
+    userStoriesRepository: IUserStoriesRepository
+) : BaseViewModel() {
 
-    private val postsRepository: IPostsRepository by immutableInstance()
-    private val userStoriesRepository: IUserStoriesRepository by immutableInstance()
 
     val homeState: StateFlow<SResult<HomeState>> = combine(
-        postsRepository.allPostsAsFlowable(),
+        postsRepository.allPostsAsFlowable().map { posts->
+            postItemUIMapper.convertList(posts)
+        },
         userStoriesRepository.getAllStoriesAsFlow()
     ) { posts, stories ->
         HomeState(posts, stories).toSuccessResult()
-    }.flowOn(Dispatchers.IO).onStart {
-        emit(loadingResult())
-    }.asState(viewModelScope, emptyResult())
+    }.flowOn(Dispatchers.IO)
+        .stateIn(viewModelScope, SharingStarted.Eagerly, loadingResult())
 
     val refreshing: Boolean = false
 
@@ -45,14 +44,26 @@ class HomeViewModel : ViewModel(), IKodi {
 
     }
 
-    fun onPostAvatarClicked(post: PostEntity) {
-        val postUser = post.takePostUser()
+    fun onPostAvatarClicked(post: PostItemUI) = launchOnMain {
+        val postUser = post.user
         logg { "Selected user name: ${postUser.name} | id: ${postUser.id}" }
-        instance<NavHostController>().toUserProfile(postUser.id)
+        router.showHostUserProfile(postUser.id)
     }
 
-    fun onPostCommentsClicked(post: PostEntity) {
+    fun onPostCommentsClicked(post: PostItemUI) = launchOnMain{
         logg { "Selected post id: ${post.postId}" }
-        instance<NavHostController>().toPostComments(post.postId)
+        router.showHostPostComments(post.postId)
+    }
+
+    fun onPostLikeClicked(post: PostItemUI) = launchOnMain {
+        val postResult = withContext(Dispatchers.IO) {
+            val localPostId = post.postId
+            postsRepository.updatePostLike(post.postId).flatMapIfSuccessSuspend { isLiked ->
+                if(isLiked) {
+                    reactionRepository.createReaction(ReactionEntity.photoLike, localPostId)
+                } else successResult(true)
+            }
+        }
+        logg { "onPostLikeClicked result ${postResult.data.orFalse()}" }
     }
 }

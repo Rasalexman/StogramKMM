@@ -5,7 +5,7 @@ plugins {
     id("com.android.library")
     //kotlin("plugin.serialization")
     id("io.realm.kotlin")
-    id("com.google.devtools.ksp")
+//    id("com.google.devtools.ksp")
 }
 
 val kotlinApiVersion: String by rootProject.extra
@@ -28,13 +28,20 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach 
 kotlin {
 
     android()
-    ios()
+//    ios() {
+//        binaries {
+//            framework {
+//                baseName = "shared"
+//                isStatic = false
+//            }
+//        }
+//    }
 
 //    val iosTarget: (String, KotlinNativeTarget.() -> Unit) -> KotlinNativeTarget = when {
 //        System.getenv("SDK_NAME")?.startsWith("iphoneos") == true -> ::iosArm64
 //        System.getenv("NATIVE_ARCH")?.startsWith("arm") == true -> ::iosSimulatorArm64
 //        else -> ::iosX64
-//    }
+//    } $(TARGET_TEMP_DIR)/$(PRODUCT_NAME)-LinkMap-$(CURRENT_VARIANT)-$(CURRENT_ARCH).txt
 //    iosTarget("ios") {}
     
     listOf(
@@ -72,7 +79,7 @@ kotlin {
         val coroutinesNative: String by rootProject.extra
         //val serializationCore: String by rootProject.extra
         val datetime: String by rootProject.extra
-        val kodi: String by rootProject.extra
+        //val kodi: String by rootProject.extra
         val sresultcore: String by rootProject.extra
 
         val commonMain by getting {
@@ -97,25 +104,33 @@ kotlin {
 
         val ktorAndroid: String by rootProject.extra
 
-        val sresult: String by rootProject.extra
+        //val sresult: String by rootProject.extra
+        @Suppress("UNUSED_VARIABLE")
         val androidMain by getting {
             dependencies {
-                api(kodi)
+                //api(kodi)
                 //api(sresult)
                 implementation(ktorAndroid)
             }
         }
+        @Suppress("UNUSED_VARIABLE")
         val androidTest by getting
 
-//        val iosMain by getting
+        val ktorIOS: String by rootProject.extra
+//        val iosMain by getting {
+//            dependsOn(commonMain)
+//            dependencies {
+//                implementation(ktorIOS)
+//            }
+//        }
 //        val iosTest by getting
 
         val iosX64Main by getting
         val iosArm64Main by getting
         val iosSimulatorArm64Main by getting
 
-        val ktorIOS: String by rootProject.extra
-        val iosMain by getting {
+        @Suppress("UNUSED_VARIABLE")
+        val iosMain by creating {
             dependsOn(commonMain)
             iosX64Main.dependsOn(this)
             iosArm64Main.dependsOn(this)
@@ -129,7 +144,8 @@ kotlin {
         val iosArm64Test by getting
         val iosSimulatorArm64Test by getting
 
-        val iosTest by getting {
+        @Suppress("UNUSED_VARIABLE")
+        val iosTest by creating {
             dependsOn(commonTest)
             iosX64Test.dependsOn(this)
             iosArm64Test.dependsOn(this)
@@ -138,10 +154,10 @@ kotlin {
     }
 }
 
-val kodiksp: String by rootProject.extra
-dependencies {
-    add("kspCommonMainMetadata", kodiksp)
-}
+//val kodiksp: String by rootProject.extra
+//dependencies {
+//    add("kspCommonMainMetadata", kodiksp)
+//}
 
 android {
     compileSdk = 33

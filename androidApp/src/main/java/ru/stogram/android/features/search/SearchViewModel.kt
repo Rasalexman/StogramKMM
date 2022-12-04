@@ -1,50 +1,45 @@
 package ru.stogram.android.features.search
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavController
-import androidx.navigation.NavHostController
-import com.rasalexman.kodi.annotations.BindSingle
-import com.rasalexman.kodi.core.IKodi
-import com.rasalexman.kodi.core.immutableInstance
-import com.rasalexman.kodi.core.instance
-import com.rasalexman.sresult.common.extensions.asState
-import com.rasalexman.sresult.common.extensions.emptyResult
+import com.rasalexman.sresult.common.extensions.loadingResult
 import com.rasalexman.sresult.common.extensions.logg
-import com.rasalexman.sresult.common.extensions.toSuccessListResult
+import com.rasalexman.sresult.common.extensions.toSuccessResult
+import com.rasalexman.sresult.common.utils.convertList
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import ru.stogram.android.constants.PostsResult
-import ru.stogram.android.di.ModuleNames
-import ru.stogram.android.navigation.toPostDetails
-import ru.stogram.models.PostEntity
+import ru.stogram.android.features.base.BaseViewModel
+import ru.stogram.android.mappers.IPostItemUIMapper
+import ru.stogram.android.models.PostItemUI
+import ru.stogram.android.navigation.IHostRouter
 import ru.stogram.repository.ISearchRepository
+import javax.inject.Inject
 
-@BindSingle(
-    toClass = SearchViewModel::class,
-    toModule = ModuleNames.ViewModels
-)
-class SearchViewModel : ViewModel(), IKodi {
-
-    private val searchRepository: ISearchRepository by immutableInstance()
+@HiltViewModel
+class SearchViewModel @Inject constructor(
+    private val router: IHostRouter,
+    private val searchRepository: ISearchRepository,
+    private val postItemUIMapper: IPostItemUIMapper,
+) : BaseViewModel() {
 
     val searchQuery = MutableStateFlow("")
     val refreshing: Boolean = false
 
     val postsState: StateFlow<PostsResult> = searchRepository.takeSearchedPostsFlow().map { posts ->
-        posts.toSuccessListResult()
-    }.flowOn(Dispatchers.Default).asState(viewModelScope, emptyResult())
+        postItemUIMapper.convertList(posts).toSuccessResult()
+    }.flowOn(Dispatchers.IO).stateIn(viewModelScope, SharingStarted.Eagerly, loadingResult())
 
     fun onSwipeRefresh() {
 
     }
 
-    fun onSearchButtonPressed() {
+    fun onSearchButtonPressed() = launchOnMain {
         logg { "---> SEARCH QUERY IS ${searchQuery.value}" }
         searchRepository.onQueryChanged(searchQuery.value)
     }
 
-    fun onPostClicked(post: PostEntity) {
-        instance<NavHostController>().toPostDetails(post.postId)
+    fun onPostClicked(post: PostItemUI) = launchOnMain {
+        router.showHostPostDetails(post.postId, false)
     }
 }

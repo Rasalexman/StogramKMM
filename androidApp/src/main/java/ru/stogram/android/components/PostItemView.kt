@@ -12,43 +12,40 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.pager.ExperimentalPagerApi
 import ru.stogram.android.common.orZero
-import ru.stogram.android.features.home.HomeViewModel
+import ru.stogram.android.mappers.IPostItemUIMapper
+import ru.stogram.android.mappers.PostItemUIMapper
+import ru.stogram.android.models.PostItemUI
 import ru.stogram.models.PostEntity
 
 @ExperimentalPagerApi
 @Composable
 fun PostItemView(
-    post: PostEntity,
-    viewModel: HomeViewModel
+    post: PostItemUI,
+    onAvatarClicked: (PostItemUI) -> Unit,
+    onCommentsClicked: (PostItemUI) -> Unit,
+    onLikeClicked: (PostItemUI) -> Unit
 ) {
-
-    var isLikedState by remember { mutableStateOf(post.isLiked) }
-    val postPhotos: List<String> by post.takeContentFlow().collectAsState(
-        initial = emptyList()
-    )
-
     Column(modifier = Modifier
         .fillMaxWidth()
         .padding(bottom = 8.dp)) {
         Box(modifier = Modifier.padding(all = 8.dp)) {
-            AvatarNameDescView(user = post.takePostUser()) {
-                viewModel.onPostAvatarClicked(post = post)
+            AvatarNameDescView(user = post.user) {
+                onAvatarClicked(post)
             }
         }
 
-        PostContentView(postPhotos)
+        PostContentView(post.postContent)
 
         Row(modifier = Modifier.padding(all = 8.dp)) {
 
-            LikesView(count = post.likesCount.orZero(), isSelected = isLikedState) {
-                //post.isLiked = !post.isLiked
-                isLikedState = post.isLiked
+            LikesView(count = post.likesCount.orZero(), isSelected = post.isLiked) {
+                onLikeClicked(post)
             }
 
             Spacer(modifier = Modifier.padding(start = 16.dp))
 
             CommentsView(count = post.commentsCount.orZero()) {
-                viewModel.onPostCommentsClicked(post = post)
+                onCommentsClicked(post)
             }
         }
 
@@ -62,10 +59,11 @@ fun PostItemView(
     }
 }
 
-class PostPreviewParameterProvider : PreviewParameterProvider<PostEntity> {
+class PostPreviewParameterProvider : PreviewParameterProvider<PostItemUI> {
+    private val postItemUIMapper: IPostItemUIMapper = PostItemUIMapper()
     override val values = sequenceOf(
-        PostEntity.createRandom(),
-        PostEntity.createRandom(),
+        postItemUIMapper.convertSingle(PostEntity.createRandom()),
+        postItemUIMapper.convertSingle(PostEntity.createRandom()),
     )
 }
 
@@ -74,7 +72,12 @@ class PostPreviewParameterProvider : PreviewParameterProvider<PostEntity> {
 @Preview(name = "PostView", showBackground = true)
 @Composable
 fun PostViewPreview(
-    @PreviewParameter(PostPreviewParameterProvider::class, limit = 1) post: PostEntity
+    @PreviewParameter(PostPreviewParameterProvider::class, limit = 1) post: PostItemUI
 ) {
-    PostItemView(post = post, viewModel = HomeViewModel())
+    PostItemView(
+        post = post,
+        onAvatarClicked = {},
+        onCommentsClicked = {},
+        onLikeClicked = {}
+    )
 }

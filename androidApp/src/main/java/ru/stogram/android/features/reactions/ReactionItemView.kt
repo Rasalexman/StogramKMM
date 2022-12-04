@@ -13,26 +13,31 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ru.stogram.android.components.PostImageView
 import ru.stogram.android.components.UserAvatarView
+import ru.stogram.android.mappers.IPostItemUIMapper
+import ru.stogram.android.mappers.IReactionItemUIMapper
+import ru.stogram.android.mappers.PostItemUIMapper
+import ru.stogram.android.mappers.ReactionItemUIMapper
+import ru.stogram.android.models.PostItemUI
+import ru.stogram.android.models.ReactionItemUI
+import ru.stogram.models.IUser
 import ru.stogram.models.ReactionEntity
 
 
 @Composable
 fun ReactionItemView(
-    reaction: ReactionEntity,
-    onAvatarClicked: (ReactionEntity) -> Unit
+    reaction: ReactionItemUI,
+    onAvatarClicked: (IUser) -> Unit,
+    onPostClicked: (PostItemUI) -> Unit
 ) {
     Row(
         Modifier
             .fillMaxWidth()
             .wrapContentHeight()
             .padding(horizontal = 8.dp, vertical = 8.dp), verticalAlignment = Alignment.CenterVertically) {
-        UserAvatarView(user = reaction.takeUserFrom()) {
-            onAvatarClicked.invoke(reaction)
-        }
-
+        UserAvatarView(user = reaction.user, onClick = onAvatarClicked)
 
         Text(
-            text = reaction.createFullDescription(),
+            text = reaction.description,
             fontSize = 12.sp,
             maxLines = 5,
             overflow = TextOverflow.Ellipsis,
@@ -40,23 +45,25 @@ fun ReactionItemView(
         )
 
         Box(modifier = Modifier.size(72.dp)) {
-            PostImageView(post = reaction.takeReactionPost())
+            PostImageView(post = reaction.post, onClick = onPostClicked)
         }
     }
 }
 
-class ReactionItemPreviewParameterProvider : PreviewParameterProvider<ReactionEntity> {
+class ReactionItemPreviewParameterProvider : PreviewParameterProvider<ReactionItemUI> {
+    private val postItemUIMapper: IPostItemUIMapper = PostItemUIMapper()
+    private val reactionItemUIMapper: IReactionItemUIMapper = ReactionItemUIMapper(postItemUIMapper)
     override val values = sequenceOf(
-        ReactionEntity.createRandom()
+        reactionItemUIMapper.convertSingle(ReactionEntity.createRandom())
     )
 }
 
 @Preview(name = "ReactionItemView", showBackground = true)
 @Composable
 fun ReactionItemViewPreview(
-    @PreviewParameter(ReactionItemPreviewParameterProvider::class, limit = 1) post: ReactionEntity
+    @PreviewParameter(ReactionItemPreviewParameterProvider::class, limit = 1) post: ReactionItemUI
 ) {
-    ReactionItemView(reaction = post) {
+    ReactionItemView(reaction = post, onAvatarClicked = {}) {
 
     }
 }
