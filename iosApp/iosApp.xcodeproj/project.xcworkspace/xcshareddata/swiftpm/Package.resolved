@@ -1,0 +1,23 @@
+{
+  "pins" : [
+    {
+      "identity" : "sodi",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Rasalexman/Sodi",
+      "state" : {
+        "revision" : "4c708ce431e97fb7f87ca13d84208dac05720be6",
+        "version" : "1.1.0"
+      }
+    },
+    {
+      "identity" : "url-image",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/dmytro-anokhin/url-image",
+      "state" : {
+        "revision" : "4042f955f1fdff00ced85545e1eecdbf969b5cd0",
+        "version" : "3.1.1"
+      }
+    }
+  ],
+  "version" : 2
+}
