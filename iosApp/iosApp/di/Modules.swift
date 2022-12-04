@@ -19,13 +19,14 @@ let ldsModule = sodiModule(moduleName: ModulesNames.LDS) { sodi in
     sodi.bindProvider(to: IPostsLocalDataSource.self) { PostsLocalDataSource(database: instance()) }
     sodi.bindProvider(to: IReactionsLocalDataSource.self) { ReactionsLocalDataSource(database: instance()) }
     sodi.bindProvider(to: ICommentsLocalDataSource.self) { CommentsLocalDataSource(database: instance()) }
+    sodi.bindProvider(to: ISearchLocalDataSource.self) { SearchLocalDataSource(database: instance()) }
 }
 
 let repositoryModule = sodiModule(moduleName: ModulesNames.REPOSITORY) { sodi in
     sodi.bindSingle(to: IUserRepository.self) { UserRepository(localDataSource: instance()) }
     sodi.bindSingle(to: IUserStoriesRepository.self) { UserStoriesRepository(localDataSource: instance()) }
     sodi.bindSingle(to: IPostsRepository.self) { PostsRepository(localDataSource: instance()) }
-    sodi.bindSingle(to: ISearchRepository.self) { SearchRepository() }
+    sodi.bindSingle(to: ISearchRepository.self) { SearchRepository(localDataSource: instance()) }
     sodi.bindSingle(to: IReactionsRepository.self) { ReactionsRepository(localDataSource: instance()) }
     sodi.bindSingle(to: ICommentsRepository.self) { CommentsRepository(localDataSource: instance()) }
 }

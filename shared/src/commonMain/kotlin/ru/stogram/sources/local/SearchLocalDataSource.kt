@@ -10,7 +10,7 @@ import ru.stogram.database.RealmDataBase
 import ru.stogram.models.PostEntity
 
 class SearchLocalDataSource(
-    private val dataBase: RealmDataBase
+    private val database: RealmDataBase
 ) : ISearchLocalDataSource {
 
     private var lastQuery: String = ""
@@ -26,7 +26,7 @@ class SearchLocalDataSource(
             if (query.isNotEmpty() && query != lastQuery) {
                 lastQuery = query
                 val lowerQuery = query.lowercase()
-                dataBase.realm.query<PostEntity>(
+                database.realm.query<PostEntity>(
                     "text CONTAINS[c] $0 OR user.name CONTAINS[c] $0",
                     lowerQuery
                 )
@@ -37,7 +37,7 @@ class SearchLocalDataSource(
 
             } else {
                 lastQuery = ""
-                dataBase.realm.query<PostEntity>().limit(20).asFlow().map { postsResult ->
+                database.realm.query<PostEntity>().limit(20).asFlow().map { postsResult ->
                     val queryResult: List<PostEntity> = postsResult.list
                     queryResult
                 }
