@@ -1,6 +1,7 @@
 package ru.stogram.android.navigation
 
 import androidx.navigation.NavHostController
+import ru.stogram.models.IUser
 import java.lang.ref.WeakReference
 
 abstract class HostRouter : IHostRouter {
@@ -12,8 +13,8 @@ abstract class HostRouter : IHostRouter {
         navHostControllerRef = WeakReference(navHostController)
     }
 
-    override fun showHostUserProfile(profileId: String) {
-        val navRouter = "user/$profileId"
+    override fun showHostUserProfile(user: IUser) {
+        val navRouter = "user/${user.id}/${user.login}"
         navHostControllerInstance.navigateToBottomRouter(navRouter)
     }
 
@@ -24,6 +25,11 @@ abstract class HostRouter : IHostRouter {
 
     override fun showHostPostComments(postId: String) {
         val navRouter = "post/comments/$postId"
+        navHostControllerInstance.navigateToBottomRouter(navRouter)
+    }
+
+    override fun showSubsAndObserversScreen(userId: String?, screenType: String) {
+        val navRouter = "user/subobs/$userId/$screenType"
         navHostControllerInstance.navigateToBottomRouter(navRouter)
     }
 
@@ -56,17 +62,16 @@ abstract class HostRouter : IHostRouter {
             }
         }
     }
-
 }
 
 interface IHostRouter : IBackToHostRouter {
     fun setupNavHostController(navHostController: NavHostController)
-
-    fun showHostUserProfile(profileId: String)
+    fun showHostUserProfile(user: IUser)
     fun showHostPostComments(postId: String)
     fun showHostPostDetails(postId: String, fromProfile: Boolean = false)
 
     fun showHostMainScreen()
     fun showHostRegisterScreen()
     fun showHostLoginScreen()
+    fun showSubsAndObserversScreen(userId: String?, screenType: String)
 }

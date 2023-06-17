@@ -4,6 +4,7 @@ import com.rasalexman.sresult.data.dto.SResult
 import kotlinx.coroutines.flow.Flow
 import ru.stogram.database.CFlow
 import ru.stogram.database.wrap
+import ru.stogram.models.IUser
 import ru.stogram.models.UserEntity
 import ru.stogram.sources.local.IUserLocalDataSource
 
@@ -34,6 +35,22 @@ class UserRepository(
     override fun registerUser(user: UserEntity): SResult<Boolean> {
         return localDataSource.registerUser(user)
     }
+
+    override fun subscribeToUser(userId: String): SResult<Boolean> {
+        return localDataSource.subscribeToUser(userId)
+    }
+
+    override fun unsubscribeToUser(userId: String): SResult<Boolean> {
+        return localDataSource.unsubscribeToUser(userId)
+    }
+
+    override fun getUserSubscribers(userId: String): Flow<SResult<List<IUser>>> {
+        return localDataSource.getUserSubscribers(userId)
+    }
+
+    override fun getUserObservers(userId: String): Flow<SResult<List<IUser>>> {
+        return localDataSource.getUserObservers(userId)
+    }
 }
 
 interface IUserRepository {
@@ -45,4 +62,10 @@ interface IUserRepository {
     fun authUser(login: String, password: String): SResult<Boolean>
     fun registerUser(user: UserEntity): SResult<Boolean>
     fun takeUserResult(): SResult<UserEntity>
+
+    fun subscribeToUser(userId: String): SResult<Boolean>
+    fun unsubscribeToUser(userId: String): SResult<Boolean>
+
+    fun getUserSubscribers(userId: String): Flow<SResult<List<IUser>>>
+    fun getUserObservers(userId: String): Flow<SResult<List<IUser>>>
 }

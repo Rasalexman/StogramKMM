@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.withContext
 import ru.stogram.android.constants.ArgsNames
 import ru.stogram.android.constants.CommentsResult
+import ru.stogram.android.features.base.BaseActionViewModel
 import ru.stogram.android.features.base.BaseViewModel
 import ru.stogram.android.mappers.ICommentItemUIMapper
 import ru.stogram.android.models.CommentItemUI
@@ -22,12 +23,12 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CommentViewModel @Inject constructor(
-    private val router: IHostRouter,
+    override val router: IHostRouter,
     private val commentItemUIMapper: ICommentItemUIMapper,
     private val reactionRepository: IReactionsRepository,
     private val commentsRepository: ICommentsRepository,
     savedStateHandle: SavedStateHandle
-) : BaseViewModel() {
+) : BaseActionViewModel() {
 
     val inputComment: MutableStateFlow<String> = MutableStateFlow("")
     private val lastSelectedPostId: String = checkNotNull(savedStateHandle[ArgsNames.POST_ID])
@@ -36,10 +37,6 @@ class CommentViewModel @Inject constructor(
         .map { currentComments ->
             commentItemUIMapper.convertList(currentComments).toSuccessResult()
     }.flowOn(Dispatchers.IO).stateIn(viewModelScope, SharingStarted.Eagerly, loadingResult())
-
-    fun onAvatarClicked(commentUser: IUser) = launchOnMain {
-        router.showHostUserProfile(commentUser.id)
-    }
 
     fun onLikeClicked(comment: CommentItemUI) = launchOnMain {
         val updateResult = withContext(Dispatchers.IO) {
@@ -60,9 +57,5 @@ class CommentViewModel @Inject constructor(
             }
             logg { "onDoneCommentHandler result ${commentResult.data.orFalse()}" }
         }
-    }
-
-    fun onBackClicked() = launchOnMain {
-        router.popBackToHost()
     }
 }

@@ -10,14 +10,14 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.google.accompanist.pager.ExperimentalPagerApi
+import androidx.compose.foundation.ExperimentalFoundationApi
 import ru.stogram.android.common.orZero
 import ru.stogram.android.mappers.IPostItemUIMapper
 import ru.stogram.android.mappers.PostItemUIMapper
 import ru.stogram.android.models.PostItemUI
 import ru.stogram.models.PostEntity
 
-@ExperimentalPagerApi
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PostItemView(
     post: PostItemUI,
@@ -67,7 +67,7 @@ class PostPreviewParameterProvider : PreviewParameterProvider<PostItemUI> {
     )
 }
 
-@ExperimentalPagerApi
+@OptIn(ExperimentalFoundationApi::class)
 @Suppress("PreviewAnnotationInFunctionWithParameters")
 @Preview(name = "PostView", showBackground = true)
 @Composable

@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.insets.ui.Scaffold
-import com.google.accompanist.pager.ExperimentalPagerApi
+import androidx.compose.foundation.ExperimentalFoundationApi
 import com.rasalexman.sresult.common.extensions.applyIfSuccess
 import kotlinx.coroutines.flow.MutableStateFlow
 import ru.stogram.android.R
@@ -40,7 +40,7 @@ import ru.stogram.android.models.CommentItemUI
 import ru.stogram.android.models.PostItemUI
 import ru.stogram.models.IUser
 
-@ExperimentalPagerApi
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PostDetailsView() {
     val postDetailsViewModel: PostDetailsViewModel = hiltViewModel()
@@ -48,7 +48,7 @@ fun PostDetailsView() {
     PostDetailsView(postDetailsViewModel, commentsViewModel)
 }
 
-@ExperimentalPagerApi
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PostDetailsView(
     postDetailsViewModel: PostDetailsViewModel,
@@ -102,7 +102,7 @@ fun PostDetailsView(
     }
 }
 
-@ExperimentalPagerApi
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PostDetailsView(
     inputComment: MutableStateFlow<String>,

@@ -21,9 +21,11 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.insets.ui.Scaffold
+import com.rasalexman.sresult.common.extensions.applyIfLoading
 import com.rasalexman.sresult.common.extensions.applyIfSuccess
 import com.rasalexman.sresult.common.extensions.toSuccessResult
 import ru.stogram.android.R
+import ru.stogram.android.components.SimpleLinearProgressIndicator
 import ru.stogram.android.constants.ReactionsResult
 import ru.stogram.android.mappers.IPostItemUIMapper
 import ru.stogram.android.mappers.IReactionItemUIMapper
@@ -52,7 +54,10 @@ internal fun ReactionsView(
         scaffoldState = scaffoldState,
         modifier = Modifier.fillMaxSize(),
     ) {
-        Box(modifier = Modifier.pullRefresh(pullRefreshState)) {
+        Box(modifier = Modifier
+            .pullRefresh(pullRefreshState)
+            .fillMaxSize()
+        ) {
 
             val reactionsState by viewModel.reactionsState.collectAsState()
 

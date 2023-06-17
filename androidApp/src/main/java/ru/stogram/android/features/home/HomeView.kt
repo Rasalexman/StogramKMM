@@ -23,7 +23,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.insets.ui.Scaffold
-import com.google.accompanist.pager.ExperimentalPagerApi
+import androidx.compose.foundation.ExperimentalFoundationApi
 import com.rasalexman.sresult.common.extensions.applyIfSuccess
 import com.rasalexman.sresult.common.extensions.isLoading
 import com.rasalexman.sresult.common.extensions.logg
@@ -37,14 +37,13 @@ import ru.stogram.android.models.PostItemUI
 import ru.stogram.models.PostEntity
 import ru.stogram.models.UserEntity
 
-@OptIn(ExperimentalPagerApi::class, ExperimentalMaterialApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class)
 @Composable
 fun Home() {
     HomeView(viewModel = hiltViewModel())
 }
 
 @ExperimentalMaterialApi
-@ExperimentalPagerApi
 @Composable
 fun HomeView(viewModel: HomeViewModel) {
     HomeView(
@@ -56,7 +55,7 @@ fun HomeView(viewModel: HomeViewModel) {
     )
 }
 
-@ExperimentalPagerApi
+@OptIn(ExperimentalFoundationApi::class)
 @ExperimentalMaterialApi
 @Composable
 internal fun HomeView(
@@ -100,7 +99,7 @@ internal fun HomeView(
     }
 }
 
-@ExperimentalPagerApi
+@OptIn(ExperimentalFoundationApi::class)
 @ExperimentalMaterialApi
 @Composable
 fun HomeView(
@@ -156,7 +155,7 @@ class HomePreviewParameterProvider : PreviewParameterProvider<HomeState> {
 }
 
 @ExperimentalMaterialApi
-@ExperimentalPagerApi
+@OptIn(ExperimentalFoundationApi::class)
 @Preview(name = "HomePreview", showBackground = true)
 @Composable
 fun HomePreview(

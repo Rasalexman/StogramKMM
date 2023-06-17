@@ -13,5 +13,6 @@ object ScreenNames {
 
     const val POST_DETAILS = "post/{${ArgsNames.POST_ID}}/{${ArgsNames.FROM_PROFILE}}"
     const val POST_COMMENTS = "post/comments/{${ArgsNames.POST_ID}}"
-    const val USER_PROFILE = "user/{${ArgsNames.USER_ID}}"
+    const val SUBS_OBSERVERS = "user/subobs/{${ArgsNames.USER_ID}}/{${ArgsNames.SCREEN_TYPE}}"
+    const val USER_PROFILE = "user/{${ArgsNames.USER_ID}}/{${ArgsNames.USER_LOGIN}}"
 }

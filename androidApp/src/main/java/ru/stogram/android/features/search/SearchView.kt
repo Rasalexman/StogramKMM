@@ -24,7 +24,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.insets.ui.Scaffold
-import com.google.accompanist.pager.ExperimentalPagerApi
+import androidx.compose.foundation.ExperimentalFoundationApi
 import com.rasalexman.sresult.common.extensions.applyIfLoading
 import com.rasalexman.sresult.common.extensions.applyIfSuccess
 import com.rasalexman.sresult.common.extensions.logg
@@ -37,14 +37,14 @@ import ru.stogram.android.models.PostItemUI
 import ru.stogram.models.PostEntity
 
 @ExperimentalMaterialApi
-@ExperimentalPagerApi
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun Search() {
     SearchView(viewModel = hiltViewModel())
 }
 
 @ExperimentalMaterialApi
-@ExperimentalPagerApi
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun SearchView(
     viewModel: SearchViewModel,
@@ -97,7 +97,7 @@ internal fun SearchView(
 }
 
 @ExperimentalMaterialApi
-@ExperimentalPagerApi
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun SearchResultView(
     posts: List<PostItemUI>,
@@ -123,7 +123,7 @@ class SearchPreviewParameterProvider : PreviewParameterProvider<List<PostItemUI>
 }
 
 @ExperimentalMaterialApi
-@ExperimentalPagerApi
+@OptIn(ExperimentalFoundationApi::class)
 @Preview
 @Composable
 fun SearchPreview(

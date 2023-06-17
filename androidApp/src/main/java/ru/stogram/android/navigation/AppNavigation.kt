@@ -7,7 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.*
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.navigation
-import com.google.accompanist.pager.ExperimentalPagerApi
+import androidx.compose.foundation.ExperimentalFoundationApi
 import ru.stogram.android.constants.ArgsNames
 import ru.stogram.android.constants.ScreenNames
 import ru.stogram.android.features.create.Create
@@ -31,6 +31,7 @@ internal sealed class Screen(val route: String) {
     object UserProfile : Screen(ScreenNames.USER_PROFILE)
     object PostDetails : Screen(ScreenNames.POST_DETAILS)
     object PostComments : Screen(ScreenNames.POST_COMMENTS)
+    object SubsAndObservers : Screen(ScreenNames.SUBS_OBSERVERS)
 }
 
 private sealed class LeafScreen(
@@ -40,7 +41,7 @@ private sealed class LeafScreen(
     object MenuProfile : LeafScreen(ScreenNames.USER_PROFILE)
 }
 
-@OptIn(ExperimentalAnimationApi::class, ExperimentalPagerApi::class, ExperimentalMaterialApi::class)
+@OptIn(ExperimentalAnimationApi::class, ExperimentalFoundationApi::class, ExperimentalMaterialApi::class)
 @Composable
 internal fun AppNavigation(
     navController: NavHostController,
@@ -64,7 +65,7 @@ internal fun AppNavigation(
 }
 
 @ExperimentalMaterialApi
-@ExperimentalPagerApi
+@OptIn(ExperimentalFoundationApi::class)
 @ExperimentalAnimationApi
 private fun NavGraphBuilder.addHomeTopLevel() {
     addBottomNavigationView(
@@ -75,7 +76,7 @@ private fun NavGraphBuilder.addHomeTopLevel() {
     }
 }
 
-@OptIn(ExperimentalAnimationApi::class, ExperimentalPagerApi::class, ExperimentalMaterialApi::class)
+@OptIn(ExperimentalAnimationApi::class, ExperimentalFoundationApi::class, ExperimentalMaterialApi::class)
 private fun NavGraphBuilder.addSearchTopLevel() {
     addBottomNavigationView(
         route = Screen.Search.route,
@@ -116,6 +117,10 @@ private fun NavGraphBuilder.addProfileTopLevel() {
             route = route,
             label = ScreenNames.PROFILE,
             argNames = listOf(navArgument(ArgsNames.USER_ID) {
+                defaultValue = ""
+                nullable = true
+                type = NavType.StringType
+            }, navArgument(ArgsNames.USER_LOGIN) {
                 defaultValue = ""
                 nullable = true
                 type = NavType.StringType

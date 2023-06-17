@@ -8,13 +8,24 @@ interface IUser {
     var desc: String
     var password: String
     var hasStory: Boolean
-
-    var postCount: String
-    var subsCount: String
-    var observCount: String
     var bio: String
 
     var isCurrentUser: Boolean
+
+    /**
+     *
+     */
+    var isSubscribed: Boolean
+
+    /**
+     *
+     */
+    val subsCount: String
+
+    /**
+     *
+     */
+    val observCount: String
 }
 
 fun IUser?.orEmpty(): IUser {

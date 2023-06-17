@@ -25,20 +25,28 @@ import ru.stogram.android.R
 import ru.stogram.android.common.orZero
 import ru.stogram.android.components.TextCountView
 import ru.stogram.android.components.UserAvatarView
+import ru.stogram.android.constants.ScreenType
 import ru.stogram.models.IUser
 import ru.stogram.models.UserEntity
 
 @Composable
 fun ProfileTopView(
+    postsCountState: SResult<String>,
     userState: SResult<IUser>,
     modifier: Modifier,
-    onMessageClick: () -> Unit
+    onProfileButtonClick: (IUser) -> Unit,
+    onScreenTypeClick: (String) -> Unit
 ) {
+
+    val postCountText = postsCountState.data ?: "-"
+
     Box(modifier = modifier) {
-        Column(modifier = Modifier
-            .fillMaxWidth()
-            .background(Color.White)
-            .padding(8.dp)) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color.White)
+                .padding(8.dp)
+        ) {
 
             userState.applyIfSuccess { user ->
                 Row(
@@ -54,24 +62,54 @@ fun ProfileTopView(
                                 .fillMaxWidth()
                                 .padding(horizontal = 8.dp)
                         ) {
-                            TextCountView(count = user.postCount.orZero(), desc = "Публикации")
-                            TextCountView(count = user.subsCount.orZero(), desc = "Подписчики")
-                            TextCountView(count = user.observCount.orZero(), desc = "Подписки")
+
+                            TextCountView(
+                                count = postCountText,
+                                desc = stringResource(id = R.string.title_publications)
+                            ) {
+
+                            }
+                            TextCountView(
+                                count = user.subsCount.orZero(),
+                                desc = stringResource(id = R.string.title_subs)
+                            ) {
+                                onScreenTypeClick(ScreenType.SUBS)
+                            }
+                            TextCountView(
+                                count = user.observCount.orZero(),
+                                desc = stringResource(id = R.string.title_observe)
+                            ) {
+                                onScreenTypeClick(ScreenType.OBSERVE)
+                            }
                         }
 
-                        if(user.isCurrentUser) {
-                            OutlinedButton(
-                                onClick = onMessageClick,
-                                shape = RoundedCornerShape(48.dp),
-                                border = BorderStroke(2.dp, Color.DarkGray),
-                                colors = ButtonDefaults.buttonColors(contentColor = Color.Black, backgroundColor = Color.White)
-                            ) {
-                                Text(
-                                    text = stringResource(id = R.string.button_exit),
-                                    fontSize = 12.sp,
-                                    modifier = Modifier.padding(horizontal = 30.dp)
-                                )
+                        val buttonTextRes = if (user.isCurrentUser) {
+                            R.string.button_exit
+                        } else {
+                            if (!user.isSubscribed) {
+                                R.string.button_subscribe
+                            } else {
+                                R.string.button_unsubscribe
                             }
+
+                        }
+
+                        OutlinedButton(
+                            onClick = {
+                                onProfileButtonClick.invoke(user)
+                            },
+                            shape = RoundedCornerShape(48.dp),
+                            border = BorderStroke(2.dp, Color.DarkGray),
+                            colors = ButtonDefaults.buttonColors(
+                                contentColor = Color.Black,
+                                backgroundColor = Color.White
+                            )
+                        ) {
+                            Text(
+                                text = stringResource(id = buttonTextRes),
+                                fontSize = 12.sp,
+                                modifier = Modifier.padding(horizontal = 30.dp)
+                            )
                         }
                     }
 
@@ -109,6 +147,11 @@ class ProfileTopPreviewParameterProvider : PreviewParameterProvider<SResult<IUse
 fun ProfileTopViewPreview(
     @PreviewParameter(ProfileTopPreviewParameterProvider::class, limit = 1) result: SResult<IUser>
 ) {
-    ProfileTopView(result, modifier = Modifier
-        .fillMaxWidth(), onMessageClick = {})
+    ProfileTopView(
+        postsCountState = "34".toSuccessResult(),
+        userState = result,
+        modifier = Modifier.fillMaxWidth(),
+        onProfileButtonClick = {},
+        onScreenTypeClick = { _ -> }
+    )
 }

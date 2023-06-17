@@ -43,7 +43,7 @@ fun AvatarNameDescView(user: IUser, desc: String = "", size: Dp = 48.dp, onClick
             verticalArrangement = Arrangement.Center,
             modifier = Modifier.padding(start = 8.dp)
         ) {
-            Text(text = user.name, fontSize = 16.sp, fontWeight = FontWeight.Bold)
+            Text(text = user.login, fontSize = 16.sp, fontWeight = FontWeight.Bold)
             if(realDesc.isNotEmpty()) {
                 Text(realDesc, fontSize = 12.sp)
             }

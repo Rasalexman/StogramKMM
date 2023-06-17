@@ -14,7 +14,7 @@ import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
-import com.google.accompanist.pager.ExperimentalPagerApi
+import androidx.compose.foundation.ExperimentalFoundationApi
 import com.rasalexman.sresult.common.extensions.logg
 import ru.stogram.android.constants.ArgsNames
 import ru.stogram.android.features.comments.CommentsView
@@ -23,11 +23,12 @@ import ru.stogram.android.features.main.MainView
 import ru.stogram.android.features.postdetails.PostDetailsView
 import ru.stogram.android.features.profile.Profile
 import ru.stogram.android.features.register.Register
+import ru.stogram.android.features.subsnobserv.SubsAndObservers
 import ru.stogram.android.navigation.Screen
 import ru.stogram.android.navigation.composable
 import ru.stogram.android.navigation.debugLabel
 
-@ExperimentalPagerApi
+@OptIn(ExperimentalFoundationApi::class)
 @ExperimentalAnimationApi
 @Composable
 fun ScreenView() {
@@ -100,9 +101,28 @@ fun ScreenView() {
                     arguments = listOf(navArgument(ArgsNames.USER_ID) {
                         nullable = true
                         type = NavType.StringType
+                    }, navArgument(ArgsNames.USER_LOGIN) {
+                        nullable = true
+                        type = NavType.StringType
                     })
                 ) {
                     Profile()
+                }
+
+                composable(
+                    route = Screen.SubsAndObservers.route,
+                    debugLabel = Screen.SubsAndObservers.route,
+                    arguments = listOf(navArgument(ArgsNames.USER_ID) {
+                        defaultValue = ""
+                        nullable = true
+                        type = NavType.StringType
+                    }, navArgument(ArgsNames.SCREEN_TYPE) {
+                        defaultValue = ""
+                        nullable = true
+                        type = NavType.StringType
+                    })
+                ) {
+                    SubsAndObservers()
                 }
             }
         }

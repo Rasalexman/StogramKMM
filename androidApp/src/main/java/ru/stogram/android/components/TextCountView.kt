@@ -12,12 +12,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ru.stogram.android.common.bodyWidth
+import ru.stogram.android.common.noRippleClickable
+import ru.stogram.models.IUser
 
 @Composable
-fun TextCountView(count: String, desc: String) {
+fun TextCountView(count: String, desc: String, onClick: (() -> Unit)? = null) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.padding(4.dp)
+        modifier = Modifier.padding(4.dp).noRippleClickable {
+            onClick?.invoke()
+        }
     ) {
         Text(text = count, fontSize = 16.sp, fontWeight = FontWeight.Bold)
         Text(text = desc, fontSize = 10.sp)

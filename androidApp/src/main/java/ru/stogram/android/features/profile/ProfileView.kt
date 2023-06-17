@@ -52,27 +52,34 @@ fun ProfileView(viewModel: ProfileViewModel) {
     val topState by viewModel.userState.collectAsState()
     val toolbarOffsetHeightPx = remember { viewModel.topBarOffset }
     val showTopBar by viewModel.showTopBar.collectAsState()
+    val postsCountState by viewModel.postsCountState.collectAsState()
 
     ProfileView(
+        userLogin = viewModel.login,
         topState = topState,
         postsState = postsState,
+        postCountState = postsCountState,
         topBarOffset = toolbarOffsetHeightPx,
         showTopBar = showTopBar,
         onPostClicked = viewModel::onPostClicked,
         onBackClicked = viewModel::onBackClicked,
-        onMessagesClick = viewModel::onMessagesClicked
+        onMessagesClick = viewModel::onProfileButtonClicked,
+        onScreenTypeClick = viewModel::onScreenTypeClick
     )
 }
 
 @Composable
 internal fun ProfileView(
+    userLogin: String,
     topState: SResult<IUser>,
+    postCountState: SResult<String>,
     postsState: PostsResult,
     topBarOffset: Float,
     showTopBar: Boolean = false,
     onPostClicked: (PostItemUI) -> Unit,
     onBackClicked: () -> Unit,
-    onMessagesClick: () -> Unit
+    onMessagesClick: (IUser) -> Unit,
+    onScreenTypeClick: (String) -> Unit
 ) {
     val scaffoldState = rememberScaffoldState()
 
@@ -104,7 +111,7 @@ internal fun ProfileView(
             if(showTopBar) {
                 TopAppBar(
                     title = {
-                        Text(text = stringResource(id = R.string.title_profile))
+                        Text(text = userLogin)
                     },
                     navigationIcon = {
                         IconButton(onClick = onBackClicked) {
@@ -149,10 +156,14 @@ internal fun ProfileView(
                 )
             }
 
-            ProfileTopView(userState = topState, modifier = Modifier
-                .height(toolbarHeight)
-                .offset { IntOffset(x = 0, y = toolbarOffsetHeightPx.value.roundToInt()) },
-                onMessageClick = onMessagesClick
+            ProfileTopView(
+                postsCountState = postCountState,
+                userState = topState,
+                modifier = Modifier
+                    .height(toolbarHeight)
+                    .offset { IntOffset(x = 0, y = toolbarOffsetHeightPx.value.roundToInt()) },
+                onProfileButtonClick = onMessagesClick,
+                onScreenTypeClick = onScreenTypeClick
             )
         }
     }
@@ -173,12 +184,15 @@ fun ProfileViewPreview(
     @PreviewParameter(ProfilePreviewParameterProvider::class, limit = 1) result: Pair<PostsResult, SResult<IUser>>
 ) {
     ProfileView(
+        postCountState = "98721".toSuccessResult(),
+        userLogin = "rally.goes",
         topState = result.second,
         postsState = result.first,
         topBarOffset = 0f,
         showTopBar = true,
         onPostClicked = {  },
         onBackClicked = {  },
-        onMessagesClick = {}
+        onMessagesClick = {},
+        onScreenTypeClick = {}
     )
 }

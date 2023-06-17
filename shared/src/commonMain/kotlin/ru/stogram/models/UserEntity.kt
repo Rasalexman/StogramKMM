@@ -1,8 +1,15 @@
 package ru.stogram.models
 
+import io.realm.kotlin.ext.realmSetOf
 import io.realm.kotlin.types.RealmObject
+import io.realm.kotlin.types.RealmSet
 import io.realm.kotlin.types.annotations.Ignore
-import ru.stogram.utils.*
+import ru.stogram.utils.getLogin
+import ru.stogram.utils.getRandomName
+import ru.stogram.utils.getRandomPhoto
+import ru.stogram.utils.getRandomString
+import ru.stogram.utils.randomBool
+import ru.stogram.utils.randomLocation
 import kotlin.random.Random
 
 class UserEntity : RealmObject, IUser {
@@ -13,14 +20,59 @@ class UserEntity : RealmObject, IUser {
     override var desc: String = ""
     override var password: String = ""
     override var hasStory: Boolean = false
-
-    override var postCount: String = "0"
-    override var subsCount: String = "0"
-    override var observCount: String = "0"
     override var bio: String = ""
+
+    //
+    var subscribers: RealmSet<String> = realmSetOf()
+    //
+    var observers: RealmSet<String> = realmSetOf()
+
+    @Ignore
+    override val subsCount: String
+        get() = subscribers.size.toString()
+
+    @Ignore
+    override val observCount: String
+        get() = observers.size.toString()
+
+    @Ignore
+    override var isSubscribed: Boolean = false
 
     @Ignore
     override var isCurrentUser: Boolean = false
+
+    fun setupIsSubs(userId: String): UserEntity {
+        isSubscribed = subscribers.contains(userId)
+        return this
+    }
+
+    fun addToSubs(userId: String): Boolean {
+        return if(!subscribers.contains(userId)) {
+            subscribers.add(userId)
+        } else {
+            true
+        }
+    }
+
+    fun removeFromSubs(userId: String): Boolean {
+        return if(subscribers.contains(userId)) {
+            subscribers.remove(userId)
+        } else {
+            true
+        }
+    }
+
+    fun addToObserv(userId: String) {
+        if(!observers.contains(userId)) {
+            observers.add(userId)
+        }
+    }
+
+    fun removeFromObserv(userId: String) {
+        if(observers.contains(userId)) {
+            observers.remove(userId)
+        }
+    }
 
     companion object {
 
@@ -50,9 +102,6 @@ class UserEntity : RealmObject, IUser {
 
         fun createRandomDetailed(hasUserStory: Boolean? = null): UserEntity {
             return createRandom(hasUserStory).apply {
-                postCount = randomCount
-                subsCount = randomCount
-                observCount = randomCount
                 bio = getRandomString(156)
             }
         }

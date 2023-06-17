@@ -113,8 +113,8 @@ kotlin {
                 implementation(ktorAndroid)
             }
         }
-        @Suppress("UNUSED_VARIABLE")
-        val androidTest by getting
+       // @Suppress("UNUSED_VARIABLE")
+//        val androidTest by getting
 
         val ktorIOS: String by rootProject.extra
 //        val iosMain by getting {

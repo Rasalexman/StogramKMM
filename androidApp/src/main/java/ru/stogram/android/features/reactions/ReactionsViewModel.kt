@@ -7,21 +7,20 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import ru.stogram.android.constants.ReactionsResult
-import ru.stogram.android.features.base.BaseViewModel
+import ru.stogram.android.features.base.BaseActionViewModel
 import ru.stogram.android.mappers.IReactionItemUIMapper
 import ru.stogram.android.models.PostItemUI
 import ru.stogram.android.navigation.IHostRouter
-import ru.stogram.models.IUser
 import ru.stogram.repository.IReactionsRepository
 import javax.inject.Inject
 
 
 @HiltViewModel
 class ReactionsViewModel @Inject constructor(
-    private val router: IHostRouter,
+    override val router: IHostRouter,
     private val reactionsRepository: IReactionsRepository,
     private val reactionItemUIMapper: IReactionItemUIMapper
-) : BaseViewModel() {
+) : BaseActionViewModel() {
 
     val isRefreshing: MutableStateFlow<Boolean> = MutableStateFlow(false)
 
@@ -37,9 +36,5 @@ class ReactionsViewModel @Inject constructor(
 
     fun onPostClicked(post: PostItemUI) = launchOnMain {
         router.showHostPostDetails(post.postId, false)
-    }
-
-    fun onAvatarClicked(reactionUser: IUser) = launchOnMain {
-        router.showHostUserProfile(reactionUser.id)
     }
 }
