@@ -8,6 +8,7 @@ plugins {
 
 val kotlinApiVersion: String by rootProject.extra
 val jvmVersion: String by rootProject.extra
+val androidNamespace = "ru.stogram.android"
 
 android {
     val appVersion: String by rootProject.extra
@@ -15,8 +16,9 @@ android {
     val buildSdkVersion: Int by rootProject.extra
 
     compileSdk = buildSdkVersion
+    namespace = androidNamespace
     defaultConfig {
-        applicationId = "ru.stogram.android"
+        applicationId = androidNamespace
         minSdk = minSdkVersion
         targetSdk = buildSdkVersion
         versionCode = 1
@@ -29,8 +31,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     buildFeatures {
@@ -49,10 +51,10 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.0"
+        kotlinCompilerExtensionVersion = "1.5.14"
     }
 
-    packagingOptions {
+    packaging {
         resources.excludes.addAll(listOf("META-INF/AL2.0", "META-INF/LGPL2.1"))
     }
 }

@@ -29,7 +29,9 @@ fun PostContentView(
     postContent: List<String>
 ) {
     val postContentSize = postContent.size
-    val pagerState = rememberPagerState()
+    val pagerState = rememberPagerState {
+        postContentSize
+    }
 
     Box(
         Modifier
@@ -38,7 +40,6 @@ fun PostContentView(
     ) {
 
         HorizontalPager(
-            pageCount = postContentSize,
             state = pagerState,
             modifier = Modifier.fillMaxWidth(),
         ) { page ->
@@ -70,7 +71,6 @@ fun PostContentView(
 }
 
 
-@Suppress("PreviewAnnotationInFunctionWithParameters")
 @Preview(name = "PostContentView", showBackground = true)
 @Composable
 fun PostContentViewPreview() {

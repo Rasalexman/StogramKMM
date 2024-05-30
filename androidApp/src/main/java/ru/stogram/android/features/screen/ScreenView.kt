@@ -25,7 +25,7 @@ import ru.stogram.android.features.profile.Profile
 import ru.stogram.android.features.register.Register
 import ru.stogram.android.features.subsnobserv.SubsAndObservers
 import ru.stogram.android.navigation.Screen
-import ru.stogram.android.navigation.composable
+import ru.stogram.android.navigation.composableRoute
 import ru.stogram.android.navigation.debugLabel
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -57,19 +57,19 @@ fun ScreenView() {
                 startDestination = Screen.Login.route
             ) {
 
-                composable(route = Screen.Login.route) {
+                composableRoute(route = Screen.Login.route) {
                     Login()
                 }
 
-                composable(route = Screen.Register.route) {
+                composableRoute(route = Screen.Register.route) {
                     Register()
                 }
 
-                composable(route = Screen.Main.route) {
+                composableRoute(route = Screen.Main.route) {
                     MainView()
                 }
 
-                composable(
+                composableRoute(
                     route = Screen.PostDetails.route,
                     debugLabel = Screen.PostDetails.route,
                     arguments = listOf(navArgument(ArgsNames.POST_ID) {
@@ -84,7 +84,7 @@ fun ScreenView() {
                     PostDetailsView()
                 }
 
-                composable(
+                composableRoute(
                     route = Screen.PostComments.route,
                     debugLabel = Screen.PostComments.route,
                     arguments = listOf(navArgument(ArgsNames.POST_ID) {
@@ -95,7 +95,7 @@ fun ScreenView() {
                     CommentsView()
                 }
 
-                composable(
+                composableRoute(
                     route = Screen.UserProfile.route,
                     debugLabel = Screen.UserProfile.route,
                     arguments = listOf(navArgument(ArgsNames.USER_ID) {
@@ -109,7 +109,7 @@ fun ScreenView() {
                     Profile()
                 }
 
-                composable(
+                composableRoute(
                     route = Screen.SubsAndObservers.route,
                     debugLabel = Screen.SubsAndObservers.route,
                     arguments = listOf(navArgument(ArgsNames.USER_ID) {

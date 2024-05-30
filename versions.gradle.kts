@@ -2,50 +2,50 @@
 extra["appVersion"] = "1.0.1"
 
 //------- LIBS VERSIONS
-val kotlin_version = "1.8.0"
+val kotlin_version = "1.9.23"
 val gson = "2.9.1"
 val leakcanary = "2.10"
 val kotpref = "2.13.2"
 val sresult = "1.3.59"
 val sresultcore = "1.3.60"
-val coil = "2.4.0"
-val hiltVersion = "2.45"
-val hiltAndroidXVersion = "1.0.0"
+val coil = "2.6.0"
+val hiltVersion = "2.51.1"
+val hiltAndroidXVersion = "1.2.0"
 
 val junit = "5.8.1"
 val runner = "1.1.0"
 val espresso = "3.1.0"
-val coroutines = "1.6.3"
+val coroutines = "1.8.1"
 
-val core = "1.10.1"
-val lifecycle = "2.6.1"
+val core = "1.13.1"
+val lifecycle = "2.8.1"
 val swiperefreshlayout = "1.2.0-alpha01"
 
-val composeVersion = "1.4.3"
-val composeTooling = "1.4.3"
-val composeNavigation = "2.5.3"
-val composeActivity = "1.7.2"
-val accompanist = "0.30.1"
+val composeVersion = "1.6.7"
+val composeTooling = "1.6.7"
+val composeNavigation = "2.7.7"
+val composeActivity = "1.9.0"
+val accompanist = "0.34.0"
 
-val ktorVersion = "2.3.1"
+val ktorVersion = "2.3.11"
 val datetimeVersion = "0.4.0"
 val realmVersion = "1.9.1"
-val coroutinesMt = "$coroutines-native-mt"
+val coroutinesMt = "$coroutines"
 val serializationVersion = "1.3.2"
 
 extra["composeVersion"] = composeVersion
 
 //------ CONFIG DATA
 extra["kotlinVersion"] = kotlin_version
-extra["kotlinApiVersion"] = "1.8"
-extra["jvmVersion"] = "11"
-extra["agpVersion"] = "7.4.2"
+extra["kotlinApiVersion"] = "1.9"
+extra["jvmVersion"] = "17"
+extra["agpVersion"] = "8.4.1"
 extra["realmVersion"] = realmVersion
 extra["composeNavigationVersion"] = composeNavigation
 extra["hiltVersion"] = hiltVersion
 
 extra["minSdkVersion"] = 24
-extra["buildSdkVersion"] = 33
+extra["buildSdkVersion"] = 34
 
 extra["jitpackPath"] = "https://jitpack.io"
 

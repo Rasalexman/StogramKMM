@@ -139,7 +139,7 @@ private fun NavGraphBuilder.addBottomNavigationView(
     argNames: List<NamedNavArgument> = emptyList(),
     content: @Composable AnimatedVisibilityScope.(NavBackStackEntry) -> Unit
 ) {
-    composable(
+    composableRoute(
         route = route,
         arguments = argNames,
         debugLabel = label,

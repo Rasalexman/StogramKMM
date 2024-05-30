@@ -11,6 +11,8 @@ plugins {
 val kotlinApiVersion: String by rootProject.extra
 val jvmVersion: String by rootProject.extra
 val realmVersion: String by rootProject.extra
+// workaround for gradle
+val dummyAttribute = Attribute.of("dummy", String::class.java)
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
     kotlinOptions {
@@ -28,6 +30,27 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach 
 kotlin {
 
     android()
+    iosX64 {
+        attributes.attribute(dummyAttribute, "1")
+        binaries.framework {
+            baseName = "shared"
+            isStatic = false
+        }
+    }
+    iosArm64 {
+        attributes.attribute(dummyAttribute, "2")
+        binaries.framework {
+            baseName = "shared"
+            isStatic = false
+        }
+    }
+    iosSimulatorArm64 {
+        attributes.attribute(dummyAttribute, "3")
+        binaries.framework {
+            baseName = "shared"
+            isStatic = false
+        }
+    }
 //    ios() {
 //        binaries {
 //            framework {
@@ -44,16 +67,16 @@ kotlin {
 //    } $(TARGET_TEMP_DIR)/$(PRODUCT_NAME)-LinkMap-$(CURRENT_VARIANT)-$(CURRENT_ARCH).txt
 //    iosTarget("ios") {}
     
-    listOf(
-        iosX64(),
-        iosArm64(),
-        iosSimulatorArm64()
-    ).forEach {
-        it.binaries.framework {
-            baseName = "shared"
-            isStatic = false
-        }
-    }
+//    listOf(
+//        iosX64(),
+//        iosArm64(),
+//        iosSimulatorArm64()
+//    ).forEachIndexed { _, kotlinNativeTarget ->
+//        kotlinNativeTarget.binaries.framework {
+//            baseName = "shared"
+//            isStatic = false
+//        }
+//    }
 
     cocoapods {
         version = realmVersion
@@ -105,7 +128,6 @@ kotlin {
         val ktorAndroid: String by rootProject.extra
 
         //val sresult: String by rootProject.extra
-        @Suppress("UNUSED_VARIABLE")
         val androidMain by getting {
             dependencies {
                 //api(kodi)
@@ -129,7 +151,6 @@ kotlin {
         val iosArm64Main by getting
         val iosSimulatorArm64Main by getting
 
-        @Suppress("UNUSED_VARIABLE")
         val iosMain by creating {
             dependsOn(commonMain)
             iosX64Main.dependsOn(this)
@@ -144,7 +165,6 @@ kotlin {
         val iosArm64Test by getting
         val iosSimulatorArm64Test by getting
 
-        @Suppress("UNUSED_VARIABLE")
         val iosTest by creating {
             dependsOn(commonTest)
             iosX64Test.dependsOn(this)
@@ -160,16 +180,16 @@ kotlin {
 //}
 
 android {
-    compileSdk = 33
+    compileSdk = 34
+    namespace = "ru.stogram.android"
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
     defaultConfig {
         minSdk = 23
-        targetSdk = 33
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 }
 
