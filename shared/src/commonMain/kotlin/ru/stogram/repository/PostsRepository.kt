@@ -6,6 +6,7 @@ import ru.stogram.database.CFlow
 import ru.stogram.database.wrap
 import ru.stogram.models.PostEntity
 import ru.stogram.models.UserEntity
+import ru.stogram.models.domain.PostModel
 import ru.stogram.sources.local.IPostsLocalDataSource
 
 class PostsRepository(
@@ -18,6 +19,10 @@ class PostsRepository(
 
     override fun allPostsAsFlowable(): Flow<List<PostEntity>> {
         return localDataSource.getAllPostsAsFlow()
+    }
+
+    override fun allDomainPostsAsFlowable(): Flow<List<PostModel>> {
+        return localDataSource.getDomainPostsAsFlow()
     }
 
     override fun allPostsAsCommonFlowable(): CFlow<List<PostEntity>> {
@@ -49,6 +54,9 @@ interface IPostsRepository {
     fun findPostByIdAsFlow(postId: String): Flow<PostEntity?>
 
     fun allPostsAsFlowable(): Flow<List<PostEntity>>
+
+    fun allDomainPostsAsFlowable(): Flow<List<PostModel>>
+
     fun allPostsAsCommonFlowable(): CFlow<List<PostEntity>>
 
     fun findUserPostsAsFlow(user: UserEntity? = null): Flow<List<PostEntity>>

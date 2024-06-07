@@ -7,13 +7,14 @@ import com.rasalexman.sresult.data.dto.SResult
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 abstract class BaseViewModel : ViewModel() {
 
-    fun BaseViewModel.launchOnMain( block:suspend CoroutineScope.() -> Unit) {
-        viewModelScope.launch(Dispatchers.Main, CoroutineStart.DEFAULT, block)
+    fun BaseViewModel.launchOnMain( block:suspend CoroutineScope.() -> Unit): Job {
+        return viewModelScope.launch(Dispatchers.Main, CoroutineStart.DEFAULT, block)
     }
 
     inline fun <reified T : Any> Flow<T?>.flowIoState(

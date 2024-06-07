@@ -1,13 +1,19 @@
 package ru.stogram.android.navigation
 
-import androidx.compose.animation.*
+import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.navigation.*
-import com.google.accompanist.navigation.animation.AnimatedNavHost
+import androidx.navigation.NamedNavArgument
+import androidx.navigation.NavBackStackEntry
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavHostController
+import androidx.navigation.NavType
+import androidx.navigation.createGraph
+import androidx.navigation.navArgument
 import com.google.accompanist.navigation.animation.navigation
-import androidx.compose.foundation.ExperimentalFoundationApi
 import ru.stogram.android.constants.ArgsNames
 import ru.stogram.android.constants.ScreenNames
 import ru.stogram.android.features.create.Create
@@ -41,31 +47,31 @@ private sealed class LeafScreen(
     object MenuProfile : LeafScreen(ScreenNames.USER_PROFILE)
 }
 
-@OptIn(ExperimentalAnimationApi::class, ExperimentalFoundationApi::class, ExperimentalMaterialApi::class)
+@OptIn(ExperimentalAnimationApi::class, ExperimentalMaterialApi::class)
 @Composable
 internal fun AppNavigation(
     navController: NavHostController,
     modifier: Modifier = Modifier,
 ) {
-    AnimatedNavHost(
-        navController = navController,
-        startDestination = Screen.Home.route,
-//        enterTransition = { defaultStogramEnterTransition(initialState, targetState) },
-//        exitTransition = { defaultStogramExitTransition(initialState, targetState) },
-//        popEnterTransition = { defaultStogramPopEnterTransition() },
-//        popExitTransition = { defaultStogramPopExitTransition() },
-        modifier = modifier,
-    ) {
+
+    val builder: NavGraphBuilder.() -> Unit = {
         addHomeTopLevel()
         addSearchTopLevel()
         addCreateTopLevel()
         addReactionsTopLevel()
         addProfileTopLevel()
     }
+
+    androidx.navigation.compose.NavHost(
+        navController = navController,
+        graph = remember(Screen.Home.route, builder) {
+            navController.createGraph(Screen.Home.route, null, builder)
+        },
+        modifier = modifier,
+    )
 }
 
 @ExperimentalMaterialApi
-@OptIn(ExperimentalFoundationApi::class)
 @ExperimentalAnimationApi
 private fun NavGraphBuilder.addHomeTopLevel() {
     addBottomNavigationView(
@@ -76,7 +82,7 @@ private fun NavGraphBuilder.addHomeTopLevel() {
     }
 }
 
-@OptIn(ExperimentalAnimationApi::class, ExperimentalFoundationApi::class, ExperimentalMaterialApi::class)
+@OptIn(ExperimentalAnimationApi::class, ExperimentalMaterialApi::class)
 private fun NavGraphBuilder.addSearchTopLevel() {
     addBottomNavigationView(
         route = Screen.Search.route,

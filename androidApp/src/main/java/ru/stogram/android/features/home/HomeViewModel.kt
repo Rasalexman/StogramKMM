@@ -42,7 +42,7 @@ class HomeViewModel @Inject constructor(
         postsRepository.allPostsAsFlowable().map { posts->
             postItemUIMapper.convertList(posts)
         },
-        userStoriesRepository.getAllStoriesAsFlow()
+        userStoriesRepository.getAllStoriesAsFlow(),
     ) { posts, stories ->
         HomeState(posts, stories).toSuccessResult()
     }.flowOn(Dispatchers.IO)

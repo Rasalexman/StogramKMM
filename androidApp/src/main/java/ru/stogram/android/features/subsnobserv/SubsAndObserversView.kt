@@ -55,7 +55,7 @@ fun SubsAndObserversView(
         R.string.title_subs
     }
 
-    Scaffold(
+    androidx.compose.material.Scaffold(
         scaffoldState = scaffoldState,
         modifier = Modifier.fillMaxSize(),
         topBar = {

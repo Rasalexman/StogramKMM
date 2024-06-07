@@ -13,7 +13,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.google.accompanist.insets.ui.Scaffold
 import kotlinx.coroutines.flow.MutableStateFlow
 import ru.stogram.android.R
 import ru.stogram.android.components.InputTextView
@@ -39,8 +38,9 @@ fun LoginView(
                 elevation = 10.dp
             )
         }
-    ) {
+    ) { paddings ->
         LoginViewContent(
+            paddingsValues = paddings,
             loginState = viewModel.login,
             passwordState = viewModel.password,
             onSignInClicked = viewModel::onSignInClicked,
@@ -51,6 +51,7 @@ fun LoginView(
 
 @Composable
 fun LoginViewContent(
+    paddingsValues: PaddingValues,
     loginState: MutableStateFlow<String>,
     passwordState: MutableStateFlow<String>,
     onSignInClicked: () -> Unit,
@@ -63,7 +64,7 @@ fun LoginViewContent(
     val focusPasswordState = remember { mutableStateOf(false) }
 
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.padding(paddingsValues).fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -117,6 +118,7 @@ fun LoginPreview() {
     val loginState = remember { MutableStateFlow("") }
     val passwordState = remember { MutableStateFlow("") }
     LoginViewContent(
+        paddingsValues = PaddingValues.Absolute(),
         loginState = loginState,
         passwordState = passwordState,
         onSignInClicked = {},

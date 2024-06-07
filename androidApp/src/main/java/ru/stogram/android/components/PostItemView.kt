@@ -1,8 +1,13 @@
 package ru.stogram.android.components
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -10,14 +15,13 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.foundation.ExperimentalFoundationApi
 import ru.stogram.android.common.orZero
 import ru.stogram.android.mappers.IPostItemUIMapper
 import ru.stogram.android.mappers.PostItemUIMapper
+import ru.stogram.android.mappers.UserUIMapper
 import ru.stogram.android.models.PostItemUI
 import ru.stogram.models.PostEntity
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PostItemView(
     post: PostItemUI,
@@ -60,14 +64,13 @@ fun PostItemView(
 }
 
 class PostPreviewParameterProvider : PreviewParameterProvider<PostItemUI> {
-    private val postItemUIMapper: IPostItemUIMapper = PostItemUIMapper()
+    private val postItemUIMapper: IPostItemUIMapper = PostItemUIMapper(UserUIMapper())
     override val values = sequenceOf(
         postItemUIMapper.convertSingle(PostEntity.createRandom()),
         postItemUIMapper.convertSingle(PostEntity.createRandom()),
     )
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Suppress("PreviewAnnotationInFunctionWithParameters")
 @Preview(name = "PostView", showBackground = true)
 @Composable

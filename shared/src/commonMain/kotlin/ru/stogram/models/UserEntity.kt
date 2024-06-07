@@ -4,6 +4,7 @@ import io.realm.kotlin.ext.realmSetOf
 import io.realm.kotlin.types.RealmObject
 import io.realm.kotlin.types.RealmSet
 import io.realm.kotlin.types.annotations.Ignore
+import ru.stogram.models.domain.UserModel
 import ru.stogram.utils.getLogin
 import ru.stogram.utils.getRandomName
 import ru.stogram.utils.getRandomPhoto
@@ -115,4 +116,10 @@ class UserEntity : RealmObject, IUser {
             }
         }
     }
+}
+
+fun UserEntity.toDomain(): UserModel {
+    return UserModel(
+        id, name, login, photo, desc, password, hasStory, bio, subsCount, observCount, isCurrentUser
+    )
 }

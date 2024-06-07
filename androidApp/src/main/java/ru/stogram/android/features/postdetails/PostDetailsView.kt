@@ -2,12 +2,11 @@ package ru.stogram.android.features.postdetails
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,8 +24,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.google.accompanist.insets.ui.Scaffold
-import androidx.compose.foundation.ExperimentalFoundationApi
 import com.rasalexman.sresult.common.extensions.applyIfSuccess
 import kotlinx.coroutines.flow.MutableStateFlow
 import ru.stogram.android.R
@@ -40,7 +37,6 @@ import ru.stogram.android.models.CommentItemUI
 import ru.stogram.android.models.PostItemUI
 import ru.stogram.models.IUser
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PostDetailsView() {
     val postDetailsViewModel: PostDetailsViewModel = hiltViewModel()
@@ -48,7 +44,6 @@ fun PostDetailsView() {
     PostDetailsView(postDetailsViewModel, commentsViewModel)
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PostDetailsView(
     postDetailsViewModel: PostDetailsViewModel,
@@ -68,6 +63,7 @@ fun PostDetailsView(
                             AvatarNameDescView(
                                 user = post.user,
                                 size = 32.dp,
+                                textColor = Color.White,
                                 onClick = {
                                     postDetailsViewModel.onToolBarAvatarClicked(post.user)
                                 }
@@ -77,7 +73,7 @@ fun PostDetailsView(
                 },
                 navigationIcon = {
                     IconButton(onClick = postDetailsViewModel::onBackClicked) {
-                        Icon(Icons.Filled.ArrowBack, "backIcon")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, "backIcon")
                     }
                 },
                 backgroundColor = MaterialTheme.colors.primary,
@@ -102,7 +98,6 @@ fun PostDetailsView(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PostDetailsView(
     inputComment: MutableStateFlow<String>,
@@ -128,11 +123,11 @@ fun PostDetailsView(
 
     postDetailsState.applyIfSuccess { post ->
         val postPhotos: List<String> = post.postContent
-        val bottomPaddings = topPaddings - 8.dp
+        val bottomPaddings = 52.dp
 
         val comment = remember { inputComment }
         val focusState = remember { mutableStateOf(false) }
-        var bottomColumnPadding by remember { mutableStateOf(56.dp) }
+        var bottomColumnPadding by remember { mutableStateOf(48.dp) }
         val density = LocalDensity.current
         val focusManager = LocalFocusManager.current
         val listState = rememberLazyListState()

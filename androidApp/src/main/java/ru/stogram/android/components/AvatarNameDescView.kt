@@ -5,6 +5,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -13,6 +14,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ru.stogram.android.common.noRippleClickable
+import ru.stogram.android.theme.MontserratFamily
 import ru.stogram.models.IUser
 import ru.stogram.models.UserEntity
 
@@ -24,7 +26,13 @@ class UserPreviewParameterProvider : PreviewParameterProvider<IUser> {
 }
 
 @Composable
-fun AvatarNameDescView(user: IUser, desc: String = "", size: Dp = 48.dp, onClick: () -> Unit = {}) {
+fun AvatarNameDescView(
+    user: IUser,
+    desc: String = "",
+    size: Dp = 48.dp,
+    textColor: Color = Color.Black,
+    onClick: () -> Unit = {},
+) {
 
     val realDesc = desc.ifEmpty { user.desc }
 
@@ -43,9 +51,21 @@ fun AvatarNameDescView(user: IUser, desc: String = "", size: Dp = 48.dp, onClick
             verticalArrangement = Arrangement.Center,
             modifier = Modifier.padding(start = 8.dp)
         ) {
-            Text(text = user.login, fontSize = 16.sp, fontWeight = FontWeight.Bold)
-            if(realDesc.isNotEmpty()) {
-                Text(realDesc, fontSize = 12.sp)
+            Text(
+                text = user.login,
+                fontSize = 16.sp,
+                fontFamily = MontserratFamily,
+                fontWeight = FontWeight.Bold,
+                color = textColor
+            )
+            if (realDesc.isNotEmpty()) {
+                Text(
+                    text = realDesc,
+                    fontSize = 12.sp,
+                    fontFamily = MontserratFamily,
+                    fontWeight = FontWeight.Normal,
+                    color = textColor
+                )
             }
         }
     }

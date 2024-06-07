@@ -24,7 +24,6 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.google.accompanist.insets.ui.Scaffold
 import com.rasalexman.sresult.common.extensions.applyIfSuccess
 import com.rasalexman.sresult.common.extensions.toSuccessResult
 import com.rasalexman.sresult.data.dto.SResult
@@ -34,6 +33,7 @@ import ru.stogram.android.constants.PostsResult
 import ru.stogram.android.features.profile.top.ProfileTopView
 import ru.stogram.android.mappers.IPostItemUIMapper
 import ru.stogram.android.mappers.PostItemUIMapper
+import ru.stogram.android.mappers.UserUIMapper
 import ru.stogram.android.models.PostItemUI
 import ru.stogram.models.IUser
 import ru.stogram.models.PostEntity
@@ -170,7 +170,7 @@ internal fun ProfileView(
 }
 
 class ProfilePreviewParameterProvider : PreviewParameterProvider<Pair<PostsResult, SResult<IUser>>> {
-    private val postItemUIMapper: IPostItemUIMapper = PostItemUIMapper()
+    private val postItemUIMapper: IPostItemUIMapper = PostItemUIMapper(UserUIMapper())
     override val values = sequenceOf(
         PostEntity.createRandomList().map {
             postItemUIMapper.convertSingle(it)

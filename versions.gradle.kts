@@ -2,7 +2,7 @@
 extra["appVersion"] = "1.0.1"
 
 //------- LIBS VERSIONS
-val kotlin_version = "1.9.23"
+val kotlin_version = "1.9.24"
 val gson = "2.9.1"
 val leakcanary = "2.10"
 val kotpref = "2.13.2"

@@ -27,7 +27,6 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.google.accompanist.insets.ui.Scaffold
 import com.rasalexman.sresult.common.extensions.applyIfLoading
 import com.rasalexman.sresult.common.extensions.applyIfSuccess
 import com.rasalexman.sresult.common.extensions.toSuccessResult

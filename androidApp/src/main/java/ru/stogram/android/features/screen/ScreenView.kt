@@ -8,13 +8,14 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.createGraph
 import androidx.navigation.navArgument
-import com.google.accompanist.navigation.animation.AnimatedNavHost
-import com.google.accompanist.navigation.animation.rememberAnimatedNavController
-import androidx.compose.foundation.ExperimentalFoundationApi
 import com.rasalexman.sresult.common.extensions.logg
 import ru.stogram.android.constants.ArgsNames
 import ru.stogram.android.features.comments.CommentsView
@@ -28,12 +29,11 @@ import ru.stogram.android.navigation.Screen
 import ru.stogram.android.navigation.composableRoute
 import ru.stogram.android.navigation.debugLabel
 
-@OptIn(ExperimentalFoundationApi::class)
 @ExperimentalAnimationApi
 @Composable
 fun ScreenView() {
     val viewModel: ScreenViewModel = hiltViewModel()
-    val navController = rememberAnimatedNavController().also {
+    val navController = rememberNavController().also {
         viewModel.setupNavHostController(it)
     }
 
@@ -52,11 +52,7 @@ fun ScreenView() {
                 .statusBarsPadding()
                 .padding(innerPadding)) {
 
-            AnimatedNavHost(
-                navController = navController,
-                startDestination = Screen.Login.route
-            ) {
-
+            val builder: NavGraphBuilder.() -> Unit = {
                 composableRoute(route = Screen.Login.route) {
                     Login()
                 }
@@ -125,6 +121,13 @@ fun ScreenView() {
                     SubsAndObservers()
                 }
             }
+
+            androidx.navigation.compose.NavHost(
+                navController = navController,
+                graph = remember(Screen.Login.route, builder) {
+                    navController.createGraph(Screen.Login.route, null, builder)
+                },
+            )
         }
     }
 }

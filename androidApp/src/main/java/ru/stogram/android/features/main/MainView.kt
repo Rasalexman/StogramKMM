@@ -3,7 +3,6 @@ package ru.stogram.android.features.main
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.animation.Crossfade
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -22,19 +21,18 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.insets.ui.BottomNavigation
-import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import ru.stogram.android.navigation.AppNavigation
 import ru.stogram.android.navigation.Screen
 import ru.stogram.android.navigation.navigateToBottomRouter
 import ru.stogram.android.theme.AppBarAlphas
 
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun MainView() {
 
     val viewModel: MainViewModel = hiltViewModel()
-    val navController = rememberAnimatedNavController().also {
+    val navController = rememberNavController().also {
         viewModel.setupMainNavController(it)
     }
     val configuration = LocalConfiguration.current

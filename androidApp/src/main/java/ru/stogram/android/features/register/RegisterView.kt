@@ -3,7 +3,7 @@ package ru.stogram.android.features.register
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -15,7 +15,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.google.accompanist.insets.ui.Scaffold
 import kotlinx.coroutines.flow.MutableStateFlow
 import ru.stogram.android.R
 import ru.stogram.android.components.InputTextView
@@ -41,7 +40,7 @@ fun RegisterView(
                 title = { Text(text = stringResource(id = R.string.title_registration)) },
                 navigationIcon = {
                     IconButton(onClick = viewModel::onBackClicked) {
-                        Icon(Icons.Filled.ArrowBack, "backIcon")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, "backIcon")
                     }
                 },
                 backgroundColor = MaterialTheme.colors.primary,
@@ -53,6 +52,7 @@ fun RegisterView(
 
         RegisterContentView(
             user = viewModel.randomUser,
+            paddingValues =  paddings,
             nameState = viewModel.name,
             loginState = viewModel.login,
             passwordState = viewModel.password,
@@ -66,6 +66,7 @@ fun RegisterView(
 @Composable
 fun RegisterContentView(
     user: IUser,
+    paddingValues: PaddingValues,
     nameState: MutableStateFlow<String>,
     loginState: MutableStateFlow<String>,
     passwordState: MutableStateFlow<String>,
@@ -157,6 +158,7 @@ fun RegisterPreview() {
     val passwordRepeatState = remember { MutableStateFlow(user.password) }
     RegisterContentView(
         user = UserEntity.createRandom(),
+        paddingValues = PaddingValues.Absolute(),
         nameState = nameState,
         loginState = loginState,
         passwordState = passwordState,

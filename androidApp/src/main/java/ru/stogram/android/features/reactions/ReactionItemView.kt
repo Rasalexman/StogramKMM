@@ -17,6 +17,7 @@ import ru.stogram.android.mappers.IPostItemUIMapper
 import ru.stogram.android.mappers.IReactionItemUIMapper
 import ru.stogram.android.mappers.PostItemUIMapper
 import ru.stogram.android.mappers.ReactionItemUIMapper
+import ru.stogram.android.mappers.UserUIMapper
 import ru.stogram.android.models.PostItemUI
 import ru.stogram.android.models.ReactionItemUI
 import ru.stogram.models.IUser
@@ -51,7 +52,7 @@ fun ReactionItemView(
 }
 
 class ReactionItemPreviewParameterProvider : PreviewParameterProvider<ReactionItemUI> {
-    private val postItemUIMapper: IPostItemUIMapper = PostItemUIMapper()
+    private val postItemUIMapper: IPostItemUIMapper = PostItemUIMapper(UserUIMapper())
     private val reactionItemUIMapper: IReactionItemUIMapper = ReactionItemUIMapper(postItemUIMapper)
     override val values = sequenceOf(
         reactionItemUIMapper.convertSingle(ReactionEntity.createRandom())

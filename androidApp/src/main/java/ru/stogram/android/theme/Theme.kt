@@ -13,7 +13,7 @@ fun StogramTheme(
 ) {
     MaterialTheme(
         colors = if (useDarkColors) StogramDarkColors else StogramLightColors,
-        typography = StogramTypography,
+        typography = MontserratTypography,
         shapes = StogramShapes,
         content = content
     )

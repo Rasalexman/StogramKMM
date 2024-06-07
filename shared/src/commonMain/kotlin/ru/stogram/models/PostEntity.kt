@@ -5,6 +5,8 @@ import io.realm.kotlin.types.RealmList
 import io.realm.kotlin.types.RealmObject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import ru.stogram.models.domain.PostModel
+import ru.stogram.models.domain.UserModel
 import ru.stogram.utils.*
 import kotlin.random.Random
 
@@ -96,6 +98,12 @@ class PostEntity : RealmObject {
 
 fun PostEntity?.orEmpty(): PostEntity {
     return this ?: PostEntity.createRandom()
+}
+
+fun PostEntity.toDomain(user: UserModel): PostModel {
+    return PostModel(
+        id, postId, text, likesCount, commentsCount, isLiked, date, user, takeContent()
+    )
 }
 
 

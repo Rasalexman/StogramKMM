@@ -22,8 +22,6 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.google.accompanist.insets.ui.Scaffold
-import androidx.compose.foundation.ExperimentalFoundationApi
 import com.rasalexman.sresult.common.extensions.applyIfSuccess
 import com.rasalexman.sresult.common.extensions.isLoading
 import com.rasalexman.sresult.common.extensions.logg
@@ -33,11 +31,12 @@ import ru.stogram.android.components.StoriesView
 import ru.stogram.android.components.TopCircleProgressView
 import ru.stogram.android.mappers.IPostItemUIMapper
 import ru.stogram.android.mappers.PostItemUIMapper
+import ru.stogram.android.mappers.UserUIMapper
 import ru.stogram.android.models.PostItemUI
 import ru.stogram.models.PostEntity
 import ru.stogram.models.UserEntity
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun Home() {
     HomeView(viewModel = hiltViewModel())
@@ -55,7 +54,6 @@ fun HomeView(viewModel: HomeViewModel) {
     )
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @ExperimentalMaterialApi
 @Composable
 internal fun HomeView(
@@ -66,7 +64,7 @@ internal fun HomeView(
     onSwipeRefresh: () -> Unit,
     scaffoldState: ScaffoldState = rememberScaffoldState()
 ) {
-    Scaffold(
+    androidx.compose.material.Scaffold(
         scaffoldState = scaffoldState,
         modifier = Modifier.fillMaxSize(),
     ) {
@@ -75,6 +73,7 @@ internal fun HomeView(
 
         Box(
             modifier = Modifier
+                .padding(it)
                 .fillMaxSize()
                 .pullRefresh(pullRefreshState)
         ) {
@@ -99,7 +98,6 @@ internal fun HomeView(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @ExperimentalMaterialApi
 @Composable
 fun HomeView(
@@ -145,7 +143,7 @@ fun HomeView(
 }
 
 class HomePreviewParameterProvider : PreviewParameterProvider<HomeState> {
-    private val postItemUIMapper: IPostItemUIMapper = PostItemUIMapper()
+    private val postItemUIMapper: IPostItemUIMapper = PostItemUIMapper(UserUIMapper())
     override val values = sequenceOf(
         HomeState(
             PostEntity.createRandomList().map { postItemUIMapper.convertSingle(it) },
@@ -155,7 +153,6 @@ class HomePreviewParameterProvider : PreviewParameterProvider<HomeState> {
 }
 
 @ExperimentalMaterialApi
-@OptIn(ExperimentalFoundationApi::class)
 @Preview(name = "HomePreview", showBackground = true)
 @Composable
 fun HomePreview(
